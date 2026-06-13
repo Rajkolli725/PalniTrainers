@@ -15,8 +15,31 @@
     --accent: #1d4ed8;
     --accent-soft: #eef2ff;
     --star: #f59e0b;
+    --hover: #fafafa;
+    --input: #ffffff;
+    --ghost-bg: #ece9e2;
+    --ghost-hover: #e0ddd4;
+    --primary-bg: #1f2933;
+    --primary-hover: #000000;
     --radius: 16px;
     --shadow: 0 1px 3px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.05);
+  }
+  body.dark {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --ink: #e2e8f0;
+    --muted: #94a3b8;
+    --line: #334155;
+    --accent: #60a5fa;
+    --accent-soft: #1e3a5f;
+    --star: #fbbf24;
+    --hover: #243044;
+    --input: #0f172a;
+    --ghost-bg: #334155;
+    --ghost-hover: #3f4d63;
+    --primary-bg: #2563eb;
+    --primary-hover: #1d4ed8;
+    --shadow: 0 1px 3px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.35);
   }
   * { box-sizing: border-box; }
   body {
@@ -44,7 +67,7 @@
   }
   .search input {
     width: 100%; padding: 12px 14px 12px 40px; border: 1px solid var(--line);
-    border-radius: 12px; font-size: .95rem; background: #fff; outline: none;
+    border-radius: 12px; font-size: .95rem; background: var(--input); color: var(--ink); outline: none;
   }
   .search input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .search svg { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: var(--muted); }
@@ -55,18 +78,39 @@
   }
   .sort-select {
     padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px;
-    background: #fff; font-size: .9rem; color: var(--ink);
+    background: var(--input); font-size: .9rem; color: var(--ink);
   }
   button.btn {
     border: none; cursor: pointer; font-size: .92rem; font-weight: 600;
     padding: 12px 18px; border-radius: 12px; transition: .15s; white-space: nowrap;
   }
-  .btn-primary { background: var(--ink); color: #fff; }
-  .btn-primary:hover { background: #000; }
-  .btn-ghost { background: #ece9e2; color: var(--ink); }
-  .btn-ghost:hover { background: #e0ddd4; }
+  .btn-primary { background: var(--primary-bg); color: #fff; }
+  .btn-primary:hover { background: var(--primary-hover); }
+  .btn-ghost { background: var(--ghost-bg); color: var(--ink); }
+  .btn-ghost:hover { background: var(--ghost-hover); }
   .btn-accent { background: var(--accent); color: #fff; }
-  .btn-accent:hover { background: #1741b6; }
+  .btn-accent:hover { filter: brightness(.92); }
+
+  /* Header action buttons (theme + settings) */
+  .head-actions { display: flex; align-items: center; gap: 10px; }
+  .icon-toggle {
+    width: 42px; height: 42px; border-radius: 12px; border: 1px solid var(--line);
+    background: var(--card); cursor: pointer; font-size: 1.05rem; display: grid; place-items: center;
+    transition: .15s;
+  }
+  .icon-toggle:hover { background: var(--hover); }
+  .settings-wrap { position: relative; }
+  .settings-panel {
+    position: absolute; right: 0; top: 50px; z-index: 40; display: none;
+    background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+    box-shadow: var(--shadow); padding: 12px; min-width: 230px;
+  }
+  .settings-panel.show { display: block; }
+  .settings-panel .title { font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px; }
+  .settings-panel label {
+    display: flex; align-items: center; gap: 9px; padding: 8px 4px; font-size: .9rem; cursor: pointer;
+  }
+  .settings-panel input { width: 16px; height: 16px; accent-color: var(--accent); }
 
   /* Accordion list */
   .list { display: flex; flex-direction: column; gap: 14px; }
@@ -80,25 +124,34 @@
     display: flex; align-items: center; gap: 16px; padding: 14px 16px; cursor: pointer;
     position: relative;
   }
-  .acc-head:hover { background: #fafafa; }
+  .acc-head:hover { background: var(--hover); }
   .avatar {
-    width: 64px; height: 64px; border-radius: 14px; object-fit: cover; flex-shrink: 0;
-    background: linear-gradient(135deg, #dbeafe, #e0e7ff); display: grid; place-items: center;
-    font-weight: 700; color: var(--accent); font-size: 1.2rem; overflow: hidden;
+    width: 64px; height: 64px; border-radius: 14px; flex-shrink: 0;
+    background: linear-gradient(135deg, #dbeafe, #e0e7ff); overflow: hidden;
+    position: relative; cursor: pointer;
   }
   .avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .avatar .avatar-initials {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; color: var(--accent); font-size: 1.2rem; line-height: 1;
+  }
+  .avatar .avatar-edit {
+    position: absolute; inset: 0; display: grid; place-items: center; font-size: 1.1rem;
+    background: rgba(0,0,0,.45); color: #fff; opacity: 0; transition: opacity .15s; border-radius: 14px;
+  }
+  .avatar:hover .avatar-edit { opacity: 1; }
   .head-meta { flex: 1; min-width: 0; }
   .head-meta .name { font-size: 1.12rem; font-weight: 800; color: var(--accent); }
   .head-meta .role { color: var(--ink); font-size: .92rem; }
   .head-meta .company {
     display: inline-block; margin-top: 3px; color: var(--muted); font-size: .72rem;
     font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
-    background: #f1f3f5; padding: 2px 8px; border-radius: 6px;
+    background: var(--accent-soft); padding: 2px 8px; border-radius: 6px;
   }
   /* QR shown on the accordion header */
   .head-qr { flex-shrink: 0; text-align: center; }
   .head-qr .qr { background:#fff; padding:4px; border:1px solid var(--line); border-radius:8px; display:inline-block; line-height:0; }
-  .head-qr .qr-label { font-size:.6rem; color:var(--muted); margin-top:2px; }
+  .head-qr .qr-label { font-size:.6rem; color:var(--muted); margin-top:1px; line-height:1.1; }
   .chevron { flex-shrink: 0; color: var(--muted); transition: transform .2s; }
   .acc.open .chevron { transform: rotate(180deg); }
   .del-btn {
@@ -110,7 +163,8 @@
   /* Body */
   .acc-body { display: none; padding: 4px 16px 20px; border-top: 1px solid var(--line); }
   .acc.open .acc-body { display: block; }
-  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding-top: 16px; }
+  .cols { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding-top: 16px; align-items: stretch; }
+  .col { display: flex; flex-direction: column; }
   .col h4 {
     margin: 0 0 8px; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em;
     color: var(--muted);
@@ -118,30 +172,26 @@
   .field { margin-bottom: 16px; }
   .bio { font-size: .94rem; }
   .rating-row { display: flex; align-items: center; gap: 8px; font-size: .94rem; }
-  .rating-big { font-size: .94rem; font-weight: 800; color: var(--star); }
+  .rating-big { font-size: .94rem; font-weight: 800; color: var(--ink); }
   .stars { color: var(--star); letter-spacing: 2px; font-size: .94rem; }
   .stat { display: flex; justify-content: space-between; padding: 7px 0; border-bottom: 1px dashed var(--line); font-size: .92rem; }
   .stat .v { font-weight: 700; }
   .chips { display: flex; flex-wrap: wrap; gap: 6px; }
   .chip { background: var(--accent-soft); color: var(--accent); padding: 4px 10px; border-radius: 999px; font-size: .8rem; font-weight: 600; }
-  .chip.cert { background: #ecfdf5; color: #047857; }
+  .chip.cert { background: rgba(16,185,129,.15); color: #10b981; }
   a.link { color: var(--accent); text-decoration: none; font-weight: 600; word-break: break-all; }
   a.link:hover { text-decoration: underline; }
 
-  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 18px; align-items: center; }
+  .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: auto; padding-top: 18px; align-items: center; }
   .icon-btn {
     width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line);
-    background: #fff; display: grid; place-items: center; cursor: pointer; color: var(--ink);
+    background: var(--input); display: grid; place-items: center; cursor: pointer; color: var(--ink);
     text-decoration: none; transition: .15s;
   }
   .icon-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
   .icon-btn.linkedin:hover { color: #0a66c2; border-color: #0a66c2; }
   .icon-btn.disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
   .icon-btn svg { width: 20px; height: 20px; }
-
-  /* Edit-photo control inside expanded view */
-  .edit-photo { background:none; border:none; color:var(--accent); font-size:.82rem; font-weight:600; cursor:pointer; padding:6px 0; }
-  .edit-photo:hover { text-decoration: underline; }
 
   .empty { text-align: center; color: var(--muted); padding: 60px 20px; }
 
@@ -152,7 +202,7 @@
   }
   .modal-overlay.show { display: flex; }
   .modal {
-    background: #fff; border-radius: 18px; width: 100%; max-width: 540px;
+    background: var(--card); border-radius: 18px; width: 100%; max-width: 540px;
     padding: 28px; box-shadow: 0 20px 60px rgba(0,0,0,.3); margin: auto;
   }
   .modal h2 { margin: 0 0 18px; }
@@ -160,7 +210,7 @@
   .modal label .req { color: #dc2626; }
   .modal input[type=text], .modal input[type=email], .modal input[type=url], .modal textarea {
     width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px;
-    font-size: .92rem; font-family: inherit; outline: none;
+    font-size: .92rem; font-family: inherit; outline: none; background: var(--input); color: var(--ink);
   }
   .modal input:focus, .modal textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .modal textarea { resize: vertical; min-height: 70px; }
@@ -188,11 +238,19 @@
 <body>
 <div class="wrap">
   <header class="page">
-    <div>
-      <h1>Team Profiles</h1>
-      <div class="sub">Sorted by computed rating — top talent first</div>
+    <h1>Team Profiles</h1>
+    <div class="head-actions">
+      <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
+      <div class="settings-wrap">
+        <button class="icon-toggle" onclick="toggleSettings(event)" title="Settings">⚙️</button>
+        <div class="settings-panel" id="settingsPanel" onclick="event.stopPropagation()">
+          <div class="title">Configuration</div>
+          <label><input type="checkbox" id="cfgAdd" onchange="updateSettings()" /> Show “Add Member” button</label>
+          <label><input type="checkbox" id="cfgDel" onchange="updateSettings()" /> Enable delete</label>
+        </div>
+      </div>
+      <button class="btn btn-primary" id="addBtn" onclick="openModal()">+ Add Member</button>
     </div>
-    <button class="btn btn-primary" onclick="openModal()">+ Add Member</button>
   </header>
 
   <div class="toolbar">
@@ -278,23 +336,64 @@
 </div>
 
 <script>
-const STORE = 'teamProfiles.v1';
+const STORE = 'teamProfiles.v2';
 let avatarData = '';
 
-const seed = [
-  { name:'Alex Rivera', role:'Engineering Manager', company:'Acme Corp', exp:12,
-    skills:['Go','Kubernetes','AWS','Mentoring'], certs:['CSA','CAD'], trainings:40, impl:5,
-    linkedin:'', email:'alex.rivera@acme.com', resume:'',
-    bio:'Leads backend infrastructure and mentors junior devs. Passionate about scalable systems.' },
-  { name:'Priya Nair', role:'Principal Data Scientist', company:'DataWorks', exp:15,
-    skills:['Python','ML','SQL','TensorFlow','Statistics'], certs:['PMP','CSA','CAD','CIS-ITSM'], trainings:420, impl:38,
-    linkedin:'', email:'priya.nair@dataworks.io', resume:'',
-    bio:'Builds production ML pipelines and trains analytics teams across the org.' },
-  { name:'Marcus Lee', role:'UX Designer', company:'Bright Studio', exp:6,
-    skills:['Figma','Research','Prototyping'], certs:['CSA'], trainings:25, impl:12,
-    linkedin:'', email:'marcus@brightstudio.com', resume:'',
-    bio:'Human-centered designer focused on accessible, delightful product experiences.' },
-];
+/* ---- 40 dummy team members (deterministic, varied so ratings differ) ---- */
+function buildSeed(){
+  const first = ['Alex','Priya','Marcus','Sara','James','Lena','Omar','Nina','David','Aisha',
+    'Tom','Mei','Carlos','Ruth','Ivan','Grace','Hassan','Emma','Noah','Zara',
+    'Leo','Maya','Sam','Tara','Kyle','Anya','Raj','Lucy','Ben','Chloe',
+    'Victor','Hana','Felix','Iris','Dane','Nora','Eli','Yara','Paul','Mira'];
+  const last = ['Rivera','Nair','Lee','Khan','Brooks','Vogel','Haddad','Patel','Stone','Bello',
+    'Chen','Lin','Ortiz','Hayes','Petrov','Owens','Ali','Watts','Park','Reed',
+    'Fox','Singh','Cole','Diaz','Burns','Volkov','Mehta','Hart','Frost','Wells',
+    'Marsh','Sato','Berg','Quinn','Lowe','Reyes','Webb','Aziz','Dunn','Kerr'];
+  const roles = ['Engineering Manager','Principal Data Scientist','UX Designer','Solutions Architect',
+    'Product Manager','DevOps Lead','Frontend Engineer','Backend Engineer','QA Lead','Scrum Master',
+    'Business Analyst','Security Engineer','ML Engineer','Cloud Architect','Tech Lead'];
+  const companies = ['Acme Corp','DataWorks','Bright Studio','NorthBay','Vertex Labs','Cloudpeak',
+    'BlueRiver','Helix','Quantum IO','Summit Tech'];
+  const skillsPool = ['Python','Go','Java','SQL','AWS','Azure','Kubernetes','React','Leadership',
+    'Mentoring','ML','TensorFlow','Figma','Docker','Terraform','Node.js','Statistics','Agile',
+    'Security','Communication','Data Viz','GraphQL'];
+  const certsPool = ['CSA','CAD','CIS-ITSM','PMP','AWS-SA','CKA','CISSP','Scrum-PSM','Azure-AZ900','TOGAF'];
+  const bios = [
+    'Leads backend infrastructure and mentors junior devs. Passionate about scalable systems.',
+    'Builds production ML pipelines and trains analytics teams across the org.',
+    'Human-centered designer focused on accessible, delightful product experiences.',
+    'Drives platform reliability and champions a strong engineering culture.',
+    'Connects business goals to technical delivery with a pragmatic, data-driven style.',
+    'Hands-on technologist who loves automating the boring parts and shipping fast.',
+    'Coaches teams toward continuous improvement and sustainable delivery.',
+    'Specializes in secure-by-default architectures and threat modeling.'
+  ];
+  const out = [];
+  for (let i = 0; i < 40; i++) {
+    const name = first[i] + ' ' + last[i];
+    const nSkills = 2 + (i % 6);          // 2..7 skills
+    const nCerts = i % 5;                  // 0..4 certs
+    const skills = []; for (let s=0;s<nSkills;s++) skills.push(skillsPool[(i*3+s)%skillsPool.length]);
+    const certs  = []; for (let c=0;c<nCerts;c++)  certs.push(certsPool[(i*2+c)%certsPool.length]);
+    const company = companies[i % companies.length];
+    out.push({
+      name,
+      role: roles[i % roles.length],
+      company,
+      exp: 2 + (i % 18),                                   // 2..19 yrs
+      skills: [...new Set(skills)],
+      certs: [...new Set(certs)],
+      trainings: (i * 17) % 460,                            // 0..459
+      impl: (i * 7) % 45,                                   // 0..44
+      linkedin: '',
+      email: (first[i] + '.' + last[i]).toLowerCase() + '@' + company.toLowerCase().replace(/[^a-z]/g,'') + '.com',
+      resume: '',
+      bio: bios[i % bios.length]
+    });
+  }
+  return out;
+}
+const seed = buildSeed();
 
 function load() {
   const raw = localStorage.getItem(STORE);
@@ -364,43 +463,50 @@ function render(){
     const linkedin = m.linkedin || ('https://www.linkedin.com/search/results/all/?keywords=' + encodeURIComponent(m.name));
     const avatar = m.avatar
       ? `<img src="${m.avatar}" alt="${esc(m.name)}">`
-      : initials(m.name);
+      : `<span class="avatar-initials">${initials(m.name)}</span>`;
     const skillChips = (m.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join('') || '<span class="hint">—</span>';
     const certChips = (m.certs||[]).map(s=>`<span class="chip cert">${esc(s)}</span>`).join('') || '<span class="hint">—</span>';
 
     return `
     <div class="acc" id="acc-${m.id}">
       <div class="acc-head" onclick="toggle('${m.id}')">
-        <div class="avatar">${avatar}</div>
+        <div class="avatar" onclick="event.stopPropagation();editAvatar('${m.id}')" title="Click to upload / change photo">
+          ${avatar}<span class="avatar-edit">📷</span>
+        </div>
         <div class="head-meta">
           <div class="name">${esc(m.name)}</div>
           <div class="role">${esc(m.role)}</div>
           ${m.company ? `<span class="company">${esc(m.company)}</span>` : ''}
         </div>
-        <div class="head-qr" onclick="event.stopPropagation()" title="Scan for full profile">
+        <div class="head-qr" onclick="event.stopPropagation()" title="Scan for complete profile">
           <div class="qr" id="qr-${m.id}"></div>
-          <div class="qr-label">Scan profile</div>
+          <div class="qr-label">Complete profile</div>
         </div>
-        <button class="del-btn" title="Remove" onclick="event.stopPropagation();removeMember('${m.id}')">🗑</button>
+        ${settings.allowDelete ? `<button class="del-btn" title="Remove" onclick="event.stopPropagation();removeMember('${m.id}')">🗑</button>` : ''}
         <svg class="chevron" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m6 9 6 6 6-6"/></svg>
       </div>
       <div class="acc-body">
         <div class="cols">
           <div class="col">
             <div class="field">
-              <h4>Bio</h4>
               <div class="bio">${esc(m.bio) || '<span class="hint">No bio provided.</span>'}</div>
             </div>
             <div class="field">
-              <h4>Rating</h4>
               <div class="rating-row">
                 <span class="rating-big">${m._rating.toFixed(1)}/5</span>
                 <span class="stars">${stars(m._rating)}</span>
               </div>
             </div>
-            <div class="field">
-              <h4>Photo</h4>
-              <button class="edit-photo" onclick="editAvatar('${m.id}')">📷 ${m.avatar ? 'Change photo' : 'Add photo'}</button>
+            <div class="cta-row">
+              <a class="icon-btn linkedin" href="${esc(linkedin)}" target="_blank" rel="noopener" title="Connect on LinkedIn">
+                <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
+              </a>
+              <a class="icon-btn" href="mailto:${esc(m.email||'')}" title="Contact ${esc(m.name)}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+              </a>
+              <a class="icon-btn ${m.resume ? '' : 'disabled'}" href="${esc(m.resume||'#')}" target="_blank" download title="${m.resume ? 'Download resume' : 'No resume available'}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+              </a>
             </div>
           </div>
           <div class="col">
@@ -418,17 +524,6 @@ function render(){
               <div class="chips">${skillChips}</div>
             </div>
           </div>
-        </div>
-        <div class="cta-row">
-          <a class="icon-btn linkedin" href="${esc(linkedin)}" target="_blank" rel="noopener" title="Connect on LinkedIn">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
-          </a>
-          <a class="icon-btn" href="mailto:${esc(m.email||'')}" title="Contact ${esc(m.name)}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
-          </a>
-          <a class="icon-btn ${m.resume ? '' : 'disabled'}" href="${esc(m.resume||'#')}" target="_blank" download title="${m.resume ? 'Download resume' : 'No resume available'}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-          </a>
         </div>
       </div>
     </div>`;
@@ -451,8 +546,10 @@ function render(){
 function toggle(id, forceOpen){
   const el = document.getElementById('acc-'+id);
   if (!el) return;
-  if (forceOpen) el.classList.add('open');
-  else el.classList.toggle('open');
+  const willOpen = forceOpen ? true : !el.classList.contains('open');
+  // Collapse any other open profile — only one stays open at a time
+  document.querySelectorAll('.acc.open').forEach(a => a.classList.remove('open'));
+  if (willOpen) el.classList.add('open');
 }
 
 function removeMember(id){
@@ -532,6 +629,44 @@ function saveMember(){
   save(); closeModal(); render();
 }
 
+/* ---- Day / night theme ---- */
+const THEME_KEY = 'teamProfiles.theme';
+function applyTheme(t){
+  document.body.classList.toggle('dark', t === 'dark');
+  document.getElementById('themeBtn').textContent = t === 'dark' ? '☀️' : '🌙';
+}
+function toggleTheme(){
+  const t = document.body.classList.contains('dark') ? 'light' : 'dark';
+  localStorage.setItem(THEME_KEY, t);
+  applyTheme(t);
+}
+
+/* ---- Configuration: show/hide Add + Delete ---- */
+const SETTINGS_KEY = 'teamProfiles.settings';
+let settings = { showAdd: true, allowDelete: true };
+try { Object.assign(settings, JSON.parse(localStorage.getItem(SETTINGS_KEY) || '{}')); } catch(e){}
+
+function applySettings(){
+  document.getElementById('addBtn').style.display = settings.showAdd ? '' : 'none';
+  document.getElementById('cfgAdd').checked = settings.showAdd;
+  document.getElementById('cfgDel').checked = settings.allowDelete;
+}
+function updateSettings(){
+  settings.showAdd = document.getElementById('cfgAdd').checked;
+  settings.allowDelete = document.getElementById('cfgDel').checked;
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  applySettings();
+  render();
+}
+function toggleSettings(e){
+  e.stopPropagation();
+  document.getElementById('settingsPanel').classList.toggle('show');
+}
+// click outside closes the settings panel
+document.addEventListener('click', () => document.getElementById('settingsPanel').classList.remove('show'));
+
+applyTheme(localStorage.getItem(THEME_KEY) || 'light');
+applySettings();
 render();
 window.addEventListener('hashchange', render);
 </script>
