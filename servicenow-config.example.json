@@ -1,0 +1,7 @@
+{
+  "instance": "https://your-instance.service-now.com",
+  "table": "x_palni_servicen_1_team_profiles",
+  "username": "YOUR_SERVICENOW_USER",
+  "password": "YOUR_SERVICENOW_PASSWORD",
+  "port": 3000
+}

@@ -1,0 +1,5 @@
+# Real ServiceNow credentials — never commit
+servicenow-config.json
+
+node_modules/
+*.log
