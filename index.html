@@ -187,28 +187,38 @@
   .reviews-sub { color: var(--muted); font-size: .9rem; margin-bottom: 18px; }
   .reviews-overall { display: inline-flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); margin-left: 6px; font-size: .95rem; }
 
-  .review-config { display: flex; align-items: center; gap: 9px; font-size: .9rem; color: var(--muted); cursor: pointer; }
-  .review-config input { width: 16px; height: 16px; accent-color: var(--accent); }
+  .reviews-actions { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
 
-  .add-review { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin-bottom: 18px; }
-  .add-review h3 { margin: 0 0 14px; font-size: 1.05rem; }
+  /* Submit Review modal */
+  .rv-modal-overlay {
+    position: fixed; inset: 0; background: rgba(15,23,42,.55); display: none;
+    align-items: flex-start; justify-content: center; padding: 24px; z-index: 60; overflow-y: auto;
+  }
+  .rv-modal {
+    background: var(--card); border: 1px solid var(--line); border-radius: 18px; width: 100%;
+    max-width: 620px; padding: 26px; box-shadow: 0 20px 60px rgba(0,0,0,.35); margin: auto;
+  }
+  .rv-modal h3 { margin: 0 0 16px; font-size: 1.2rem; }
   .add-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
-  .add-review label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 4px; color: var(--muted); }
-  .add-review input[type=text], .add-review textarea {
+  .rv-modal label { display: block; font-size: .8rem; font-weight: 600; margin-bottom: 4px; color: var(--muted); }
+  .rv-modal input[type=text], .rv-modal textarea, .rv-modal select {
     width: 100%; padding: 10px 11px; border: 1px solid var(--line); border-radius: 10px;
     font-size: .9rem; font-family: inherit; outline: none; background: var(--input); color: var(--ink);
   }
-  .add-review textarea { min-height: 96px; resize: vertical; }
-  .add-review input:focus, .add-review textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
-  .param-input { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: center; margin-bottom: 8px; }
+  .rv-modal textarea { min-height: 96px; resize: vertical; }
+  .rv-modal input:focus, .rv-modal textarea:focus, .rv-modal select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .rv-modal-actions { display: flex; gap: 12px; margin-top: 22px; }
+  .rv-modal-actions .btn { flex: 1; padding: 13px; }
+  .param-input { display: grid; grid-template-columns: 1fr auto auto; gap: 10px; align-items: center; margin-bottom: 8px; }
   .param-input span.lbl { font-size: .82rem; }
-  .param-input input[type=range] { width: 100%; accent-color: var(--accent); }
+  .param-input input[type=range] { width: 140px; accent-color: var(--accent); }
   .param-input .num { font-weight: 700; min-width: 28px; text-align: right; font-size: .85rem; }
 
   .review-cards { display: flex; flex-direction: column; gap: 16px; }
   .review-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
   .review-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid var(--line); }
   .rv-name { font-weight: 800; color: var(--accent); font-size: 1.05rem; }
+  .rv-for { color: var(--muted); font-size: .85rem; }
   .rv-rating { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
   .rv-rating .stars { font-size: .95rem; }
   .rv-batch { margin-left: auto; font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--accent-soft); padding: 3px 10px; border-radius: 6px; }
@@ -262,9 +272,12 @@
     <div class="list" id="list"></div>
   </div>
 
-  <!-- ===== Reviews & Feedback view (populated by showReviews) ===== -->
+  <!-- ===== Reviews & Feedback view (populated by showAllReviews) ===== -->
   <div id="reviewsView" style="display:none"></div>
 </div>
+
+<!-- Submit Review modal (populated by openReviewModal) -->
+<div id="rvModal" class="rv-modal-overlay" style="display:none" onclick="if(event.target===this)closeReviewModal()"></div>
 
 <script>
 /* ---- 40 dummy team members (deterministic, varied so ratings differ) ---- */
@@ -495,7 +508,7 @@ function render(){
               <div class="rating-row">
                 <span class="rating-big">${m._rating.toFixed(1)}/5</span>
                 <span class="stars">${stars(m._rating)}</span>
-                <a class="reviews-link" href="#reviews=${encodeURIComponent(m.id)}">(Reviews)</a>
+                <a class="reviews-link" href="#reviews">(Reviews)</a>
               </div>
             </div>
             <div class="cta-row">
@@ -547,11 +560,10 @@ function toggle(id, forceOpen){
 function splitList(v){ return v.split(',').map(s=>s.trim()).filter(Boolean); }
 
 /* ============================================================
-   Reviews & Feedback
+   Reviews & Feedback (one global page for ALL trainers)
    ------------------------------------------------------------
-   Reviews are demo data stored in localStorage (no ServiceNow
-   reviews table yet). Each trainer is seeded with sample reviews
-   on first visit; submitted reviews are saved per trainer.
+   Demo data: a few seeded sample reviews (tied to real trainers)
+   plus any reviews submitted via the form, saved in localStorage.
    ============================================================ */
 const REVIEW_PARAMS = [
   ['depth',      'Depth of Knowledge Covered'],
@@ -563,53 +575,42 @@ const REVIEW_PARAMS = [
   ['mentorship', 'Mentorship and Guidance'],
   ['recommend',  'Likelihood to Recommend This Program']
 ];
-const REVIEWS_KEY     = 'teamProfiles.reviews';      // { trainerId: [review,...] }
-const REVIEW_CFG_KEY  = 'teamProfiles.reviewsCfg';   // { allowAdd: bool }
+const REVIEWS_KEY = 'teamProfiles.reviews.v2';   // flat array of submitted reviews
+let userReviews = [];
+try { userReviews = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || []; if (!Array.isArray(userReviews)) userReviews = []; } catch(e) { userReviews = []; }
+let reviewSort = 'overall';
 
-let reviewsStore = {};
-try { reviewsStore = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || {}; } catch(e) { reviewsStore = {}; }
-let reviewCfg = { allowAdd: false };
-try { Object.assign(reviewCfg, JSON.parse(localStorage.getItem(REVIEW_CFG_KEY) || '{}')); } catch(e){}
-
-function saveReviews(){ localStorage.setItem(REVIEWS_KEY, JSON.stringify(reviewsStore)); }
+function saveReviews(){ localStorage.setItem(REVIEWS_KEY, JSON.stringify(userReviews)); }
 function avgScore(scores){
   const vals = REVIEW_PARAMS.map(p => +scores[p[0]] || 0);
   return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) * 10) / 10;
 }
+function backToTrainers(e){ if (e) e.preventDefault(); location.hash = ''; }
+function setReviewSort(v){ reviewSort = v; showAllReviews(); }
+function sortValue(r){ return reviewSort === 'overall' ? avgScore(r.scores) : (+r.scores[reviewSort] || 0); }
 
-// Deterministic sample reviews so the page isn't empty before any are added.
-function sampleReviews(trainer){
-  const samples = [
-    { name:'Anita Rao',   batch:'B-2025-02', base:4.6,
-      comment:'Exceptional sessions — concepts were broken down clearly and the hands-on labs made everything click. Easily one of the best trainers I have worked with.' },
-    { name:'John Mathew', batch:'B-2024-11', base:4.2,
-      comment:'Very knowledgeable and approachable. Real-world examples were spot on. Would have liked a little more time on the advanced topics, but overall excellent.' },
-    { name:'Sara Lee',    batch:'B-2025-01', base:4.8,
-      comment:'Engaging from start to finish. The mentorship after the program was invaluable and directly helped me on a live project. Highly recommend.' }
+// Seeded sample reviews tied to the first few real trainers, so the page isn't empty.
+function buildSampleReviews(){
+  const base = [
+    { name:'Anita Rao',   batch:'B-2025-02', base:4.6, comment:'Exceptional sessions — concepts were broken down clearly and the hands-on labs made everything click. Easily one of the best trainers I have worked with.' },
+    { name:'John Mathew', batch:'B-2024-11', base:4.2, comment:'Very knowledgeable and approachable. Real-world examples were spot on. Would have liked a little more time on the advanced topics, but overall excellent.' },
+    { name:'Sara Lee',    batch:'B-2025-01', base:4.8, comment:'Engaging from start to finish. The mentorship after the program was invaluable and directly helped me on a live project. Highly recommend.' },
+    { name:'Vikram Shah', batch:'B-2024-09', base:3.9, comment:'Solid program with practical content. The pacing was good and questions were always welcomed. A bit more real-world context would make it perfect.' },
+    { name:'Priya Menon', batch:'B-2025-03', base:4.4, comment:'Great clarity and structure. I appreciated the hands-on exercises and the follow-up guidance. Would definitely recommend to colleagues.' }
   ];
-  return samples.map(function(s, i){
+  const out = [];
+  members.slice(0, base.length).forEach(function(trainer, i){
+    const s = base[i];
     const scores = {};
     REVIEW_PARAMS.forEach(function(p, j){
-      const v = s.base + (((i + j) % 3) - 1) * 0.3;   // small deterministic spread
+      const v = s.base + (((i + j) % 3) - 1) * 0.3;
       scores[p[0]] = Math.max(3, Math.min(5, Math.round(v * 2) / 2));
     });
-    return { id:'sample-'+i, name:s.name, batch:s.batch, comment:s.comment, scores:scores };
+    out.push({ id:'sample-'+i, trainerId:trainer.id, trainerName:trainer.name, name:s.name, batch:s.batch, comment:s.comment, scores:scores });
   });
+  return out;
 }
-
-function getReviews(trainerId, trainer){
-  if (!reviewsStore[trainerId]) reviewsStore[trainerId] = sampleReviews(trainer);
-  return reviewsStore[trainerId];
-}
-
-function goToReviews(id){ location.hash = 'reviews=' + encodeURIComponent(id); }
-function backToTrainers(e){ if (e) e.preventDefault(); location.hash = ''; }
-
-function toggleReviewCfg(trainerId){
-  reviewCfg.allowAdd = !reviewCfg.allowAdd;
-  localStorage.setItem(REVIEW_CFG_KEY, JSON.stringify(reviewCfg));
-  showReviews(trainerId);
-}
+function allReviews(){ return buildSampleReviews().concat(userReviews); }
 
 function scaleRow(label, val){
   const pct = Math.max(0, Math.min(100, (val/5)*100));
@@ -625,6 +626,7 @@ function reviewCard(r){
   return '<div class="review-card">' +
     '<div class="review-head">' +
       '<span class="rv-name">' + esc(r.name) + '</span>' +
+      (r.trainerName ? '<span class="rv-for">on ' + esc(r.trainerName) + '</span>' : '') +
       '<span class="rv-rating">' + overall.toFixed(1) + '/5 <span class="stars">' + stars(overall) + '</span></span>' +
       '<span class="rv-batch">Batch: ' + esc(r.batch || '—') + '</span>' +
     '</div>' +
@@ -635,7 +637,38 @@ function reviewCard(r){
   '</div>';
 }
 
-function addReviewForm(trainerId){
+function showAllReviews(){
+  const list = allReviews().slice().sort(function(a,b){ return sortValue(b) - sortValue(a); });
+  const overall = list.length
+    ? Math.round((list.reduce(function(a,r){ return a + avgScore(r.scores); }, 0) / list.length) * 10) / 10
+    : 0;
+  const sortOpts = [['overall','Overall']].concat(REVIEW_PARAMS).map(function(p){
+    return '<option value="' + p[0] + '"' + (reviewSort === p[0] ? ' selected' : '') + '>Sort: ' + esc(p[1]) + '</option>';
+  }).join('');
+
+  const html =
+    '<div class="reviews-head">' +
+      '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Trainers</a>' +
+      '<div class="reviews-actions">' +
+        '<select class="sort-select" onchange="setReviewSort(this.value)">' + sortOpts + '</select>' +
+        '<button class="btn btn-primary" onclick="openReviewModal()">+ Submit Review</button>' +
+      '</div>' +
+    '</div>' +
+    '<h2 class="reviews-title">Reviews &amp; Feedback</h2>' +
+    '<div class="reviews-sub">All trainers' +
+      (list.length ? '<span class="reviews-overall">&#9733; ' + overall.toFixed(1) + '/5 &nbsp;(' + list.length + ' review' + (list.length!==1?'s':'') + ')</span>' : '') +
+    '</div>' +
+    '<div class="review-cards">' +
+      (list.length ? list.map(reviewCard).join('') : '<div class="empty">No reviews yet.</div>') +
+    '</div>';
+
+  document.getElementById('reviewsView').innerHTML = html;
+  window.scrollTo(0, 0);
+}
+
+/* ---- Submit Review modal ---- */
+function openReviewModal(){
+  const trainerOpts = members.map(function(m){ return '<option value="' + m.id + '">' + esc(m.name) + '</option>'; }).join('');
   const params = REVIEW_PARAMS.map(function(p){
     return '<div class="param-input">' +
         '<span class="lbl">' + esc(p[1]) + '</span>' +
@@ -644,77 +677,62 @@ function addReviewForm(trainerId){
         '<span class="num" id="rvn_' + p[0] + '">4</span>' +
       '</div>';
   }).join('');
-  return '<div class="add-review">' +
-    '<h3>Add a Review</h3>' +
-    '<div class="add-grid">' +
-      '<div><label>Your Name</label><input type="text" id="rv_name" placeholder="Trainee name"></div>' +
-      '<div><label>Batch Number</label><input type="text" id="rv_batch" placeholder="e.g. B-2025-04"></div>' +
-    '</div>' +
-    '<div style="margin-top:14px"><label>Ratings (1–5)</label>' + params + '</div>' +
-    '<div style="margin-top:6px"><label>Comment</label><textarea id="rv_comment" placeholder="Share your experience…"></textarea></div>' +
-    '<div style="margin-top:14px;display:flex;gap:10px">' +
-      '<button class="btn btn-primary" onclick="submitReview(\'' + trainerId + '\')">Submit Review</button>' +
-    '</div>' +
-  '</div>';
+  const html =
+    '<div class="rv-modal">' +
+      '<h3>Submit a Review</h3>' +
+      '<div class="add-grid">' +
+        '<div><label>Trainer</label><select id="rv_trainer">' + trainerOpts + '</select></div>' +
+        '<div><label>Your Name</label><input type="text" id="rv_name" placeholder="Trainee name"></div>' +
+        '<div><label>Batch Number</label><input type="text" id="rv_batch" placeholder="e.g. B-2025-04"></div>' +
+      '</div>' +
+      '<div style="margin-top:14px"><label>Ratings (1–5)</label>' + params + '</div>' +
+      '<div style="margin-top:6px"><label>Comment</label><textarea id="rv_comment" placeholder="Share your experience…"></textarea></div>' +
+      '<div class="rv-modal-actions">' +
+        '<button class="btn btn-ghost" onclick="closeReviewModal()">Cancel</button>' +
+        '<button class="btn btn-primary" onclick="submitReview()">Submit Review</button>' +
+      '</div>' +
+    '</div>';
+  const ov = document.getElementById('rvModal');
+  ov.innerHTML = html;
+  ov.style.display = 'flex';
 }
+function closeReviewModal(){ const ov = document.getElementById('rvModal'); ov.style.display = 'none'; ov.innerHTML = ''; }
 
-function submitReview(trainerId){
+function submitReview(){
   const name = document.getElementById('rv_name').value.trim();
   if (!name) { alert('Please enter your name.'); return; }
+  const sel = document.getElementById('rv_trainer');
+  const trainerId = sel ? sel.value : '';
+  const trainer = members.find(function(m){ return m.id === trainerId; });
   const scores = {};
   REVIEW_PARAMS.forEach(function(p){ scores[p[0]] = +document.getElementById('rv_' + p[0]).value || 0; });
-  const review = {
+  userReviews.push({
     id: 'r_' + Date.now().toString(36),
+    trainerId: trainerId,
+    trainerName: trainer ? trainer.name : '',
     name: name,
     batch: document.getElementById('rv_batch').value.trim(),
     comment: document.getElementById('rv_comment').value.trim(),
     scores: scores
-  };
-  if (!reviewsStore[trainerId]) reviewsStore[trainerId] = [];
-  reviewsStore[trainerId].push(review);
+  });
   saveReviews();
-  showReviews(trainerId);
-}
-
-function showReviews(trainerId){
-  const trainer = members.find(function(m){ return m.id === trainerId; }) || { name:'Trainer', role:'', company:'' };
-  const reviews = getReviews(trainerId, trainer);
-  const overall = reviews.length
-    ? Math.round((reviews.reduce(function(a,r){ return a + avgScore(r.scores); }, 0) / reviews.length) * 10) / 10
-    : 0;
-
-  const html =
-    '<div class="reviews-head">' +
-      '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Trainers</a>' +
-      '<label class="review-config" title="Show or hide the Add Review form">' +
-        '<input type="checkbox" ' + (reviewCfg.allowAdd ? 'checked' : '') + ' onchange="toggleReviewCfg(\'' + trainerId + '\')"> Allow adding reviews' +
-      '</label>' +
-    '</div>' +
-    '<h2 class="reviews-title">Reviews &amp; Feedback</h2>' +
-    '<div class="reviews-sub">' + esc(trainer.name) + (trainer.role ? ' &middot; ' + esc(trainer.role) : '') +
-      (reviews.length ? '<span class="reviews-overall">&#9733; ' + overall.toFixed(1) + '/5 &nbsp;(' + reviews.length + ' review' + (reviews.length!==1?'s':'') + ')</span>' : '') +
-    '</div>' +
-    (reviewCfg.allowAdd ? addReviewForm(trainerId) : '') +
-    '<div class="review-cards">' +
-      (reviews.length ? reviews.map(reviewCard).join('') : '<div class="empty">No reviews yet.</div>') +
-    '</div>';
-
-  document.getElementById('reviewsView').innerHTML = html;
-  window.scrollTo(0, 0);
+  closeReviewModal();
+  showAllReviews();
 }
 
 /* ---- Router: switch between the trainers list and the reviews view ---- */
 function route(){
-  const rm = location.hash.match(/reviews=([^&]+)/);
+  const isReviews = location.hash.indexOf('#reviews') === 0;
   const mainView = document.getElementById('mainView');
   const reviewsView = document.getElementById('reviewsView');
-  if (rm) {
+  if (isReviews) {
     mainView.style.display = 'none';
     reviewsView.style.display = '';
-    showReviews(decodeURIComponent(rm[1]));
+    showAllReviews();
   } else {
     reviewsView.style.display = 'none';
     mainView.style.display = '';
+    closeReviewModal();
     render();
   }
 }
