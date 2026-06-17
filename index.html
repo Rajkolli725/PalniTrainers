@@ -216,6 +216,7 @@
   .review-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
   .review-head { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid var(--line); }
   .rv-name { font-weight: 800; color: var(--accent); font-size: 1.05rem; }
+  .rv-trainer { color: var(--muted); font-size: .85rem; font-weight: 600; }
   .rv-rating { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
   .rv-rating .stars { font-size: .95rem; }
   .rv-batch { margin-left: auto; font-size: .72rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); background: var(--accent-soft); padding: 3px 10px; border-radius: 6px; }
@@ -342,8 +343,10 @@ function withId(m){ if(!m.id) m.id = 'm_' + Date.now().toString(36) + '_' + (_id
    read-only viewer; member management is done in ServiceNow directly.
    ============================================================ */
 const SN = { instance: 'https://ven07539.service-now.com' };
-const API_URL    = SN.instance + '/api/x_palni_servicen_1/team_profiles';  // GET -> list of members
-const RESUME_URL = API_URL + '/resume/';                                    // GET /resume/{sysId} -> base64
+const API_URL     = SN.instance + '/api/x_palni_servicen_1/team_profiles';  // GET -> list of members
+const RESUME_URL  = API_URL + '/resume/';                                   // GET /resume/{sysId} -> base64
+const REVIEWS_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_trainee_feedback';  // GET -> list of reviews
+const REVIEWS_POST_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/post_trainee_feedback'; // POST -> submit (lands in staging table)
 
 // No auth header — the Scripted REST API is anonymous; credentials:'omit'
 // keeps it a clean cross-origin request governed only by the CORS rule.
@@ -572,70 +575,58 @@ const REVIEW_PARAMS = [
   ['mentorship', 'Mentorship and Guidance'],
   ['recommend',  'Likelihood to Recommend This Program']
 ];
-const REVIEWS_KEY = 'teamProfiles.reviews.v2';   // flat array of submitted reviews
-let userReviews = [];
-try { userReviews = JSON.parse(localStorage.getItem(REVIEWS_KEY)) || []; if (!Array.isArray(userReviews)) userReviews = []; } catch(e) { userReviews = []; }
+let snReviews = [];          // reviews loaded from ServiceNow
+let reviewsState = 'idle';   // idle | loading | ready | error
+let reviewsError = '';
 let reviewSort = 'overall';
 
-function saveReviews(){ localStorage.setItem(REVIEWS_KEY, JSON.stringify(userReviews)); }
 function avgScore(scores){
   const vals = REVIEW_PARAMS.map(p => +scores[p[0]] || 0);
   return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) * 10) / 10;
 }
 function backToTrainers(e){ if (e) e.preventDefault(); location.hash = ''; }
 function setReviewSort(v){ reviewSort = v; showAllReviews(); }
-function sortValue(r){ return reviewSort === 'overall' ? avgScore(r.scores) : (+r.scores[reviewSort] || 0); }
+function sortValue(r){ return reviewSort === 'overall' ? (r.overall || avgScore(r.scores)) : (+r.scores[reviewSort] || 0); }
 
-// Seeded sample reviews (40+) spread deterministically across the real trainers.
-function buildSampleReviews(){
-  if (!members.length) return [];
-  const firsts = ['Anita','John','Sara','Vikram','Priya','Rahul','Meera','Daniel','Sneha','Arjun',
-    'Kavya','Tomás','Lina','Imran','Grace','Naveen','Ritu','Sam','Pooja','Karan',
-    'Divya','Hassan','Emma','Rohit','Neha','Leo','Ananya','Yusuf','Maya','Aditya'];
-  const lasts = ['Rao','Mathew','Lee','Shah','Menon','Verma','Iyer','Cruz','Patel','Nair',
-    'Reddy','Silva','Khan','Bose','Walker','Kapoor','Sharma','Cole','Joshi','Pillai'];
-  const comments = [
-    'Exceptional sessions — concepts were broken down clearly and the hands-on labs made everything click. One of the best trainers I have worked with.',
-    'Very knowledgeable and approachable. Real-world examples were spot on. Would have liked a little more time on the advanced topics, but overall excellent.',
-    'Engaging from start to finish. The mentorship afterwards was invaluable and directly helped me on a live project. Highly recommend.',
-    'Solid program with practical content. Pacing was good and questions were always welcomed. A bit more real-world context would make it perfect.',
-    'Great clarity and structure. I appreciated the hands-on exercises and the follow-up guidance. Would definitely recommend to colleagues.',
-    'The trainer made a dense topic genuinely enjoyable. Loved the live demos and the way doubts were handled patiently.',
-    'Well-organized sessions with a strong balance of theory and practice. The case studies tied everything back to our day-to-day work.',
-    'Clear communicator who keeps the room engaged. The exercises were challenging in a good way and reinforced the concepts.',
-    'Brought a lot of industry experience to the table. The real-world war stories were the highlight for me.',
-    'Patient, thorough, and always available for questions. I left the program feeling confident to apply what I learned.',
-    'Good session overall. Slides were clear, though I would have preferred a few more guided labs to practice.',
-    'Fantastic mentorship. The personalized feedback on my project pushed me to improve quickly.',
-    'Strong command of the subject and great at simplifying complex ideas. Recommend for anyone starting out.',
-    'The flow of the program was logical and easy to follow. Hands-on portions were the most valuable parts.',
-    'Interactive and energetic. Encouraged participation and made sure no one was left behind.',
-    'Practical, relevant, and well-paced. The takeaways were immediately useful back at work.',
-    'A few sections felt rushed, but the trainer followed up generously afterwards to clear my doubts.',
-    'Excellent real-world examples and a clear structure. The recommendations at the end were a nice touch.'
-  ];
-  const out = [];
-  const COUNT = 44;
-  for (let i = 0; i < COUNT; i++) {
-    const trainer = members[i % members.length];
-    const name = firsts[i % firsts.length] + ' ' + lasts[(i * 7) % lasts.length];
-    const base = 3.6 + (((i * 7) % 14) / 10);            // deterministic 3.6–4.9 spread
-    const scores = {};
-    REVIEW_PARAMS.forEach(function(p, j){
-      const v = base + (((i + j) % 5) - 2) * 0.25;
-      scores[p[0]] = Math.max(2.5, Math.min(5, Math.round(v * 2) / 2));
-    });
-    const yr = 2024 + (i % 2);
-    const no = (i % 12) + 1;
-    const batch = 'B-' + yr + '-' + (no < 10 ? '0' + no : no);
-    out.push({
-      id: 'sample-' + i, trainerId: trainer.id, trainerName: trainer.name,
-      name: name, batch: batch, comment: comments[i % comments.length], scores: scores
-    });
-  }
-  return out;
+// Map a ServiceNow trainee_feedback record -> the review object the UI renders.
+// The GET Scripted REST API returns these clean keys (see servicenow/get-trainee-feedback.js).
+function mapReview(p){
+  return {
+    id: p.number || p.sys_id || '',
+    trainerName: p.trainer || '',
+    name: p.trainee || '',
+    batch: p.batch || '',
+    comment: p.comment || '',
+    overall: +p.overall || 0,
+    scores: {
+      depth:       +p.depth || 0,
+      clarity:     +p.clarity || 0,
+      interaction: +p.interaction || 0,
+      handsOn:     +p.handsOn || 0,
+      realWorld:   +p.realWorld || 0,
+      planning:    +p.planning || 0,
+      mentorship:  +p.mentorship || 0,
+      recommend:   +p.recommend || 0
+    }
+  };
 }
-function allReviews(){ return buildSampleReviews().concat(userReviews); }
+
+// Load all reviews from the anonymous Scripted REST API.
+async function loadReviews(){
+  reviewsState = 'loading';
+  showAllReviews();
+  try {
+    const res = await snFetch(REVIEWS_GET_API);
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' — ' + (await res.text()).slice(0,200));
+    const json = await res.json();
+    snReviews = (json.result || []).map(mapReview);
+    reviewsState = 'ready';
+  } catch (e) {
+    reviewsState = 'error';
+    reviewsError = e.message;
+  }
+  showAllReviews();
+}
 
 function scaleRow(label, val){
   const pct = Math.max(0, Math.min(100, (val/5)*100));
@@ -646,11 +637,12 @@ function scaleRow(label, val){
 }
 
 function reviewCard(r){
-  const overall = avgScore(r.scores);
+  const overall = r.overall || avgScore(r.scores);
   const scales = REVIEW_PARAMS.map(function(p){ return scaleRow(p[1], +r.scores[p[0]] || 0); }).join('');
   return '<div class="review-card">' +
     '<div class="review-head">' +
-      '<span class="rv-name">' + esc(r.name) + '</span>' +
+      '<span class="rv-name">' + esc(r.name || 'Anonymous') + '</span>' +
+      (r.trainerName ? '<span class="rv-trainer">on ' + esc(r.trainerName) + '</span>' : '') +
       '<span class="rv-rating">' + overall.toFixed(1) + '/5 <span class="stars">' + stars(overall) + '</span></span>' +
       '<span class="rv-batch">Batch: ' + esc(r.batch || '—') + '</span>' +
     '</div>' +
@@ -662,10 +654,28 @@ function reviewCard(r){
 }
 
 function showAllReviews(){
-  const list = allReviews().slice().sort(function(a,b){ return sortValue(b) - sortValue(a); });
   const sortOpts = [['overall','Overall']].concat(REVIEW_PARAMS).map(function(p){
     return '<option value="' + p[0] + '"' + (reviewSort === p[0] ? ' selected' : '') + '>Sort: ' + esc(p[1]) + '</option>';
   }).join('');
+
+  let body;
+  if (reviewsState === 'loading') {
+    body = '<div class="empty">Loading reviews from ServiceNow…</div>';
+  } else if (reviewsState === 'error') {
+    body =
+      '<div class="empty">' +
+        '<p style="color:#dc2626;font-weight:700;font-size:1.05rem">Could not load reviews</p>' +
+        '<p class="hint" style="max-width:540px;margin:8px auto">' + esc(reviewsError) + '</p>' +
+        '<p class="hint" style="max-width:540px;margin:8px auto">Check that the <b>Trainee Feedback</b> Scripted REST API has its GET script pasted in, that the resource is anonymous (Requires authentication = off), and that a CORS rule allows this page\'s domain (GET).</p>' +
+        '<div style="margin-top:14px"><button class="btn btn-primary" onclick="loadReviews()">Retry</button></div>' +
+      '</div>';
+  } else {
+    const list = snReviews.slice().sort(function(a,b){ return sortValue(b) - sortValue(a); });
+    body =
+      '<div class="review-cards">' +
+        (list.length ? list.map(reviewCard).join('') : '<div class="empty">No reviews yet. Be the first to submit one.</div>') +
+      '</div>';
+  }
 
   const html =
     '<div class="reviews-head">' +
@@ -676,9 +686,7 @@ function showAllReviews(){
       '</div>' +
     '</div>' +
     '<h2 class="reviews-title">Reviews &amp; Feedback</h2>' +
-    '<div class="review-cards">' +
-      (list.length ? list.map(reviewCard).join('') : '<div class="empty">No reviews yet.</div>') +
-    '</div>';
+    body;
 
   document.getElementById('reviewsView').innerHTML = html;
   window.scrollTo(0, 0);
@@ -716,7 +724,7 @@ function openReviewModal(){
 }
 function closeReviewModal(){ const ov = document.getElementById('rvModal'); ov.style.display = 'none'; ov.innerHTML = ''; }
 
-function submitReview(){
+async function submitReview(){
   const name = document.getElementById('rv_name').value.trim();
   if (!name) { alert('Please enter your name.'); return; }
   const sel = document.getElementById('rv_trainer');
@@ -724,18 +732,42 @@ function submitReview(){
   const trainer = members.find(function(m){ return m.id === trainerId; });
   const scores = {};
   REVIEW_PARAMS.forEach(function(p){ scores[p[0]] = +document.getElementById('rv_' + p[0]).value || 0; });
-  userReviews.push({
-    id: 'r_' + Date.now().toString(36),
-    trainerId: trainerId,
-    trainerName: trainer ? trainer.name : '',
-    name: name,
-    batch: document.getElementById('rv_batch').value.trim(),
-    comment: document.getElementById('rv_comment').value.trim(),
-    scores: scores
-  });
-  saveReviews();
-  closeReviewModal();
-  showAllReviews();
+  const overall = avgScore(scores);
+
+  // Clean payload — the POST Scripted REST API maps these keys onto the
+  // staging/import-set table columns (see servicenow/post-trainee-feedback.js).
+  const payload = {
+    trainer:     trainer ? trainer.name : '',
+    trainee:     name,
+    batch:       document.getElementById('rv_batch').value.trim(),
+    comment:     document.getElementById('rv_comment').value.trim(),
+    overall:     String(overall),
+    depth:       String(scores.depth),
+    clarity:     String(scores.clarity),
+    interaction: String(scores.interaction),
+    handsOn:     String(scores.handsOn),
+    realWorld:   String(scores.realWorld),
+    planning:    String(scores.planning),
+    mentorship:  String(scores.mentorship),
+    recommend:   String(scores.recommend)
+  };
+
+  const btn = document.querySelector('#rvModal .btn-primary');
+  if (btn) { btn.disabled = true; btn.textContent = 'Submitting…'; }
+  try {
+    const res = await snFetch(REVIEWS_POST_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' — ' + (await res.text()).slice(0,200));
+    closeReviewModal();
+    await loadReviews();   // re-fetch so the transformed record shows up
+    alert('Thank you! Your review has been submitted.');
+  } catch (e) {
+    if (btn) { btn.disabled = false; btn.textContent = 'Submit Review'; }
+    alert('Could not submit review: ' + e.message);
+  }
 }
 
 /* ---- Router: switch between the trainers list and the reviews view ---- */
@@ -746,7 +778,7 @@ function route(){
   if (isReviews) {
     mainView.style.display = 'none';
     reviewsView.style.display = '';
-    showAllReviews();
+    loadReviews();
   } else {
     reviewsView.style.display = 'none';
     mainView.style.display = '';
