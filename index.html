@@ -50,6 +50,11 @@
   }
   .wrap { max-width: 1000px; margin: 0 auto; padding: 24px 16px 80px; }
 
+  /* Brand logo — top-right corner, shared across both views */
+  .topbar { display: flex; justify-content: flex-end; align-items: center; margin-bottom: 8px; }
+  .page-logo { height: 46px; width: auto; display: block; }
+  @media (max-width: 640px) { .page-logo { height: 38px; } }
+
   header.page {
     display: flex; flex-wrap: wrap; gap: 16px; align-items: center;
     justify-content: space-between; margin-bottom: 24px;
@@ -245,6 +250,11 @@
 </head>
 <body>
 <div class="wrap">
+  <!-- Brand logo (shared by both views, top-right) -->
+  <div class="topbar">
+    <img class="page-logo" src="palni-logo.png" alt="PALNI — Aim High" onerror="this.style.display='none'">
+  </div>
+
   <!-- ===== Trainers view ===== -->
   <div id="mainView">
     <header class="page">
