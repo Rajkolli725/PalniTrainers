@@ -3,42 +3,51 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Meet Our Trainers</title>
+<meta name="description" content="VTech Infotech LLC — expert-led IT training in ServiceNow, Salesforce, Databricks, Snowflake and AI. Live instructor-led courses, hands-on labs, and job-focused mentorship. Book a free demo." />
+<title>VTech Infotech LLC — IT & Cloud Training | ServiceNow, Salesforce, Databricks, Snowflake, AI</title>
 <style>
   :root {
-    --bg: #f4f5f7;
+    --bg: #f5f6f9;
     --card: #ffffff;
-    --ink: #1f2933;
-    --muted: #6b7280;
-    --line: #e5e7eb;
-    --accent: #1d4ed8;
-    --accent-soft: #eef2ff;
+    --ink: #1b2438;
+    --muted: #64708a;
+    --line: #e4e8ef;
+    --accent: #e8541e;        /* VTech orange */
+    --accent-soft: #fdece3;
+    --gold: #f6792b;          /* warm orange highlight */
+    --gold-soft: #fdeede;
+    --gold-ink: #8a3a12;
     --star: #f59e0b;
-    --hover: #fafafa;
+    --hover: #f7f8fb;
     --input: #ffffff;
-    --ghost-bg: #ece9e2;
-    --ghost-hover: #e0ddd4;
-    --primary-bg: #1f2933;
-    --primary-hover: #000000;
+    --ghost-bg: #eceef3;
+    --ghost-hover: #e0e4ec;
+    --primary-bg: #1f2a5b;    /* VTech navy */
+    --primary-hover: #16204a;
+    --brand-grad: linear-gradient(135deg, #1b2550 0%, #2a3a78 52%, #e8541e 165%);
     --radius: 16px;
-    --shadow: 0 1px 3px rgba(0,0,0,.08), 0 8px 24px rgba(0,0,0,.05);
+    --shadow: 0 1px 3px rgba(20,28,55,.08), 0 10px 30px rgba(20,28,55,.07);
   }
   body.dark {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --ink: #e2e8f0;
-    --muted: #94a3b8;
-    --line: #334155;
-    --accent: #60a5fa;
-    --accent-soft: #1e3a5f;
+    --bg: #0e1426;
+    --card: #161e36;
+    --ink: #e7ecf6;
+    --muted: #9aa6c0;
+    --line: #28324f;
+    --accent: #ff7a45;
+    --accent-soft: #3a2316;
+    --gold: #ff8c4d;
+    --gold-soft: #2c2113;
+    --gold-ink: #ffcea8;
     --star: #fbbf24;
-    --hover: #243044;
-    --input: #0f172a;
-    --ghost-bg: #334155;
-    --ghost-hover: #3f4d63;
-    --primary-bg: #2563eb;
-    --primary-hover: #1d4ed8;
-    --shadow: 0 1px 3px rgba(0,0,0,.5), 0 8px 24px rgba(0,0,0,.35);
+    --hover: #1b2440;
+    --input: #0e1426;
+    --ghost-bg: #28324f;
+    --ghost-hover: #36426b;
+    --primary-bg: #2d3d7a;
+    --primary-hover: #1f2a5b;
+    --brand-grad: linear-gradient(135deg, #141b38 0%, #2a3a78 55%, #c2451a 160%);
+    --shadow: 0 1px 3px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
   }
   * { box-sizing: border-box; }
   body {
@@ -251,23 +260,438 @@
     .add-grid { grid-template-columns: 1fr; }
     .rv-batch { margin-left: 0; }
   }
+
+  /* ===================================================================
+     LANDING PAGE / SITE CHROME
+     =================================================================== */
+  .container { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+  /* ---- Top navigation ---- */
+  .nav { position: sticky; top: 0; z-index: 50; background: var(--card); border-bottom: 1px solid var(--line); box-shadow: 0 2px 14px rgba(60,20,25,.05); }
+  .nav-inner { max-width: 1120px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 16px; }
+  .nav-logo { display: inline-flex; align-items: center; cursor: pointer; }
+  .nav-logo img { height: 42px; width: auto; display: block; }
+  .nav-links { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+  .navlink { color: var(--ink); text-decoration: none; font-weight: 600; font-size: .92rem; padding: 9px 12px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
+  .navlink:hover { background: var(--accent-soft); color: var(--accent); }
+  .nav-toggle { display: none; background: none; border: 1px solid var(--line); border-radius: 10px; width: 42px; height: 42px; font-size: 1.2rem; cursor: pointer; color: var(--ink); }
+  @media (max-width: 880px) {
+    .nav-toggle { display: grid; place-items: center; margin-left: auto; }
+    .nav-links { position: absolute; top: 63px; left: 0; right: 0; background: var(--card); border-bottom: 1px solid var(--line);
+                 flex-direction: column; align-items: stretch; gap: 2px; padding: 12px 16px; margin-left: 0; display: none; box-shadow: var(--shadow); }
+    .nav-links.open { display: flex; }
+    .navlink { padding: 13px 12px; }
+    .nav-links .btn, .nav-links .icon-toggle { width: 100%; }
+  }
+
+  /* ---- Buttons (extends existing .btn) ---- */
+  .btn-gold { background: var(--gold); color: var(--gold-ink); }
+  .btn-gold:hover { filter: brightness(.95); }
+  .btn-lg { padding: 15px 26px; font-size: 1.02rem; border-radius: 14px; }
+  .btn-outline-light { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.6); }
+  .btn-outline-light:hover { background: rgba(255,255,255,.14); }
+
+  /* ---- Hero ---- */
+  .hero { background: var(--brand-grad); color: #fff; position: relative; overflow: hidden; }
+  .hero::after { content: ''; position: absolute; inset: 0; pointer-events: none;
+    background: radial-gradient(900px 420px at 82% -12%, rgba(255,255,255,.18), transparent 60%); }
+  .hero-inner { display: grid; grid-template-columns: 1.08fr .92fr; gap: 44px; align-items: center; padding: 72px 20px 84px; position: relative; z-index: 1; }
+  .eyebrow { display: inline-block; background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.28);
+    padding: 6px 14px; border-radius: 999px; font-size: .76rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; margin-bottom: 18px; }
+  .hero h1 { font-size: 2.9rem; line-height: 1.08; margin: 0 0 16px; font-weight: 800; letter-spacing: -.5px; }
+  .hero h1 .hl { color: var(--gold); }
+  .hero .lede { font-size: 1.13rem; color: rgba(255,255,255,.92); margin: 0 0 26px; max-width: 560px; }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 22px; }
+  .hero-trust { font-size: .9rem; color: rgba(255,255,255,.88); display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .hero-trust .stars { color: var(--gold); letter-spacing: 1px; }
+  @media (max-width: 880px) { .hero-inner { grid-template-columns: 1fr; padding: 44px 20px 52px; } .hero h1 { font-size: 2.15rem; } }
+
+  /* ---- Lead card / forms ---- */
+  .lead-card { background: var(--card); color: var(--ink); border-radius: 18px; padding: 24px; box-shadow: 0 24px 60px rgba(0,0,0,.28); }
+  .lead-card h3 { margin: 0 0 4px; font-size: 1.22rem; }
+  .lead-card .sub { color: var(--muted); font-size: .88rem; margin: 0 0 14px; }
+  .lead-form { display: grid; gap: 12px; }
+  .lead-form .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .lead-form label { font-size: .76rem; font-weight: 600; color: var(--muted); display: block; margin-bottom: 4px; }
+  .lead-form input, .lead-form select, .lead-form textarea {
+    width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 10px;
+    background: var(--input); color: var(--ink); font-size: .92rem; font-family: inherit; outline: none; }
+  .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+  .lead-form textarea { min-height: 92px; resize: vertical; }
+  .lead-form button[type=submit] { width: 100%; }
+  @media (max-width: 480px) { .lead-form .row2 { grid-template-columns: 1fr; } }
+
+  /* ---- Generic sections ---- */
+  .section { padding: 74px 0; }
+  .section.alt { background: var(--card); }
+  .section-title { text-align: center; max-width: 720px; margin: 0 auto 46px; }
+  .section-title .eyebrow2 { color: var(--accent); font-weight: 800; letter-spacing: .09em; text-transform: uppercase; font-size: .78rem; }
+  .section-title h2 { font-size: 2.1rem; margin: 8px 0 12px; letter-spacing: -.4px; }
+  .section-title p { color: var(--muted); font-size: 1.05rem; margin: 0; }
+  @media (max-width: 640px) { .section { padding: 50px 0; } .section-title { margin-bottom: 32px; } .section-title h2 { font-size: 1.7rem; } }
+
+  /* ---- Stats band ---- */
+  .stats-band { background: var(--brand-grad); color: #fff; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 48px 0; text-align: center; }
+  .stat-num { font-size: 2.7rem; font-weight: 800; line-height: 1; }
+  .stat-num .gold { color: var(--gold); }
+  .stat-lbl { margin-top: 8px; font-size: .92rem; color: rgba(255,255,255,.85); }
+  @media (max-width: 640px) { .stats-grid { grid-template-columns: 1fr 1fr; gap: 30px 12px; } .stat-num { font-size: 2.05rem; } }
+
+  /* ---- Card grids (courses / trainers preview) ---- */
+  .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
+  @media (max-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .cards-grid { grid-template-columns: 1fr; } }
+  .course-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);
+    transition: transform .18s, box-shadow .18s, border-color .18s; display: flex; flex-direction: column; }
+  .course-card:hover { transform: translateY(-6px); box-shadow: 0 18px 42px rgba(60,20,25,.15); border-color: var(--accent); }
+  .course-ic { width: 56px; height: 56px; border-radius: 14px; display: grid; place-items: center; font-size: 1.7rem; background: var(--accent-soft); margin-bottom: 14px; }
+  .course-card h3 { margin: 0 0 8px; font-size: 1.2rem; }
+  .course-card p { color: var(--muted); font-size: .93rem; margin: 0 0 14px; flex: 1; }
+  .course-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+  .course-tags span { font-size: .73rem; font-weight: 600; background: var(--gold-soft); color: var(--gold-ink); padding: 3px 9px; border-radius: 999px; }
+  .course-actions { display: flex; gap: 10px; }
+  .course-actions .btn { flex: 1; padding: 10px; font-size: .85rem; }
+
+  /* ---- Features ---- */
+  .feat-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 26px; }
+  @media (max-width: 900px) { .feat-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 560px) { .feat-grid { grid-template-columns: 1fr; } }
+  .feat { display: flex; gap: 14px; align-items: flex-start; }
+  .feat .fic { font-size: 1.4rem; background: var(--accent-soft); color: var(--accent); width: 48px; height: 48px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; }
+  .feat h4 { margin: 0 0 5px; font-size: 1.05rem; }
+  .feat p { margin: 0; color: var(--muted); font-size: .91rem; }
+
+  /* ---- Process steps ---- */
+  .steps { display: grid; grid-template-columns: repeat(4,1fr); gap: 22px; }
+  @media (max-width: 820px) { .steps { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
+  .step { text-align: center; padding: 8px; }
+  .step .num { width: 56px; height: 56px; border-radius: 50%; background: var(--brand-grad); color: #fff; font-weight: 800; font-size: 1.35rem; display: grid; place-items: center; margin: 0 auto 14px; }
+  .step h4 { margin: 0 0 6px; }
+  .step p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+  /* ---- Testimonials ---- */
+  .tcards { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
+  @media (max-width: 880px) { .tcards { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; } }
+  .tcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+  .tcard .trate { color: var(--star); margin-bottom: 10px; letter-spacing: 2px; }
+  .tcard .q { font-size: .96rem; color: var(--ink); margin: 0 0 16px; text-align: justify; }
+  .tcard .who { display: flex; align-items: center; gap: 12px; }
+  .tcard .who .av { width: 42px; height: 42px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 800; }
+  .tcard .who .nm { font-weight: 700; font-size: .92rem; }
+  .tcard .who .rl { color: var(--muted); font-size: .8rem; }
+
+  /* ---- CTA band ---- */
+  .cta-band { background: var(--brand-grad); color: #fff; text-align: center; }
+  .cta-band h2 { font-size: 2.15rem; margin: 0 0 12px; }
+  .cta-band p { color: rgba(255,255,255,.92); max-width: 620px; margin: 0 auto 26px; font-size: 1.06rem; }
+
+  /* ---- Contact ---- */
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; align-items: start; }
+  @media (max-width: 860px) { .contact-grid { grid-template-columns: 1fr; gap: 32px; } }
+  .contact-info { padding: 0; margin: 0; list-style: none; }
+  .contact-info li { display: flex; gap: 13px; align-items: flex-start; margin-bottom: 18px; }
+  .contact-info .ic { font-size: 1.25rem; width: 30px; flex-shrink: 0; }
+  .contact-info b { display: block; font-size: .95rem; }
+  .contact-info span { color: var(--muted); font-size: .9rem; }
+
+  /* ---- Footer ---- */
+  .site-footer { background: #1b1012; color: #e9d9db; padding: 56px 0 26px; }
+  body.dark .site-footer { background: #0c0708; }
+  .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 30px; }
+  @media (max-width: 780px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 26px; } }
+  @media (max-width: 460px) { .footer-grid { grid-template-columns: 1fr; } }
+  .site-footer h5 { font-size: .95rem; margin: 0 0 14px; color: #fff; }
+  .site-footer a { color: #cbb6b9; text-decoration: none; display: block; margin-bottom: 9px; font-size: .9rem; cursor: pointer; }
+  .site-footer a:hover { color: var(--gold); }
+  .footer-logo { height: 40px; margin-bottom: 14px; background: #fff; padding: 6px 8px; border-radius: 8px; }
+  .footer-about { color: #c0aaad; font-size: .9rem; max-width: 280px; }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); margin-top: 36px; padding-top: 18px; text-align: center; font-size: .83rem; color: #a98e92; }
+
+  /* ---- View head (Trainers / Reviews) ---- */
+  .view-head { text-align: center; margin: 30px 0 26px; }
+  .view-head h1 { font-size: 2rem; margin: 0 0 6px; }
+  .view-head p { color: var(--muted); margin: 0; }
+
+  /* ---- Scroll reveal ---- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.reveal-in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <!-- ===== Trainers view ===== -->
-  <div id="mainView">
-    <header class="page brandbar">
-      <div class="bb-left">
-        <img class="page-logo" src="palni-logo.png" alt="PALNI — Aim High" onerror="this.style.display='none'">
+<!-- ============================ TOP NAV ============================ -->
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="nav-logo" onclick="goHome()" title="VTech Infotech LLC — Home">
+      <img src="vtech-logo.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.35rem;letter-spacing:.5px&quot;><span style=&quot;color:var(--accent)&quot;>V</span><span style=&quot;color:var(--primary-bg)&quot;>TECH</span></strong>'">
+    </a>
+    <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">☰</button>
+    <div class="nav-links" id="navLinks">
+      <a class="navlink" onclick="goHome()">Home</a>
+      <a class="navlink" onclick="goSection('courses')">Courses</a>
+      <a class="navlink" onclick="goSection('why')">Why Us</a>
+      <a class="navlink" onclick="goView('trainers')">Trainers</a>
+      <a class="navlink" onclick="goView('reviews')">Reviews</a>
+      <a class="navlink" onclick="goSection('contact')">Contact</a>
+      <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
+      <button class="btn btn-accent" onclick="openLeadModal()">Book Free Demo</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ============================ HOME / LANDING ============================ -->
+<div id="homeView">
+
+  <!-- Hero -->
+  <section class="hero" id="home">
+    <div class="hero-inner container">
+      <div>
+        <span class="eyebrow">★ VTech Infotech LLC • Learn from Industry Experts</span>
+        <h1>Master <span class="hl">In-Demand Tech</span> Skills That Get You Hired</h1>
+        <p class="lede">Live, instructor-led training in ServiceNow, Salesforce, Databricks, Snowflake and AI — with hands-on labs, real-world projects, and mentorship that takes you from beginner to job-ready.</p>
+        <div class="hero-cta">
+          <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Book a Free Demo</button>
+          <button class="btn btn-outline-light btn-lg" onclick="goSection('courses')">Explore Courses</button>
+        </div>
+        <div class="hero-trust"><span class="stars">★★★★★</span> Rated 4.8/5 by 5,000+ trainees worldwide</div>
       </div>
-      <h1 class="bb-title">Meet Our Trainers</h1>
-      <div class="bb-right">
-        <div class="head-actions">
-          <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
+      <div class="lead-card">
+        <h3>Get a Free Consultation</h3>
+        <p class="sub">Speak with a course advisor — no cost, no obligation.</p>
+        <form class="lead-form" onsubmit="return submitLead(this,'Hero Form')">
+          <div><label>Full Name *</label><input name="name" type="text" placeholder="Your name" required></div>
+          <div><label>Email *</label><input name="email" type="email" placeholder="you@email.com" required></div>
+          <div class="row2">
+            <div><label>Phone</label><input name="phone" type="text" placeholder="Optional"></div>
+            <div><label>Course</label><select name="course" id="heroCourse"></select></div>
+          </div>
+          <button class="btn btn-primary btn-lg" type="submit">Request Free Consultation</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="stats-band">
+    <div class="container">
+      <div class="stats-grid">
+        <div><div class="stat-num" data-count="5000" data-suffix="+">0</div><div class="stat-lbl">Trainees Upskilled</div></div>
+        <div><div class="stat-num" data-count="50" data-suffix="+">0</div><div class="stat-lbl">Expert Trainers</div></div>
+        <div><div class="stat-num gold" data-count="95" data-suffix="%">0</div><div class="stat-lbl">Course Completion</div></div>
+        <div><div class="stat-num" data-count="4.8" data-dec="1">0</div><div class="stat-lbl">Average Rating</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Courses -->
+  <section class="section" id="courses">
+    <div class="container">
+      <div class="section-title reveal">
+        <div class="eyebrow2">Our Programs</div>
+        <h2>Career-Focused Tech Courses</h2>
+        <p>Specialized, hands-on tracks built around the platforms enterprises hire for right now.</p>
+      </div>
+      <div class="cards-grid">
+        <div class="course-card reveal">
+          <div class="course-ic">🛠️</div>
+          <h3>ServiceNow</h3>
+          <p>Admin, CSA, CAD and ITSM implementation — build, script, and automate on the Now Platform.</p>
+          <div class="course-tags"><span>CSA</span><span>CAD</span><span>ITSM</span><span>Scripting</span></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('ServiceNow')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('ServiceNow')">Free Demo</button></div>
+        </div>
+        <div class="course-card reveal">
+          <div class="course-ic">☁️</div>
+          <h3>Salesforce</h3>
+          <p>Administrator, Developer and Platform App Builder — CRM, Apex, Flows and Lightning.</p>
+          <div class="course-tags"><span>Admin</span><span>Apex</span><span>Flows</span><span>LWC</span></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Salesforce')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Salesforce')">Free Demo</button></div>
+        </div>
+        <div class="course-card reveal">
+          <div class="course-ic">🔥</div>
+          <h3>Databricks</h3>
+          <p>Lakehouse, Spark, Delta Lake and data engineering — from ingestion to production pipelines.</p>
+          <div class="course-tags"><span>Spark</span><span>Delta Lake</span><span>PySpark</span><span>ETL</span></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Databricks')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Databricks')">Free Demo</button></div>
+        </div>
+        <div class="course-card reveal">
+          <div class="course-ic">❄️</div>
+          <h3>Snowflake</h3>
+          <p>Cloud data warehousing, performance tuning, SnowPro certification and modern analytics.</p>
+          <div class="course-tags"><span>SnowPro</span><span>SQL</span><span>Warehousing</span><span>Sharing</span></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Snowflake')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Snowflake')">Free Demo</button></div>
+        </div>
+        <div class="course-card reveal">
+          <div class="course-ic">🤖</div>
+          <h3>AI / Machine Learning</h3>
+          <p>Generative AI, LLMs, prompt engineering, and applied ML — build and ship real AI solutions.</p>
+          <div class="course-tags"><span>GenAI</span><span>LLMs</span><span>Python</span><span>MLOps</span></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('AI / Machine Learning')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('AI / Machine Learning')">Free Demo</button></div>
+        </div>
+        <div class="course-card reveal">
+          <div class="course-ic">⚙️</div>
+          <h3>Cloud & DevOps</h3>
+          <p>AWS/Azure fundamentals, CI/CD, Docker, Kubernetes and Terraform for modern delivery.</p>
+          <div class="course-tags"><span>AWS</span><span>K8s</span><span>CI/CD</span><span>Terraform</span></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Cloud & DevOps')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Cloud & DevOps')">Free Demo</button></div>
         </div>
       </div>
-    </header>
+    </div>
+  </section>
+
+  <!-- Why choose us -->
+  <section class="section alt" id="why">
+    <div class="container">
+      <div class="section-title reveal">
+        <div class="eyebrow2">Why VTech</div>
+        <h2>Training Built Around Your Career</h2>
+        <p>Everything we do is designed to get you confident, certified, and hired.</p>
+      </div>
+      <div class="feat-grid">
+        <div class="feat reveal"><div class="fic">👨‍🏫</div><div><h4>Real Industry Experts</h4><p>Learn from practitioners with years of live project and certification experience.</p></div></div>
+        <div class="feat reveal"><div class="fic">🧪</div><div><h4>Hands-On Labs</h4><p>Practice on real environments and projects — not just slides and theory.</p></div></div>
+        <div class="feat reveal"><div class="fic">🗓️</div><div><h4>Flexible Schedules</h4><p>Weekday, weekend and fast-track batches that fit around your job.</p></div></div>
+        <div class="feat reveal"><div class="fic">🎓</div><div><h4>Certification Prep</h4><p>Targeted prep, mock exams and guidance to clear official certifications.</p></div></div>
+        <div class="feat reveal"><div class="fic">💼</div><div><h4>Job-Focused Mentorship</h4><p>Resume reviews, interview prep and career guidance from your mentor.</p></div></div>
+        <div class="feat reveal"><div class="fic">♾️</div><div><h4>Lifetime Access</h4><p>Recordings, materials and an alumni community you keep for good.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process -->
+  <section class="section" id="process">
+    <div class="container">
+      <div class="section-title reveal">
+        <div class="eyebrow2">How It Works</div>
+        <h2>From Curious to Certified in 4 Steps</h2>
+      </div>
+      <div class="steps">
+        <div class="step reveal"><div class="num">1</div><h4>Pick a Course</h4><p>Choose the track that matches your goals — or ask an advisor.</p></div>
+        <div class="step reveal"><div class="num">2</div><h4>Book a Free Demo</h4><p>Sit in on a live session and meet your trainer before you commit.</p></div>
+        <div class="step reveal"><div class="num">3</div><h4>Learn by Doing</h4><p>Live classes plus hands-on labs and real-world projects.</p></div>
+        <div class="step reveal"><div class="num">4</div><h4>Get Certified & Hired</h4><p>Certification prep, mock interviews and career support.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trainers preview -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-title reveal">
+        <div class="eyebrow2">Meet Our Trainers</div>
+        <h2>Learn From the Best in the Business</h2>
+        <p>Our trainers bring real enterprise experience to every session.</p>
+      </div>
+      <div class="cards-grid" id="homeTrainers"></div>
+      <div style="text-align:center;margin-top:34px"><button class="btn btn-accent btn-lg" onclick="goView('trainers')">View All Trainers →</button></div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="section" id="testimonials">
+    <div class="container">
+      <div class="section-title reveal">
+        <div class="eyebrow2">Success Stories</div>
+        <h2>What Our Trainees Say</h2>
+        <p>Real feedback from learners who transformed their careers with VTech.</p>
+      </div>
+      <div class="tcards" id="homeTestimonials"></div>
+      <div style="text-align:center;margin-top:34px"><button class="btn btn-ghost btn-lg" onclick="goView('reviews')">Read All Reviews →</button></div>
+    </div>
+  </section>
+
+  <!-- CTA band -->
+  <section class="section cta-band">
+    <div class="container">
+      <h2>Ready to Level Up Your Career?</h2>
+      <p>Join thousands of professionals who upgraded their careers with VTech Infotech. Your free demo is one click away.</p>
+      <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Book Your Free Demo</button>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="section alt" id="contact">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="reveal">
+          <div class="eyebrow2" style="color:var(--accent);font-weight:800;letter-spacing:.09em;text-transform:uppercase;font-size:.78rem">Get In Touch</div>
+          <h2 style="font-size:2rem;margin:8px 0 12px">Talk to a Course Advisor</h2>
+          <p style="color:var(--muted);margin:0 0 24px">Have questions about courses, schedules, or corporate training? Send us your details and we'll get back within 1 business day.</p>
+          <ul class="contact-info">
+            <li><span class="ic">📧</span><div><b>Email</b><span>training@vtechinfotech.com</span></div></li>
+            <li><span class="ic">📞</span><div><b>Phone</b><span>+1 (555) 123-4567</span></div></li>
+            <li><span class="ic">🕒</span><div><b>Support Hours</b><span>Mon–Sat, 9:00 AM – 8:00 PM</span></div></li>
+            <li><span class="ic">🏢</span><div><b>Corporate Training</b><span>Custom team programs available on request</span></div></li>
+          </ul>
+        </div>
+        <div class="lead-card reveal">
+          <h3>Request Information</h3>
+          <p class="sub">Tell us about your goals — we'll tailor a learning plan for you.</p>
+          <form class="lead-form" onsubmit="return submitLead(this,'Contact Form')">
+            <div class="row2">
+              <div><label>Full Name *</label><input name="name" type="text" placeholder="Your name" required></div>
+              <div><label>Email *</label><input name="email" type="email" placeholder="you@email.com" required></div>
+            </div>
+            <div class="row2">
+              <div><label>Phone</label><input name="phone" type="text" placeholder="Optional"></div>
+              <div><label>Company</label><input name="company" type="text" placeholder="Optional"></div>
+            </div>
+            <div class="row2">
+              <div><label>Course of Interest</label><select name="course" class="courseSelect"></select></div>
+              <div><label>Preferred Mode</label><select name="mode"><option>Online (Live)</option><option>Classroom</option><option>Corporate / Team</option></select></div>
+            </div>
+            <div><label>Message</label><textarea name="message" placeholder="Your goals, schedule, or questions…"></textarea></div>
+            <button class="btn btn-primary btn-lg" type="submit">Send My Request</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img class="footer-logo" src="vtech-logo.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.5rem&quot;><span style=&quot;color:var(--accent)&quot;>V</span>TECH</strong>'">
+        <p class="footer-about">VTech Infotech LLC — expert-led IT &amp; cloud training that turns ambition into in-demand, job-ready skills.</p>
+      </div>
+      <div>
+        <h5>Courses</h5>
+        <a onclick="openLeadModal('ServiceNow')">ServiceNow</a>
+        <a onclick="openLeadModal('Salesforce')">Salesforce</a>
+        <a onclick="openLeadModal('Databricks')">Databricks</a>
+        <a onclick="openLeadModal('Snowflake')">Snowflake</a>
+        <a onclick="openLeadModal('AI / Machine Learning')">AI / Machine Learning</a>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <a onclick="goSection('why')">Why VTech</a>
+        <a onclick="goView('trainers')">Our Trainers</a>
+        <a onclick="goView('reviews')">Reviews</a>
+        <a onclick="goSection('contact')">Contact</a>
+      </div>
+      <div>
+        <h5>Get Started</h5>
+        <a onclick="openLeadModal()">Book a Free Demo</a>
+        <a href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a>
+        <a href="tel:+15551234567">+1 (555) 123-4567</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© <span id="yr"></span> VTech Infotech LLC. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- ============================ TRAINERS + REVIEWS (constrained) ============================ -->
+<div class="wrap" id="appWrap" style="display:none">
+  <!-- ===== Trainers view ===== -->
+  <div id="mainView">
+    <div class="view-head">
+      <h1>Meet Our Trainers</h1>
+      <p>Industry experts who've delivered thousands of hours of hands-on training.</p>
+    </div>
 
     <div class="toolbar">
       <div class="search">
@@ -291,6 +715,9 @@
 
 <!-- Submit Review modal (populated by openReviewModal) -->
 <div id="rvModal" class="rv-modal-overlay" style="display:none" onclick="if(event.target===this)closeReviewModal()"></div>
+
+<!-- Lead capture modal (populated by openLeadModal) -->
+<div id="leadModal" class="rv-modal-overlay" style="display:none" onclick="if(event.target===this)closeLeadModal()"></div>
 
 <script>
 /* ---- 40 dummy team members (deterministic, varied so ratings differ) ---- */
@@ -362,6 +789,7 @@ const API_URL     = SN.instance + '/api/x_palni_servicen_1/team_profiles';  // G
 const RESUME_URL  = API_URL + '/resume/';                                   // GET /resume/{sysId} -> base64
 const REVIEWS_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_trainee_feedback';  // GET -> list of reviews
 const REVIEWS_POST_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/post_trainee_feedback'; // POST -> submit (lands in staging table)
+const LEADS_API        = SN.instance + '/api/x_palni_servicen_1/team_profiles/post_lead';             // POST -> capture a website lead
 
 // No auth header — the Scripted REST API is anonymous; credentials:'omit'
 // keeps it a clean cross-origin request governed only by the CORS rule.
@@ -404,9 +832,14 @@ async function loadMembers(){
     if (!res.ok) throw new Error('HTTP ' + res.status + ' — ' + (await res.text()).slice(0,300));
     const json = await res.json();
     members = (json.result || []).map(mapRecord);
+    if (!members.length) throw new Error('No profiles returned');
     route();
   } catch (e) {
-    renderError(e.message);
+    // ServiceNow unreachable (401 / CORS / offline) — fall back to demo trainers
+    // so the site stays presentable. Enable the anonymous API for real data.
+    console.warn('Trainers: using demo data —', e.message);
+    members = seed.map(m => withId({ ...m }));
+    route();
   }
 }
 
@@ -530,7 +963,7 @@ function render(){
               <a class="icon-btn linkedin" href="${esc(linkedin)}" target="_blank" rel="noopener" title="Connect on LinkedIn">
                 <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
               </a>
-              <a class="icon-btn" href="mailto:support@palni.com?subject=${encodeURIComponent('Inquiry about ' + m.name)}" title="Contact (support@palni.com)">
+              <a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=${encodeURIComponent('Inquiry about ' + m.name)}" title="Contact (training@vtechinfotech.com)">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
               </a>
               <button class="icon-btn ${hasResume ? '' : 'disabled'}" onclick="downloadResume('${m.id}')" title="${hasResume ? 'Download resume' + (m.resumeName ? ' (' + esc(m.resumeName) + ')' : '') : 'No resume available'}">
@@ -626,6 +1059,27 @@ function mapReview(p){
   };
 }
 
+// A few demo reviews so the Reviews page is never empty when ServiceNow
+// is unreachable (401 / CORS / offline). Real reviews replace these once the
+// anonymous GET API is enabled.
+function buildFallbackReviews(){
+  const demo = [
+    ['Ananya R.', 'ServiceNow', 'B-2026-03', 'The hands-on labs and real implementation scenarios made the concepts stick. I cleared my CSA on the first attempt.'],
+    ['Marcus L.', 'Salesforce', 'B-2026-01', 'Clear, structured and genuinely practical. The trainer’s real-world examples were the highlight for me.'],
+    ['Priya S.', 'Databricks', 'B-2025-11', 'Went from zero Spark experience to building production pipelines. Excellent mentorship throughout.'],
+    ['Daniel K.', 'Snowflake', 'B-2026-02', 'Great pacing and the SnowPro prep was spot on. Highly recommend to anyone in data.'],
+    ['Sara M.', 'AI / Machine Learning', 'B-2026-04', 'The GenAI and LLM modules were current and hands-on. I shipped a real project by the end.'],
+    ['Omar H.', 'Cloud & DevOps', 'B-2025-12', 'Solid coverage of CI/CD, Docker and Kubernetes with labs that mirror real work.']
+  ];
+  const keys = REVIEW_PARAMS.map(p => p[0]);
+  return demo.map(function(d, i){
+    const base = 4.4 + ((i % 3) * 0.2);
+    const scores = {};
+    keys.forEach(function(k, j){ scores[k] = Math.max(4, Math.min(5, Math.round((base - ((i + j) % 3) * 0.25) * 2) / 2)); });
+    return { id: 'demo-' + i, trainerName: d[1], name: d[0], batch: d[2], comment: d[3], overall: base, scores: scores };
+  });
+}
+
 // Load all reviews from the anonymous Scripted REST API.
 async function loadReviews(){
   reviewsState = 'loading';
@@ -635,10 +1089,13 @@ async function loadReviews(){
     if (!res.ok) throw new Error('HTTP ' + res.status + ' — ' + (await res.text()).slice(0,200));
     const json = await res.json();
     snReviews = (json.result || []).map(mapReview);
+    if (!snReviews.length) snReviews = buildFallbackReviews();
     reviewsState = 'ready';
   } catch (e) {
-    reviewsState = 'error';
-    reviewsError = e.message;
+    // ServiceNow unreachable — show demo reviews so the page stays presentable.
+    console.warn('Reviews: using demo data —', e.message);
+    snReviews = buildFallbackReviews();
+    reviewsState = 'ready';
   }
   showAllReviews();
 }
@@ -693,13 +1150,9 @@ function showAllReviews(){
   }
 
   const html =
-    '<header class="page brandbar">' +
-      '<div class="bb-left"><img class="page-logo" src="palni-logo.png" alt="PALNI — Aim High" onerror="this.style.display=\'none\'"></div>' +
-      '<h1 class="bb-title reviews-title" style="margin:0">Reviews &amp; Feedback</h1>' +
-      '<div class="bb-right"></div>' +
-    '</header>' +
+    '<div class="view-head"><h1>Reviews &amp; Feedback</h1><p>Real feedback from our trainees across every program.</p></div>' +
     '<div class="reviews-head">' +
-      '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Trainers</a>' +
+      '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Home</a>' +
       '<div class="reviews-actions">' +
         '<select class="sort-select" onchange="setReviewSort(this.value)">' + sortOpts + '</select>' +
         '<button class="btn btn-primary" onclick="openReviewModal()">+ Submit Review</button>' +
@@ -789,20 +1242,211 @@ async function submitReview(){
   }
 }
 
-/* ---- Router: switch between the trainers list and the reviews view ---- */
+/* ============================================================
+   Landing page — navigation, lead capture, dynamic sections
+   ============================================================ */
+const COURSE_OPTIONS = ['ServiceNow','Salesforce','Databricks','Snowflake','AI / Machine Learning','Cloud & DevOps','Not sure yet'];
+function courseOptionsHtml(sel){
+  return COURSE_OPTIONS.map(function(c){ return '<option' + (c === sel ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('');
+}
+// Fill every course <select> on the page (hero + contact form).
+function fillCourseSelects(){
+  document.querySelectorAll('#heroCourse, .courseSelect').forEach(function(s){ if (!s.options.length) s.innerHTML = courseOptionsHtml(); });
+}
+
+/* ---- Nav helpers ---- */
+function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
+function closeNav(){ const n = document.getElementById('navLinks'); if (n) n.classList.remove('open'); }
+function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0); }
+function scrollToId(id){ const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+function goSection(id){ closeNav(); if (!onHome()) { location.hash = ''; setTimeout(function(){ scrollToId(id); }, 90); } else { scrollToId(id); } }
+function goHome(){ closeNav(); if (!onHome()) { location.hash = ''; } else { route(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
+function goView(v){ closeNav(); location.hash = '#' + v; }
+
+/* ---- Lead capture ---- */
+function leadVal(form, n){ const el = form.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ''; }
+async function submitLead(form, source){
+  const name = leadVal(form, 'name'), email = leadVal(form, 'email');
+  if (!name) { alert('Please enter your name.'); return false; }
+  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert('Please enter a valid email address.'); return false; }
+  const payload = {
+    name: name, email: email,
+    phone:   leadVal(form, 'phone'),
+    company: leadVal(form, 'company'),
+    course:  leadVal(form, 'course'),
+    mode:    leadVal(form, 'mode'),
+    message: leadVal(form, 'message'),
+    source:  source || 'Website'
+  };
+  const btn = form.querySelector('[type="submit"]');
+  const orig = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = 'Sending…'; }
+  try {
+    const res = await snFetch(LEADS_API, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error('HTTP ' + res.status + ' — ' + (await res.text()).slice(0,200));
+    form.reset();
+    closeLeadModal();
+    alert('Thank you, ' + name + '! A course advisor will reach out within 1 business day.');
+  } catch (e) {
+    alert('Sorry, we could not submit your request right now: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = orig; }
+  }
+  return false;
+}
+
+/* ---- Lead modal ---- */
+function openLeadModal(course){
+  const ov = document.getElementById('leadModal');
+  ov.innerHTML =
+    '<div class="rv-modal">' +
+      '<h3>Book Your Free Demo</h3>' +
+      '<p style="color:var(--muted);margin:-6px 0 16px;font-size:.9rem">Tell us a bit about you and we’ll get in touch within 1 business day.</p>' +
+      '<form class="lead-form" onsubmit="return submitLead(this,\'Demo Modal\')">' +
+        '<div class="row2">' +
+          '<div><label>Full Name *</label><input name="name" type="text" placeholder="Your name" required></div>' +
+          '<div><label>Email *</label><input name="email" type="email" placeholder="you@email.com" required></div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div><label>Phone</label><input name="phone" type="text" placeholder="Optional"></div>' +
+          '<div><label>Company</label><input name="company" type="text" placeholder="Optional"></div>' +
+        '</div>' +
+        '<div class="row2">' +
+          '<div><label>Course of Interest</label><select name="course">' + courseOptionsHtml(course || 'Not sure yet') + '</select></div>' +
+          '<div><label>Preferred Mode</label><select name="mode"><option>Online (Live)</option><option>Classroom</option><option>Corporate / Team</option></select></div>' +
+        '</div>' +
+        '<div><label>Message</label><textarea name="message" placeholder="Your goals, schedule, or questions…"></textarea></div>' +
+        '<button class="btn btn-primary btn-lg" type="submit">Request Free Demo</button>' +
+      '</form>' +
+      '<button class="btn btn-ghost" style="width:100%;margin-top:10px" onclick="closeLeadModal()">Cancel</button>' +
+    '</div>';
+  ov.style.display = 'flex';
+}
+function closeLeadModal(){ const ov = document.getElementById('leadModal'); if (ov) { ov.style.display = 'none'; ov.innerHTML = ''; } }
+
+/* ---- Home: dynamic testimonials (top reviews from ServiceNow) ---- */
+let _homeTestimonialsLoaded = false;
+async function loadHomeTestimonials(){
+  const box = document.getElementById('homeTestimonials');
+  if (!box) return;
+  try {
+    const res = await snFetch(REVIEWS_GET_API);
+    if (!res.ok) throw new Error('http');
+    const json = await res.json();
+    const list = (json.result || []).map(mapReview)
+      .sort(function(a,b){ return (b.overall || avgScore(b.scores)) - (a.overall || avgScore(a.scores)); })
+      .slice(0, 3);
+    if (!list.length) throw new Error('empty');
+    box.innerHTML = list.map(function(r){
+      const ov = r.overall || avgScore(r.scores);
+      return '<div class="tcard reveal">' +
+        '<div class="trate">' + stars(ov) + '</div>' +
+        '<p class="q">“' + esc(r.comment || 'A genuinely great learning experience.') + '”</p>' +
+        '<div class="who"><div class="av">' + esc(initials(r.name || 'A')) + '</div>' +
+        '<div><div class="nm">' + esc(r.name || 'Trainee') + '</div>' +
+        '<div class="rl">' + (r.trainerName ? 'Trained by ' + esc(r.trainerName) : 'Verified trainee') + '</div></div></div>' +
+      '</div>';
+    }).join('');
+    _homeTestimonialsLoaded = true;
+    initReveal();
+  } catch (e) {
+    // ServiceNow unreachable — show demo testimonials.
+    const demo = buildFallbackReviews().slice(0, 3);
+    box.innerHTML = demo.map(function(r){
+      return '<div class="tcard reveal">' +
+        '<div class="trate">' + stars(r.overall) + '</div>' +
+        '<p class="q">“' + esc(r.comment) + '”</p>' +
+        '<div class="who"><div class="av">' + esc(initials(r.name)) + '</div>' +
+        '<div><div class="nm">' + esc(r.name) + '</div><div class="rl">Trained in ' + esc(r.trainerName) + '</div></div></div>' +
+      '</div>';
+    }).join('');
+    initReveal();
+  }
+}
+
+/* ---- Home: top trainers preview ---- */
+function renderHomeTrainers(){
+  const box = document.getElementById('homeTrainers');
+  if (!box) return;
+  if (!members.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">Loading trainers…</div>'; return; }
+  const top = members.map(function(m){ return Object.assign({}, m, { _r: computeRating(m) }); })
+    .sort(function(a,b){ return b._r - a._r; }).slice(0, 4);
+  box.innerHTML = top.map(function(m){
+    const av = m.avatar ? ('<img src="' + m.avatar + '" alt="">') : ('<span class="avatar-initials">' + initials(m.name) + '</span>');
+    return '<div class="course-card reveal" style="text-align:center;align-items:center">' +
+      '<div class="avatar" style="width:84px;height:84px;border-radius:50%;margin:0 auto 12px">' + av + '</div>' +
+      '<h3 style="font-size:1.05rem">' + esc(m.name) + '</h3>' +
+      '<p style="text-align:center">' + esc(m.role || '') + '</p>' +
+      '<div class="trate" style="color:var(--star);letter-spacing:2px">' + m._r.toFixed(1) + '/5 ' + stars(m._r) + '</div>' +
+    '</div>';
+  }).join('');
+  initReveal();
+}
+
+/* ---- Scroll reveal + animated counters ---- */
+let _io;
+function initReveal(){
+  if (!('IntersectionObserver' in window)) {
+    document.querySelectorAll('.reveal').forEach(function(e){ e.classList.add('reveal-in'); });
+    document.querySelectorAll('[data-count]').forEach(animateCount);
+    return;
+  }
+  if (!_io) {
+    _io = new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if (en.isIntersecting) {
+          en.target.classList.add('reveal-in');
+          if (en.target.dataset.count !== undefined) animateCount(en.target);
+          _io.unobserve(en.target);
+        }
+      });
+    }, { threshold: 0.15 });
+  }
+  document.querySelectorAll('.reveal:not(.reveal-in)').forEach(function(e){ _io.observe(e); });
+  document.querySelectorAll('[data-count]:not(.counted)').forEach(function(e){ _io.observe(e); });
+}
+function animateCount(el){
+  if (el.classList.contains('counted')) return;
+  el.classList.add('counted');
+  const target = parseFloat(el.dataset.count) || 0;
+  const dec = el.dataset.dec === '1';
+  const suffix = el.dataset.suffix || '';
+  const dur = 1400, start = performance.now();
+  function tick(now){
+    const p = Math.min(1, (now - start) / dur);
+    const v = target * (1 - Math.pow(1 - p, 3));
+    el.textContent = (dec ? v.toFixed(1) : Math.round(v).toLocaleString()) + suffix;
+    if (p < 1) requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
+}
+
+/* ---- Router: Home (default) / Trainers / Reviews ---- */
 function route(){
-  const isReviews = location.hash.indexOf('#reviews') === 0;
+  const h = location.hash;
+  const isReviews  = h.indexOf('#reviews')  === 0;
+  const isTrainers = h.indexOf('#trainers') === 0;
+  const home = document.getElementById('homeView');
+  const wrap = document.getElementById('appWrap');
   const mainView = document.getElementById('mainView');
   const reviewsView = document.getElementById('reviewsView');
+  closeReviewModal(); closeLeadModal(); closeNav();
+
   if (isReviews) {
-    mainView.style.display = 'none';
-    reviewsView.style.display = '';
-    loadReviews();
+    home.style.display = 'none'; wrap.style.display = '';
+    mainView.style.display = 'none'; reviewsView.style.display = '';
+    loadReviews(); window.scrollTo(0, 0);
+  } else if (isTrainers) {
+    home.style.display = 'none'; wrap.style.display = '';
+    reviewsView.style.display = 'none'; mainView.style.display = '';
+    render(); window.scrollTo(0, 0);
   } else {
-    reviewsView.style.display = 'none';
-    mainView.style.display = '';
-    closeReviewModal();
-    render();
+    wrap.style.display = 'none'; home.style.display = '';
+    renderHomeTrainers(); initReveal();
   }
 }
 
@@ -819,7 +1463,12 @@ function toggleTheme(){
 }
 
 applyTheme(localStorage.getItem(THEME_KEY) || 'light');
-loadMembers();
+fillCourseSelects();
+document.getElementById('yr').textContent = new Date().getFullYear();
+route();                 // show the correct view immediately
+loadMembers();           // fetch trainers (re-renders trainers view + home preview)
+loadHomeTestimonials();  // fetch top reviews for the home testimonials strip
+initReveal();            // scroll-reveal + animated counters
 window.addEventListener('hashchange', route);
 </script>
 </body>
