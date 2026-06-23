@@ -271,6 +271,8 @@
   .nav-inner { max-width: 1120px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 16px; }
   .nav-logo { display: inline-flex; align-items: center; cursor: pointer; }
   .nav-logo img { height: 42px; width: auto; display: block; }
+  /* Logo has a transparent background and dark text — add a white chip in dark mode so it stays visible */
+  body.dark .nav-logo img { background: #fff; padding: 5px 9px; border-radius: 9px; }
   .nav-links { margin-left: auto; display: flex; align-items: center; gap: 4px; }
   .navlink { color: var(--ink); text-decoration: none; font-weight: 600; font-size: .92rem; padding: 9px 12px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
   .navlink:hover { background: var(--accent-soft); color: var(--accent); }
