@@ -374,10 +374,10 @@
   /* ---- Testimonials ---- */
   .tcards { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
   @media (max-width: 880px) { .tcards { grid-template-columns: 1fr; max-width: 560px; margin: 0 auto; } }
-  .tcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); }
+  .tcard { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; box-shadow: var(--shadow); display: flex; flex-direction: column; height: 100%; }
   .tcard .trate { color: var(--star); margin-bottom: 10px; letter-spacing: 2px; }
   .tcard .q { font-size: .96rem; color: var(--ink); margin: 0 0 16px; text-align: justify; }
-  .tcard .who { display: flex; align-items: center; gap: 12px; }
+  .tcard .who { display: flex; align-items: center; gap: 12px; margin-top: auto; }
   .tcard .who .av { width: 42px; height: 42px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-weight: 800; }
   .tcard .who .nm { font-weight: 700; font-size: .92rem; }
   .tcard .who .rl { color: var(--muted); font-size: .8rem; }
@@ -477,8 +477,7 @@
   <section class="hero" id="home">
     <div class="hero-inner container">
       <div>
-        <span class="eyebrow">★ VTech Infotech LLC • IT Consulting · Staffing · Training</span>
-        <h1>Your Partner for <span class="hl">IT Consulting, Staffing</span> & Expert Training</h1>
+        <h1>Your Partner for <span class="hl">Expert Training</span>, IT Consulting &amp; Staffing</h1>
         <p class="lede">VTech Infotech is a full-spectrum IT services company. We consult on and deliver technology projects, place vetted IT talent, and run hands-on training across ServiceNow, Salesforce, Cloud, Data and AI.</p>
         <div class="hero-cta">
           <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Talk to an Advisor</button>
@@ -1385,8 +1384,7 @@ async function loadHomeTestimonials(){
         '<div class="trate">' + stars(ov) + '</div>' +
         '<p class="q">“' + esc(r.comment || 'A genuinely great learning experience.') + '”</p>' +
         '<div class="who"><div class="av">' + esc(initials(r.name || 'A')) + '</div>' +
-        '<div><div class="nm">' + esc(r.name || 'Trainee') + '</div>' +
-        '<div class="rl">' + (r.trainerName ? 'Trained by ' + esc(r.trainerName) : 'Verified trainee') + '</div></div></div>' +
+        '<div><div class="nm">' + esc(r.name || 'Trainee') + '</div></div></div>' +
       '</div>';
     }).join('');
     _homeTestimonialsLoaded = true;
@@ -1399,7 +1397,7 @@ async function loadHomeTestimonials(){
         '<div class="trate">' + stars(r.overall) + '</div>' +
         '<p class="q">“' + esc(r.comment) + '”</p>' +
         '<div class="who"><div class="av">' + esc(initials(r.name)) + '</div>' +
-        '<div><div class="nm">' + esc(r.name) + '</div><div class="rl">Trained in ' + esc(r.trainerName) + '</div></div></div>' +
+        '<div><div class="nm">' + esc(r.name) + '</div></div></div>' +
       '</div>';
     }).join('');
     initReveal();
