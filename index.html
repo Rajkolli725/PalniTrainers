@@ -22,39 +22,39 @@
     --input: #ffffff;
     --ghost-bg: #eceef3;
     --ghost-hover: #e0e4ec;
-    --primary-bg: #1f2a5b;    /* VTech navy */
-    --primary-hover: #16204a;
-    --brand-grad: linear-gradient(135deg, #1b2550 0%, #2a3a78 52%, #e8541e 165%);
-    --nav-bg: rgba(245,246,249,.85);
-    --nav-line: #e4e8ef;
+    --primary-bg: #293e40;    /* deep teal-slate */
+    --primary-hover: #1d2d2e;
+    --brand-grad: linear-gradient(135deg, #1f3133 0%, #293e40 52%, #e8541e 165%);
+    --nav-bg: rgba(245,247,247,.85);
+    --nav-line: #e2e8e7;
     --radius: 16px;
     --shadow: 0 1px 3px rgba(20,28,55,.08), 0 10px 30px rgba(20,28,55,.07);
   }
   body.dark {
-    --bg: #0e1426;
-    --card: #161e36;
-    --ink: #e7ecf6;
-    --muted: #9aa6c0;
-    --line: #28324f;
+    --bg: #122021;
+    --card: #1b2e2f;
+    --ink: #e8efee;
+    --muted: #9bb0ae;
+    --line: #2c3f40;
     --accent: #ff7a45;
     --accent-soft: #3a2316;
     --gold: #ff8c4d;
     --gold-soft: #2c2113;
     --gold-ink: #ffcea8;
     --star: #fbbf24;
-    --hover: #1b2440;
-    --input: #0e1426;
-    --ghost-bg: #28324f;
-    --ghost-hover: #36426b;
-    --primary-bg: #2d3d7a;
-    --primary-hover: #1f2a5b;
-    --brand-grad: linear-gradient(135deg, #141b38 0%, #2a3a78 55%, #c2451a 160%);
-    --nav-bg: rgba(18,26,48,.82);
+    --hover: #1f3334;
+    --input: #122021;
+    --ghost-bg: #2c3f40;
+    --ghost-hover: #3a4f50;
+    --primary-bg: #34504e;
+    --primary-hover: #293e40;
+    --brand-grad: linear-gradient(135deg, #122021 0%, #293e40 55%, #c2451a 160%);
+    --nav-bg: rgba(24,38,39,.85);
     --nav-line: rgba(255,255,255,.09);
     --shadow: 0 1px 3px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
   }
   /* Immersive dark backdrop with a warm brand glow */
-  body.dark { background: radial-gradient(1100px 560px at 75% -220px, rgba(232,84,30,.12), transparent 60%), var(--bg); background-attachment: fixed; }
+  body.dark { background: radial-gradient(1100px 560px at 75% -220px, rgba(232,84,30,.13), transparent 60%), var(--bg); background-attachment: fixed; }
   * { box-sizing: border-box; }
   body {
     margin: 0;
@@ -279,8 +279,8 @@
   .nav.scrolled { box-shadow: 0 6px 24px rgba(0,0,0,.18); }
   .nav-inner { max-width: 1120px; margin: 0 auto; padding: 11px 20px; display: flex; align-items: center; gap: 16px; }
   .nav-logo { display: inline-flex; align-items: center; cursor: pointer; }
-  .nav-logo img { height: 44px; width: auto; display: block; }
-  body.dark .nav-logo img { filter: brightness(0) invert(1); }   /* white logo on the dark header */
+  /* White rounded chip in BOTH themes so the logo reads the same everywhere */
+  .nav-logo img { height: 50px; width: auto; display: block; background: #fff; padding: 6px 13px; border-radius: 11px; box-shadow: 0 4px 14px rgba(0,0,0,.18); }
   .nav-links { margin-left: auto; display: flex; align-items: center; gap: 4px; }
   .navlink { color: var(--ink); text-decoration: none; font-weight: 600; font-size: .92rem; padding: 9px 12px; border-radius: 9px; cursor: pointer; white-space: nowrap; }
   .navlink:hover { background: var(--accent-soft); color: var(--accent); }
@@ -462,13 +462,24 @@
      HERO PROMO VIDEO
      =================================================================== */
   .hero-wrap { padding: 64px 20px 76px; }
-  .hero-copy { text-align: center; max-width: 860px; margin: 0 auto 40px; }
-  .hero-copy .hero-cta { justify-content: center; }
-  .hero-copy .hero-trust { justify-content: center; }
+  /* Two-column hero: left = heading + rating + CTAs, right = justified paragraph (equal heights) */
+  .hero-top { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: stretch; text-align: left; margin-bottom: 44px; }
+  .hero-left { display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-left h1 { margin: 0 0 18px; font-size: 2rem; line-height: 1.22; }
+  .hero-left .hero-trust { display: flex; flex-direction: row; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; margin: 0; font-size: .95rem; color: #fff; }
+  .hero-left .hero-trust .stars { font-size: 1.2rem; letter-spacing: 2px; color: #63DF4E; white-space: nowrap; }
+  .hero-right { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; }
+  .hero-right .lede { text-align: justify; margin: 0 0 24px; max-width: none; font-size: 1.1rem; }
+  .hero-right .hero-cta { justify-content: flex-start; margin: 0; }
+  @media (max-width: 860px) {
+    .hero-top { grid-template-columns: 1fr; gap: 22px; margin-bottom: 32px; }
+    .hero-right .lede { text-align: left; }
+    .hero-left .hero-trust { white-space: normal; }
+  }
   .promo-video {
     position: relative; max-width: 940px; margin: 0 auto; aspect-ratio: 16 / 9;
     border-radius: 20px; overflow: hidden; cursor: pointer;
-    background: linear-gradient(135deg, #0e1733 0%, #1f2a5b 55%, #3a2150 100%);
+    background: linear-gradient(135deg, #15282a 0%, #293e40 55%, #5a3318 100%);
     border: 1px solid rgba(255,255,255,.16); box-shadow: 0 34px 80px rgba(0,0,0,.45);
   }
   .promo-video::before { content: ''; position: absolute; inset: 0;
@@ -487,6 +498,29 @@
   /* ===================================================================
      SPEAKER GRID (Meet Our Trainers — "Explore All Speakers" style)
      =================================================================== */
+  /* Home preview portrait cards (click + to expand the bio out to the RIGHT) */
+  .tp-card { position: relative; height: 100%; }
+  .tp-figure { position: relative; height: 100%; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow); }
+  .tp-photo { position: relative; aspect-ratio: 3 / 4; background: linear-gradient(135deg, var(--primary-bg), #1a2c2d); overflow: hidden; }
+  .tp-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tp-photo .avatar-initials { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: 800; color: #fff; }
+  .tp-info { position: absolute; left: 0; right: 0; bottom: 0; padding: 34px 14px 18px; text-align: center;
+    background: linear-gradient(to top, rgba(0,0,0,.9), rgba(0,0,0,.15) 78%, transparent); }
+  .tp-name { color: #fff; font-weight: 800; font-size: 1.25rem; line-height: 1.16; }
+  .tp-divider { display: block; width: 34px; height: 3px; border-radius: 2px; background: #63DF4E; margin: 9px auto; }
+  .tp-role { color: rgba(255,255,255,.85); font-size: .85rem; font-weight: 500; }
+  .tp-plus { position: absolute; top: 12px; right: 12px; z-index: 3; width: 38px; height: 38px; border-radius: 50%; border: none;
+    background: #122021; color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,.4); transition: transform .15s; }
+  .tp-plus:hover { transform: scale(1.09); }
+  .tp-bio { position: absolute; top: 0; left: 100%; width: 250px; max-width: 74vw; height: 100%; z-index: 5;
+    background: #122021; color: #fff; padding: 20px; overflow-y: auto; display: none;
+    border-radius: 0 16px 16px 0; box-shadow: 14px 0 34px rgba(0,0,0,.45); }
+  .tp-bio h4 { margin: 0 0 8px; color: #63DF4E; font-size: .95rem; }
+  .tp-bio p { margin: 0; font-size: .88rem; line-height: 1.55; text-align: justify; }
+  .tp-card.open { z-index: 6; }
+  .tp-card.open .tp-bio { display: block; }
+
   .speaker-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; }
   .speaker-grid .empty { grid-column: 1 / -1; }
   @media (max-width: 980px) { .speaker-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -498,7 +532,7 @@
     transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
   }
   .speaker-card:hover { transform: translateY(-6px); box-shadow: 0 20px 44px rgba(0,0,0,.28); border-color: var(--accent); }
-  .sc-photo { position: relative; aspect-ratio: 1 / 1; background: linear-gradient(135deg, var(--primary-bg), #3a2150); overflow: hidden; }
+  .sc-photo { position: relative; aspect-ratio: 1 / 1; background: linear-gradient(135deg, var(--primary-bg), #1a2c2d); overflow: hidden; }
   .sc-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .sc-photo .avatar-initials { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.6rem; font-weight: 800; color: #fff; }
   .sc-rate { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,.55); color: var(--star); font-weight: 700; font-size: .8rem; padding: 4px 9px; border-radius: 999px; backdrop-filter: blur(4px); }
@@ -511,13 +545,19 @@
   .tr-modal-overlay { position: fixed; inset: 0; background: rgba(8,12,24,.62); display: none;
     align-items: flex-start; justify-content: center; padding: 24px; z-index: 70; overflow-y: auto; backdrop-filter: blur(3px); }
   .tr-modal { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px; width: 100%;
-    max-width: 600px; padding: 26px; box-shadow: 0 30px 70px rgba(0,0,0,.45); margin: auto; }
+    max-width: 880px; padding: 28px; box-shadow: 0 30px 70px rgba(0,0,0,.45); margin: auto; }
+  .tr-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; align-items: stretch; }
+  .tr-col { display: flex; flex-direction: column; }
+  .tr-col .tr-bio { flex: 1 1 auto; }                          /* bio grows so rating + icons drop to the bottom */
+  .tr-col .rating-row { margin: 0 0 12px; }                    /* rating sits just above the icons */
+  .tr-col .cta-row { margin-top: 0; padding-top: 0; }          /* social/attach icons at the bottom */
+  @media (max-width: 680px) { .tr-body { grid-template-columns: 1fr; gap: 18px; } .tr-col .tr-bio { flex: 0 0 auto; } }
   .tr-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--line);
     background: var(--input); color: var(--ink); font-size: 1rem; cursor: pointer; }
   .tr-close:hover { background: var(--hover); }
   .tr-head { display: flex; gap: 18px; align-items: center; margin-bottom: 16px; padding-right: 36px; }
   .tr-photo { width: 96px; height: 96px; border-radius: 16px; overflow: hidden; flex-shrink: 0;
-    background: linear-gradient(135deg, var(--primary-bg), #3a2150); position: relative; }
+    background: linear-gradient(135deg, var(--primary-bg), #1a2c2d); position: relative; }
   .tr-photo img { width: 100%; height: 100%; object-fit: cover; }
   .tr-photo .avatar-initials { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: #fff; }
   .tr-name { font-size: 1.4rem; font-weight: 800; color: var(--accent); }
@@ -555,14 +595,18 @@
   <!-- Hero -->
   <section class="hero" id="home">
     <div class="container hero-wrap">
-      <div class="hero-copy">
-        <h1>Your Partner for <span class="hl">Expert Training</span>, IT Consulting &amp; Staffing</h1>
-        <p class="lede">VTech Infotech is a full-spectrum IT services company. We consult on and deliver technology projects, place vetted IT talent, and run hands-on training across ServiceNow, Salesforce, Cloud, Data and AI.</p>
-        <div class="hero-cta">
-          <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Talk to an Advisor</button>
-          <button class="btn btn-outline-light btn-lg" onclick="goSection('services')">Explore Services</button>
+      <div class="hero-top">
+        <div class="hero-left">
+          <h1>Your Partner for <span class="hl">Expert Training</span>,<br>IT Consulting &amp; Staffing</h1>
+          <div class="hero-trust"><span class="stars">★★★★★</span> Trusted by 5,000+ professionals &amp; teams worldwide</div>
         </div>
-        <div class="hero-trust"><span class="stars">★★★★★</span> Trusted by 5,000+ professionals &amp; teams worldwide</div>
+        <div class="hero-right">
+          <p class="lede">VTech Infotech is a full-spectrum IT services company. We deliver technology projects, place vetted IT talent, and run hands-on training.</p>
+          <div class="hero-cta">
+            <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Talk to an Advisor</button>
+            <button class="btn btn-outline-light btn-lg" onclick="goSection('services')">Explore Services</button>
+          </div>
+        </div>
       </div>
 
       <!-- Promotion video placeholder. Set PROMO_VIDEO_URL in the script to embed a real video. -->
@@ -1081,31 +1125,37 @@ function openTrainer(id){
           <div class="tr-name">${esc(m.name)}</div>
           <div class="tr-role">${esc(m.role||'')}</div>
           ${m.company ? `<span class="company">${esc(m.company)}</span>` : ''}
-          <div class="rating-row" style="margin-top:10px">
+        </div>
+      </div>
+      <div class="tr-body">
+        <div class="tr-col">
+          <div class="tr-bio">${esc(m.bio) || '<span class="hint">No bio provided.</span>'}</div>
+          <div class="rating-row">
             <span class="rating-big">${r.toFixed(1)}/5</span>
             <span class="stars">${stars(r)}</span>
             <a class="reviews-link" href="#reviews" onclick="closeTrainer()">(Reviews)</a>
           </div>
+          <div class="cta-row">
+            <a class="icon-btn linkedin" href="${esc(linkedin)}" target="_blank" rel="noopener" title="Connect on LinkedIn">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
+            </a>
+            <a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=${encodeURIComponent('Inquiry about ' + m.name)}" title="Contact (training@vtechinfotech.com)">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
+            </a>
+            <button class="icon-btn ${hasResume ? '' : 'disabled'}" onclick="downloadResume('${m.id}')" title="${hasResume ? 'Download resume' : 'No resume available'}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="tr-bio">${esc(m.bio) || '<span class="hint">No bio provided.</span>'}</div>
-      <div class="tr-stats">
-        <div class="stat"><span>💼 Experience</span><span class="v">${esc(String(m.exp||0))} yrs</span></div>
-        <div class="stat"><span>📊 Trainings Delivered</span><span class="v">${esc(String(m.trainings||0))}</span></div>
-        <div class="stat"><span>🚀 Successful Implementations</span><span class="v">${esc(String(m.impl||0))}</span></div>
-      </div>
-      <div class="field"><h4>🎖 Certifications (${(m.certs||[]).length})</h4><div class="chips">${certChips}</div></div>
-      <div class="field"><h4>🛠 Skills</h4><div class="chips">${skillChips}</div></div>
-      <div class="cta-row">
-        <a class="icon-btn linkedin" href="${esc(linkedin)}" target="_blank" rel="noopener" title="Connect on LinkedIn">
-          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
-        </a>
-        <a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=${encodeURIComponent('Inquiry about ' + m.name)}" title="Contact (training@vtechinfotech.com)">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
-        </a>
-        <button class="icon-btn ${hasResume ? '' : 'disabled'}" onclick="downloadResume('${m.id}')" title="${hasResume ? 'Download resume' : 'No resume available'}">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-        </button>
+        <div class="tr-col">
+          <div class="tr-stats">
+            <div class="stat"><span>💼 Experience</span><span class="v">${esc(String(m.exp||0))} yrs</span></div>
+            <div class="stat"><span>📊 Trainings Delivered</span><span class="v">${esc(String(m.trainings||0))}</span></div>
+            <div class="stat"><span>🚀 Successful Implementations</span><span class="v">${esc(String(m.impl||0))}</span></div>
+          </div>
+          <div class="field"><h4>🎖 Certifications (${(m.certs||[]).length})</h4><div class="chips">${certChips}</div></div>
+          <div class="field"><h4>🛠 Skills</h4><div class="chips">${skillChips}</div></div>
+        </div>
       </div>
     </div>`;
   ov.style.display = 'flex';
@@ -1559,17 +1609,34 @@ function renderHomeTrainers(){
   const all = members.map(function(m){ return Object.assign({}, m, { _r: computeRating(m) }); })
     .sort(function(a,b){ return b._r - a._r; });
   box.innerHTML = all.map(function(m){
-    const av = m.avatar ? ('<img src="' + m.avatar + '" alt="">') : ('<span class="avatar-initials">' + initials(m.name) + '</span>');
+    const av = m.avatar ? ('<img src="' + m.avatar + '" alt="' + esc(m.name) + '">') : ('<span class="avatar-initials">' + initials(m.name) + '</span>');
+    const bio = esc(m.bio) || 'No bio provided.';
     return '<div class="carousel-card">' +
-      '<div class="course-card" style="text-align:center;align-items:center">' +
-        '<div class="avatar" style="width:84px;height:84px;border-radius:50%;margin:0 auto 12px">' + av + '</div>' +
-        '<h3 style="font-size:1.05rem">' + esc(m.name) + '</h3>' +
-        '<p style="text-align:center">' + esc(m.role || '') + '</p>' +
-        '<div class="trate" style="color:var(--star);letter-spacing:2px">' + m._r.toFixed(1) + '/5 ' + stars(m._r) + '</div>' +
+      '<div class="tp-card" id="tp-' + m.id + '">' +
+        '<div class="tp-bio"><h4>About ' + esc(m.name.split(' ')[0]) + '</h4><p>' + bio + '</p></div>' +
+        '<div class="tp-figure">' +
+          '<button class="tp-plus" onclick="toggleHomeBio(event,\'' + m.id + '\')" aria-label="Show bio" title="Show bio">+</button>' +
+          '<div class="tp-photo">' + av + '</div>' +
+          '<div class="tp-info">' +
+            '<div class="tp-name">' + esc(m.name) + '</div>' +
+            '<span class="tp-divider"></span>' +
+            '<div class="tp-role">' + esc(m.role || '') + '</div>' +
+          '</div>' +
+        '</div>' +
       '</div>' +
     '</div>';
   }).join('');
   initCarousels();
+}
+
+/* Toggle the bio overlay on a home portrait card (+ ⇄ −) */
+function toggleHomeBio(e, id){
+  if (e) e.stopPropagation();
+  const card = document.getElementById('tp-' + id);
+  if (!card) return;
+  const open = card.classList.toggle('open');
+  const btn = card.querySelector('.tp-plus');
+  if (btn) { btn.textContent = open ? '−' : '+'; btn.title = open ? 'Hide bio' : 'Show bio'; btn.setAttribute('aria-label', btn.title); }
 }
 
 /* ---- Scroll reveal + animated counters ---- */
