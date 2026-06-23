@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<meta name="description" content="VTech Infotech LLC — expert-led IT training in ServiceNow, Salesforce, Databricks, Snowflake and AI. Live instructor-led courses, hands-on labs, and job-focused mentorship. Book a free demo." />
-<title>VTech Infotech LLC — IT & Cloud Training | ServiceNow, Salesforce, Databricks, Snowflake, AI</title>
+<meta name="description" content="VTech Infotech LLC — IT consulting, staffing and expert-led training. We deliver technology consulting, vetted IT talent, cloud, AI and hands-on courses in ServiceNow, Salesforce, Databricks and Snowflake." />
+<title>VTech Infotech LLC — IT Consulting, Staffing & Training | ServiceNow, Salesforce, Cloud, Data & AI</title>
 <style>
   :root {
     --bg: #f5f6f9;
@@ -418,6 +418,35 @@
   .reveal { opacity: 0; transform: translateY(24px); transition: opacity .6s ease, transform .6s ease; }
   .reveal.reveal-in { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+
+  /* ---- Carousel (services + trainers): 4 cards per row, looping ---- */
+  .carousel { position: relative; padding: 0 6px; }
+  .carousel-track {
+    display: flex; gap: 22px; overflow-x: auto; scroll-snap-type: x mandatory;
+    scroll-behavior: smooth; padding: 6px 2px 14px; scrollbar-width: none; -ms-overflow-style: none;
+  }
+  .carousel-track::-webkit-scrollbar { display: none; }
+  .carousel-card { scroll-snap-align: start; flex: 0 0 calc((100% - 66px) / 4); min-width: 0; }
+  .carousel.per3 .carousel-card { flex-basis: calc((100% - 44px) / 3); }
+  /* Cards inside a horizontal scroller: drop the vertical lift so it isn't clipped */
+  .carousel-card .course-card { height: 100%; }
+  .carousel-card .course-card:hover { transform: none; box-shadow: 0 18px 42px rgba(60,20,25,.15); }
+  .carousel-btn {
+    position: absolute; top: 50%; transform: translateY(-50%); z-index: 5;
+    width: 44px; height: 44px; border-radius: 50%; border: 1px solid var(--line);
+    background: var(--card); color: var(--ink); cursor: pointer; font-size: 1.5rem; line-height: 1;
+    display: grid; place-items: center; box-shadow: var(--shadow); transition: .15s;
+  }
+  .carousel-btn:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .carousel-btn.prev { left: -10px; }
+  .carousel-btn.next { right: -10px; }
+  @media (max-width: 900px) {
+    .carousel-card, .carousel.per3 .carousel-card { flex-basis: calc((100% - 22px) / 2); }
+  }
+  @media (max-width: 560px) {
+    .carousel-card, .carousel.per3 .carousel-card { flex-basis: 100%; }
+    .carousel-btn.prev { left: -4px; } .carousel-btn.next { right: -4px; }
+  }
 </style>
 </head>
 <body>
@@ -430,7 +459,8 @@
     <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">☰</button>
     <div class="nav-links" id="navLinks">
       <a class="navlink" onclick="goHome()">Home</a>
-      <a class="navlink" onclick="goSection('courses')">Courses</a>
+      <a class="navlink" onclick="goSection('services')">Services</a>
+      <a class="navlink" onclick="goSection('courses')">Training</a>
       <a class="navlink" onclick="goSection('why')">Why Us</a>
       <a class="navlink" onclick="goView('trainers')">Trainers</a>
       <a class="navlink" onclick="goView('reviews')">Reviews</a>
@@ -448,14 +478,14 @@
   <section class="hero" id="home">
     <div class="hero-inner container">
       <div>
-        <span class="eyebrow">★ VTech Infotech LLC • Learn from Industry Experts</span>
-        <h1>Master <span class="hl">In-Demand Tech</span> Skills That Get You Hired</h1>
-        <p class="lede">Live, instructor-led training in ServiceNow, Salesforce, Databricks, Snowflake and AI — with hands-on labs, real-world projects, and mentorship that takes you from beginner to job-ready.</p>
+        <span class="eyebrow">★ VTech Infotech LLC • IT Consulting · Staffing · Training</span>
+        <h1>Your Partner for <span class="hl">IT Consulting, Staffing</span> & Expert Training</h1>
+        <p class="lede">VTech Infotech is a full-spectrum IT services company. We consult on and deliver technology projects, place vetted IT talent, and run hands-on training across ServiceNow, Salesforce, Cloud, Data and AI.</p>
         <div class="hero-cta">
-          <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Book a Free Demo</button>
-          <button class="btn btn-outline-light btn-lg" onclick="goSection('courses')">Explore Courses</button>
+          <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Talk to an Advisor</button>
+          <button class="btn btn-outline-light btn-lg" onclick="goSection('services')">Explore Services</button>
         </div>
-        <div class="hero-trust"><span class="stars">★★★★★</span> Rated 4.8/5 by 5,000+ trainees worldwide</div>
+        <div class="hero-trust"><span class="stars">★★★★★</span> Trusted by 5,000+ professionals &amp; teams worldwide</div>
       </div>
       <div class="lead-card">
         <h3>Get a Free Consultation</h3>
@@ -477,10 +507,26 @@
   <section class="stats-band">
     <div class="container">
       <div class="stats-grid">
-        <div><div class="stat-num" data-count="5000" data-suffix="+">0</div><div class="stat-lbl">Trainees Upskilled</div></div>
-        <div><div class="stat-num" data-count="50" data-suffix="+">0</div><div class="stat-lbl">Expert Trainers</div></div>
-        <div><div class="stat-num gold" data-count="95" data-suffix="%">0</div><div class="stat-lbl">Course Completion</div></div>
-        <div><div class="stat-num" data-count="4.8" data-dec="1">0</div><div class="stat-lbl">Average Rating</div></div>
+        <div><div class="stat-num" data-count="5000" data-suffix="+">0</div><div class="stat-lbl">Professionals Trained &amp; Placed</div></div>
+        <div><div class="stat-num" data-count="50" data-suffix="+">0</div><div class="stat-lbl">Expert Consultants &amp; Trainers</div></div>
+        <div><div class="stat-num gold" data-count="95" data-suffix="%">0</div><div class="stat-lbl">Project Success Rate</div></div>
+        <div><div class="stat-num" data-count="4.8" data-dec="1">0</div><div class="stat-lbl">Average Client Rating</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services carousel -->
+  <section class="section alt" id="services">
+    <div class="container">
+      <div class="section-title reveal">
+        <div class="eyebrow2">What We Do</div>
+        <h2>End-to-End IT Services</h2>
+        <p>From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
+      </div>
+      <div class="carousel per3" data-auto="4500">
+        <button class="carousel-btn prev" aria-label="Previous services">&#8249;</button>
+        <div class="carousel-track" id="servicesTrack"></div>
+        <button class="carousel-btn next" aria-label="Next services">&#8250;</button>
       </div>
     </div>
   </section>
@@ -489,7 +535,7 @@
   <section class="section" id="courses">
     <div class="container">
       <div class="section-title reveal">
-        <div class="eyebrow2">Our Programs</div>
+        <div class="eyebrow2">Training Programs</div>
         <h2>Career-Focused Tech Courses</h2>
         <p>Specialized, hands-on tracks built around the platforms enterprises hire for right now.</p>
       </div>
@@ -581,9 +627,13 @@
       <div class="section-title reveal">
         <div class="eyebrow2">Meet Our Trainers</div>
         <h2>Learn From the Best in the Business</h2>
-        <p>Our trainers bring real enterprise experience to every session.</p>
+        <p>Our consultants and trainers bring real enterprise experience to every engagement.</p>
       </div>
-      <div class="cards-grid" id="homeTrainers"></div>
+      <div class="carousel" data-auto="3500">
+        <button class="carousel-btn prev" aria-label="Previous trainers">&#8249;</button>
+        <div class="carousel-track" id="homeTrainers"></div>
+        <button class="carousel-btn next" aria-label="Next trainers">&#8250;</button>
+      </div>
       <div style="text-align:center;margin-top:34px"><button class="btn btn-accent btn-lg" onclick="goView('trainers')">View All Trainers →</button></div>
     </div>
   </section>
@@ -1368,23 +1418,81 @@ async function loadHomeTestimonials(){
   }
 }
 
+/* ---- Home: services carousel ---- */
+const SERVICES = [
+  ['💡', 'IT Consulting', 'Advisory and implementation services that align technology with your business goals and deliver measurable outcomes.', ['Strategy', 'Architecture', 'Delivery'], 'Get a Consultation'],
+  ['🤝', 'IT Staffing & Recruitment', 'Contract, contract-to-hire and full-time placement — we connect you with vetted, job-ready tech talent, fast.', ['Contract', 'C2H', 'Full-time'], 'Find Talent'],
+  ['🎓', 'Corporate & Career Training', 'Live, instructor-led courses in ServiceNow, Salesforce, Cloud, Data and AI — with hands-on labs and certification prep.', ['Live', 'Hands-on', 'Certification'], 'Explore Training'],
+  ['☁️', 'Cloud & Infrastructure', 'Cloud migration, architecture and managed infrastructure on AWS and Azure with modern DevOps toolchains.', ['AWS', 'Azure', 'DevOps'], 'Talk to Us'],
+  ['🤖', 'AI & Data Solutions', 'Generative AI, machine learning and data engineering that turn your data into a real competitive advantage.', ['GenAI', 'ML', 'Data'], 'Talk to Us'],
+  ['✅', 'QA & Testing', 'Manual and automated quality assurance so you ship reliable, high-quality software with confidence.', ['Automation', 'Manual', 'CI/CD'], 'Talk to Us']
+];
+function renderServices(){
+  const box = document.getElementById('servicesTrack');
+  if (!box) return;
+  box.innerHTML = SERVICES.map(function(s){
+    const tags = s[3].map(function(t){ return '<span>' + esc(t) + '</span>'; }).join('');
+    return '<div class="carousel-card">' +
+      '<div class="course-card">' +
+        '<div class="course-ic">' + s[0] + '</div>' +
+        '<h3>' + esc(s[1]) + '</h3>' +
+        '<p>' + esc(s[2]) + '</p>' +
+        '<div class="course-tags">' + tags + '</div>' +
+        '<div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal()">' + esc(s[4]) + '</button></div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* ---- Generic looping carousel: arrows + autoplay, scrolls one page (row) at a time ---- */
+function initCarousels(){
+  document.querySelectorAll('.carousel').forEach(function(root){
+    const track = root.querySelector('.carousel-track');
+    if (!track) return;
+    const prev = root.querySelector('.carousel-btn.prev');
+    const next = root.querySelector('.carousel-btn.next');
+    function page(dir){
+      const max = track.scrollWidth - track.clientWidth - 2;
+      if (max <= 0) return;                                  // nothing to scroll
+      let target = track.scrollLeft + dir * track.clientWidth * 0.98;
+      if (dir > 0 && track.scrollLeft >= max) target = 0;    // loop forward → start
+      else if (dir < 0 && track.scrollLeft <= 2) target = max; // loop back → end
+      track.scrollTo({ left: target, behavior: 'smooth' });
+    }
+    if (!root.dataset.cInit) {                               // wire controls once
+      root.dataset.cInit = '1';
+      if (prev) prev.addEventListener('click', function(){ page(-1); });
+      if (next) next.addEventListener('click', function(){ page(1); });
+      const ms = +root.dataset.auto || 0;
+      if (ms) {
+        let timer = setInterval(function(){ page(1); }, ms);
+        root.addEventListener('mouseenter', function(){ clearInterval(timer); });
+        root.addEventListener('mouseleave', function(){ timer = setInterval(function(){ page(1); }, ms); });
+      }
+    }
+  });
+}
+
 /* ---- Home: top trainers preview ---- */
 function renderHomeTrainers(){
   const box = document.getElementById('homeTrainers');
   if (!box) return;
-  if (!members.length) { box.innerHTML = '<div class="empty" style="grid-column:1/-1">Loading trainers…</div>'; return; }
-  const top = members.map(function(m){ return Object.assign({}, m, { _r: computeRating(m) }); })
-    .sort(function(a,b){ return b._r - a._r; }).slice(0, 4);
-  box.innerHTML = top.map(function(m){
+  if (!members.length) { box.innerHTML = '<div class="empty" style="flex:1 0 100%">Loading trainers…</div>'; return; }
+  // Show ALL trainers (rating high → low) as a looping, 4-per-row carousel.
+  const all = members.map(function(m){ return Object.assign({}, m, { _r: computeRating(m) }); })
+    .sort(function(a,b){ return b._r - a._r; });
+  box.innerHTML = all.map(function(m){
     const av = m.avatar ? ('<img src="' + m.avatar + '" alt="">') : ('<span class="avatar-initials">' + initials(m.name) + '</span>');
-    return '<div class="course-card reveal" style="text-align:center;align-items:center">' +
-      '<div class="avatar" style="width:84px;height:84px;border-radius:50%;margin:0 auto 12px">' + av + '</div>' +
-      '<h3 style="font-size:1.05rem">' + esc(m.name) + '</h3>' +
-      '<p style="text-align:center">' + esc(m.role || '') + '</p>' +
-      '<div class="trate" style="color:var(--star);letter-spacing:2px">' + m._r.toFixed(1) + '/5 ' + stars(m._r) + '</div>' +
+    return '<div class="carousel-card">' +
+      '<div class="course-card" style="text-align:center;align-items:center">' +
+        '<div class="avatar" style="width:84px;height:84px;border-radius:50%;margin:0 auto 12px">' + av + '</div>' +
+        '<h3 style="font-size:1.05rem">' + esc(m.name) + '</h3>' +
+        '<p style="text-align:center">' + esc(m.role || '') + '</p>' +
+        '<div class="trate" style="color:var(--star);letter-spacing:2px">' + m._r.toFixed(1) + '/5 ' + stars(m._r) + '</div>' +
+      '</div>' +
     '</div>';
   }).join('');
-  initReveal();
+  initCarousels();
 }
 
 /* ---- Scroll reveal + animated counters ---- */
@@ -1464,8 +1572,10 @@ function toggleTheme(){
 
 applyTheme(localStorage.getItem(THEME_KEY) || 'light');
 fillCourseSelects();
+renderServices();        // build the services carousel cards
 document.getElementById('yr').textContent = new Date().getFullYear();
 route();                 // show the correct view immediately
+initCarousels();         // wire arrows + autoplay (services now; trainers re-inits on load)
 loadMembers();           // fetch trainers (re-renders trainers view + home preview)
 loadHomeTestimonials();  // fetch top reviews for the home testimonials strip
 initReveal();            // scroll-reveal + animated counters
