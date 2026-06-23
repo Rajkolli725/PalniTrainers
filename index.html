@@ -463,7 +463,6 @@
       <a class="navlink" onclick="goSection('courses')">Training</a>
       <a class="navlink" onclick="goSection('why')">Why Us</a>
       <a class="navlink" onclick="goView('trainers')">Trainers</a>
-      <a class="navlink" onclick="goView('reviews')">Reviews</a>
       <a class="navlink" onclick="goSection('contact')">Contact</a>
       <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
       <button class="btn btn-accent" onclick="openLeadModal()">Book Free Demo</button>
@@ -511,22 +510,6 @@
         <div><div class="stat-num" data-count="50" data-suffix="+">0</div><div class="stat-lbl">Expert Consultants &amp; Trainers</div></div>
         <div><div class="stat-num gold" data-count="95" data-suffix="%">0</div><div class="stat-lbl">Project Success Rate</div></div>
         <div><div class="stat-num" data-count="4.8" data-dec="1">0</div><div class="stat-lbl">Average Client Rating</div></div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Services carousel -->
-  <section class="section alt" id="services">
-    <div class="container">
-      <div class="section-title reveal">
-        <div class="eyebrow2">What We Do</div>
-        <h2>End-to-End IT Services</h2>
-        <p>From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
-      </div>
-      <div class="carousel per3" data-auto="4500">
-        <button class="carousel-btn prev" aria-label="Previous services">&#8249;</button>
-        <div class="carousel-track" id="servicesTrack"></div>
-        <button class="carousel-btn next" aria-label="Next services">&#8250;</button>
       </div>
     </div>
   </section>
@@ -698,41 +681,23 @@
       </div>
     </div>
   </section>
-</div>
 
-<!-- ============================ FOOTER ============================ -->
-<footer class="site-footer">
-  <div class="container">
-    <div class="footer-grid">
-      <div>
-        <img class="footer-logo" src="vtech-logo.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.5rem&quot;><span style=&quot;color:var(--accent)&quot;>V</span>TECH</strong>'">
-        <p class="footer-about">VTech Infotech LLC — expert-led IT &amp; cloud training that turns ambition into in-demand, job-ready skills.</p>
+  <!-- Services carousel — "What We Do" (moved to last section) -->
+  <section class="section" id="services">
+    <div class="container">
+      <div class="section-title reveal">
+        <div class="eyebrow2">What We Do</div>
+        <h2>End-to-End IT Services</h2>
+        <p>From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
       </div>
-      <div>
-        <h5>Courses</h5>
-        <a onclick="openLeadModal('ServiceNow')">ServiceNow</a>
-        <a onclick="openLeadModal('Salesforce')">Salesforce</a>
-        <a onclick="openLeadModal('Databricks')">Databricks</a>
-        <a onclick="openLeadModal('Snowflake')">Snowflake</a>
-        <a onclick="openLeadModal('AI / Machine Learning')">AI / Machine Learning</a>
-      </div>
-      <div>
-        <h5>Company</h5>
-        <a onclick="goSection('why')">Why VTech</a>
-        <a onclick="goView('trainers')">Our Trainers</a>
-        <a onclick="goView('reviews')">Reviews</a>
-        <a onclick="goSection('contact')">Contact</a>
-      </div>
-      <div>
-        <h5>Get Started</h5>
-        <a onclick="openLeadModal()">Book a Free Demo</a>
-        <a href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a>
-        <a href="tel:+15551234567">+1 (555) 123-4567</a>
+      <div class="carousel per3" data-auto="4500">
+        <button class="carousel-btn prev" aria-label="Previous services">&#8249;</button>
+        <div class="carousel-track" id="servicesTrack"></div>
+        <button class="carousel-btn next" aria-label="Next services">&#8250;</button>
       </div>
     </div>
-    <div class="footer-bottom">© <span id="yr"></span> VTech Infotech LLC. All rights reserved.</div>
-  </div>
-</footer>
+  </section>
+</div>
 
 <!-- ============================ TRAINERS + REVIEWS (constrained) ============================ -->
 <div class="wrap" id="appWrap" style="display:none">
@@ -762,6 +727,39 @@
   <!-- ===== Reviews & Feedback view (populated by showAllReviews) ===== -->
   <div id="reviewsView" style="display:none"></div>
 </div>
+
+<!-- ============================ FOOTER ============================ -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <img class="footer-logo" src="vtech-logo.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.5rem&quot;><span style=&quot;color:var(--accent)&quot;>V</span>TECH</strong>'">
+        <p class="footer-about">VTech Infotech LLC — IT consulting, staffing and expert-led training that turns technology into a competitive advantage.</p>
+      </div>
+      <div>
+        <h5>Services</h5>
+        <a onclick="goSection('services')">IT Consulting</a>
+        <a onclick="goSection('services')">IT Staffing</a>
+        <a onclick="goSection('services')">Cloud &amp; AI</a>
+        <a onclick="goSection('courses')">Training</a>
+      </div>
+      <div>
+        <h5>Company</h5>
+        <a onclick="goSection('why')">Why VTech</a>
+        <a onclick="goView('trainers')">Our Trainers</a>
+        <a onclick="goView('reviews')">Reviews</a>
+        <a onclick="goSection('contact')">Contact</a>
+      </div>
+      <div>
+        <h5>Get Started</h5>
+        <a onclick="openLeadModal()">Talk to an Advisor</a>
+        <a href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a>
+        <a href="tel:+15551234567">+1 (555) 123-4567</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© <span id="yr"></span> VTech Infotech LLC. All rights reserved.</div>
+  </div>
+</footer>
 
 <!-- Submit Review modal (populated by openReviewModal) -->
 <div id="rvModal" class="rv-modal-overlay" style="display:none" onclick="if(event.target===this)closeReviewModal()"></div>
@@ -1454,9 +1452,13 @@ function initCarousels(){
     function page(dir){
       const max = track.scrollWidth - track.clientWidth - 2;
       if (max <= 0) return;                                  // nothing to scroll
-      let target = track.scrollLeft + dir * track.clientWidth * 0.98;
+      const card = track.querySelector('.carousel-card');
+      const gap = parseFloat(getComputedStyle(track).gap) || 22;
+      const step = card ? card.getBoundingClientRect().width + gap : track.clientWidth;
+      let target = track.scrollLeft + dir * step;            // move ONE card at a time
       if (dir > 0 && track.scrollLeft >= max) target = 0;    // loop forward → start
       else if (dir < 0 && track.scrollLeft <= 2) target = max; // loop back → end
+      else target = Math.max(0, Math.min(target, max));
       track.scrollTo({ left: target, behavior: 'smooth' });
     }
     if (!root.dataset.cInit) {                               // wire controls once
