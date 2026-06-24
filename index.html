@@ -327,6 +327,14 @@
     background: var(--input); color: var(--ink); font-size: .92rem; font-family: inherit; outline: none; }
   .lead-form input:focus, .lead-form select:focus, .lead-form textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
   .lead-form textarea { min-height: 92px; resize: vertical; }
+  .phone-group { display: flex; gap: 8px; }
+  .phone-group select { flex: 0 0 84px; width: auto; padding-left: 8px; padding-right: 6px; }
+  .phone-group input { flex: 1 1 auto; }
+  .lead-thanks { text-align: center; max-width: 420px; }
+  .lead-thanks .lt-icon { width: 64px; height: 64px; border-radius: 50%; margin: 4px auto 16px; display: grid; place-items: center;
+    background: #63DF4E; color: #0c1a10; font-size: 1.9rem; font-weight: 800; }
+  .lead-thanks h3 { margin: 0 0 8px; font-size: 1.4rem; }
+  .lead-thanks p { color: var(--muted); margin: 0 0 22px; font-size: .98rem; line-height: 1.55; }
   .lead-form button[type=submit] { width: 100%; }
   @media (max-width: 480px) { .lead-form .row2 { grid-template-columns: 1fr; } }
 
@@ -610,7 +618,7 @@
       <a class="navlink" onclick="goView('trainers')">Trainers</a>
       <a class="navlink" onclick="goSection('contact')">Contact</a>
       <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
-      <button class="btn btn-accent" onclick="openLeadModal()">Book Free Demo</button>
+      <button class="btn btn-accent" onclick="openLeadModal('','Book Free Demo (Nav)')">Book Free Demo</button>
     </div>
   </div>
 </nav>
@@ -629,7 +637,7 @@
         <div class="hero-right">
           <p class="lede">VTech Infotech is a full-spectrum IT services company. We deliver technology projects, place vetted IT talent, and run hands-on training.</p>
           <div class="hero-cta">
-            <button class="btn btn-gold btn-lg" onclick="openLeadModal()">Talk to an Advisor</button>
+            <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an Advisor (Hero)')">Talk to an Advisor</button>
             <button class="btn btn-outline-light btn-lg" onclick="goSection('services')">Explore Services</button>
           </div>
         </div>
@@ -672,42 +680,42 @@
           <h3>ServiceNow</h3>
           <p>Admin, CSA, CAD and ITSM implementation — build, script, and automate on the Now Platform.</p>
           <div class="course-tags"><span>CSA</span><span>CAD</span><span>ITSM</span><span>Scripting</span></div>
-          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('ServiceNow')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('ServiceNow')">Free Demo</button></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('ServiceNow','Enroll Now')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('ServiceNow','Free Demo')">Free Demo</button></div>
         </div>
         <div class="course-card reveal">
           <div class="course-ic">☁️</div>
           <h3>Salesforce</h3>
           <p>Administrator, Developer and Platform App Builder — CRM, Apex, Flows and Lightning.</p>
           <div class="course-tags"><span>Admin</span><span>Apex</span><span>Flows</span><span>LWC</span></div>
-          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Salesforce')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Salesforce')">Free Demo</button></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Salesforce','Enroll Now')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Salesforce','Free Demo')">Free Demo</button></div>
         </div>
         <div class="course-card reveal">
           <div class="course-ic">🔥</div>
           <h3>Databricks</h3>
           <p>Lakehouse, Spark, Delta Lake and data engineering — from ingestion to production pipelines.</p>
           <div class="course-tags"><span>Spark</span><span>Delta Lake</span><span>PySpark</span><span>ETL</span></div>
-          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Databricks')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Databricks')">Free Demo</button></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Databricks','Enroll Now')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Databricks','Free Demo')">Free Demo</button></div>
         </div>
         <div class="course-card reveal">
           <div class="course-ic">❄️</div>
           <h3>Snowflake</h3>
           <p>Cloud data warehousing, performance tuning, SnowPro certification and modern analytics.</p>
           <div class="course-tags"><span>SnowPro</span><span>SQL</span><span>Warehousing</span><span>Sharing</span></div>
-          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Snowflake')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Snowflake')">Free Demo</button></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Snowflake','Enroll Now')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Snowflake','Free Demo')">Free Demo</button></div>
         </div>
         <div class="course-card reveal">
           <div class="course-ic">🤖</div>
           <h3>AI / Machine Learning</h3>
           <p>Generative AI, LLMs, prompt engineering, and applied ML — build and ship real AI solutions.</p>
           <div class="course-tags"><span>GenAI</span><span>LLMs</span><span>Python</span><span>MLOps</span></div>
-          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('AI / Machine Learning')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('AI / Machine Learning')">Free Demo</button></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('AI / Machine Learning','Enroll Now')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('AI / Machine Learning','Free Demo')">Free Demo</button></div>
         </div>
         <div class="course-card reveal">
           <div class="course-ic">⚙️</div>
           <h3>Cloud & DevOps</h3>
           <p>AWS/Azure fundamentals, CI/CD, Docker, Kubernetes and Terraform for modern delivery.</p>
           <div class="course-tags"><span>AWS</span><span>K8s</span><span>CI/CD</span><span>Terraform</span></div>
-          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Cloud & DevOps')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Cloud & DevOps')">Free Demo</button></div>
+          <div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal('Cloud & DevOps','Enroll Now')">Enroll Now</button><button class="btn btn-ghost" onclick="openLeadModal('Cloud & DevOps','Free Demo')">Free Demo</button></div>
         </div>
       </div>
     </div>
@@ -818,7 +826,7 @@
               <div><label>Email *</label><input name="email" type="email" placeholder="you@email.com" required></div>
             </div>
             <div class="row2">
-              <div><label>Phone *</label><input name="phone" type="tel" placeholder="Your phone number" required></div>
+              <div><label>Phone *</label><div class="phone-group"><select name="cc" class="ccSelect" aria-label="Country code"></select><input name="phone" type="tel" placeholder="Your phone number" required></div></div>
               <div><label>Company</label><input name="company" type="text" placeholder="Optional"></div>
             </div>
             <div class="row2">
@@ -887,7 +895,7 @@
       </div>
       <div>
         <h5>Get Started</h5>
-        <a onclick="openLeadModal()">Talk to an Advisor</a>
+        <a onclick="openLeadModal('','Talk to an Advisor (Footer)')">Talk to an Advisor</a>
         <a href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a>
         <a href="tel:+15551234567">+1 (555) 123-4567</a>
       </div>
@@ -976,7 +984,7 @@ const API_URL     = SN.instance + '/api/x_palni_servicen_1/team_profiles';  // G
 const RESUME_URL  = API_URL + '/resume/';                                   // GET /resume/{sysId} -> base64
 const REVIEWS_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_trainee_feedback';  // GET -> list of reviews
 const REVIEWS_POST_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/post_trainee_feedback'; // POST -> submit (lands in staging table)
-const LEADS_API        = SN.instance + '/api/x_palni_servicen_1/team_profiles/post_lead';             // POST -> capture a website lead
+const LEADS_API        = SN.instance + '/api/x_palni_servicen_1/team_profiles/register_lead';         // POST -> capture a website lead (x_palni_servicen_1_lead_registration)
 
 // No auth header — the Scripted REST API is anonymous; credentials:'omit'
 // keeps it a clean cross-origin request governed only by the CORS rule.
@@ -1435,9 +1443,16 @@ const COURSE_OPTIONS = ['ServiceNow','Salesforce','Databricks','Snowflake','AI /
 function courseOptionsHtml(sel){
   return COURSE_OPTIONS.map(function(c){ return '<option' + (c === sel ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('');
 }
-// Fill every course <select> on the page (hero + contact form).
+// Country dial codes for the phone field (default +1)
+const COUNTRY_CODES = ['+1','+44','+91','+61','+971','+65','+49','+33','+81','+27','+55','+86'];
+function ccOptionsHtml(sel){
+  sel = sel || '+1';
+  return COUNTRY_CODES.map(function(c){ return '<option' + (c === sel ? ' selected' : '') + '>' + c + '</option>'; }).join('');
+}
+// Fill every course + country-code <select> on the page (hero + contact form).
 function fillCourseSelects(){
   document.querySelectorAll('#heroCourse, .courseSelect').forEach(function(s){ if (!s.options.length) s.innerHTML = courseOptionsHtml(); });
+  document.querySelectorAll('.ccSelect').forEach(function(s){ if (!s.options.length) s.innerHTML = ccOptionsHtml(); });
 }
 
 /* ---- Nav helpers ---- */
@@ -1452,13 +1467,13 @@ function goView(v){ closeNav(); location.hash = '#' + v; }
 /* ---- Lead capture ---- */
 function leadVal(form, n){ const el = form.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ''; }
 async function submitLead(form, source){
-  const name = leadVal(form, 'name'), email = leadVal(form, 'email'), phone = leadVal(form, 'phone');
+  const name = leadVal(form, 'name'), email = leadVal(form, 'email'), phone = leadVal(form, 'phone'), cc = leadVal(form, 'cc');
   if (!name) { alert('Please enter your name.'); return false; }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert('Please enter a valid email address.'); return false; }
   if (!phone) { alert('Please enter your phone number.'); return false; }
   const payload = {
     name: name, email: email,
-    phone:   phone,
+    phone:   (cc || '') + phone.replace(/[\s\-()]/g, ''),
     company: leadVal(form, 'company'),
     course:  leadVal(form, 'course'),
     mode:    leadVal(form, 'mode'),
@@ -1476,8 +1491,8 @@ async function submitLead(form, source){
     });
     if (!res.ok) throw new Error('HTTP ' + res.status + ' — ' + (await res.text()).slice(0,200));
     form.reset();
-    closeLeadModal();
-    alert('Thank you, ' + name + '! A course advisor will reach out within 1 business day.');
+    closeLeadModal();          // close the form (if it was the modal)
+    showLeadThanks(name);      // formal confirmation message
   } catch (e) {
     alert('Sorry, we could not submit your request right now: ' + e.message);
   } finally {
@@ -1486,20 +1501,35 @@ async function submitLead(form, source){
   return false;
 }
 
+/* Formal confirmation shown after any CTA form submits successfully */
+function showLeadThanks(name){
+  const first = name ? esc(name.trim().split(/\s+/)[0]) : '';
+  const ov = document.getElementById('leadModal');
+  ov.innerHTML =
+    '<div class="rv-modal lead-thanks">' +
+      '<div class="lt-icon">✓</div>' +
+      '<h3>Thank you' + (first ? ', ' + first : '') + '!</h3>' +
+      '<p>Your request has been received. A member of the VTech Infotech team will reach out to you shortly.</p>' +
+      '<button class="btn btn-primary btn-lg" style="width:100%" onclick="closeLeadModal()">Done</button>' +
+    '</div>';
+  ov.style.display = 'flex';
+}
+
 /* ---- Lead modal ---- */
-function openLeadModal(course){
+function openLeadModal(course, source){
+  source = (source || 'Book a Free Demo').replace(/'/g, '');
   const ov = document.getElementById('leadModal');
   ov.innerHTML =
     '<div class="rv-modal">' +
       '<h3>Book Your Free Demo</h3>' +
       '<p style="color:var(--muted);margin:-6px 0 16px;font-size:.9rem">Tell us a bit about you and we’ll get in touch within 1 business day.</p>' +
-      '<form class="lead-form" onsubmit="return submitLead(this,\'Demo Modal\')">' +
+      '<form class="lead-form" onsubmit="return submitLead(this,\'' + source + '\')">' +
         '<div class="row2">' +
           '<div><label>Full Name *</label><input name="name" type="text" placeholder="Your name" required></div>' +
           '<div><label>Email *</label><input name="email" type="email" placeholder="you@email.com" required></div>' +
         '</div>' +
         '<div class="row2">' +
-          '<div><label>Phone *</label><input name="phone" type="tel" placeholder="Your phone number" required></div>' +
+          '<div><label>Phone *</label><div class="phone-group"><select name="cc" aria-label="Country code">' + ccOptionsHtml() + '</select><input name="phone" type="tel" placeholder="Your phone number" required></div></div>' +
           '<div><label>Company</label><input name="company" type="text" placeholder="Optional"></div>' +
         '</div>' +
         '<div class="row2">' +
@@ -1592,7 +1622,7 @@ function renderServices(){
         '<h3>' + esc(s[1]) + '</h3>' +
         '<p>' + esc(s[2]) + '</p>' +
         '<div class="course-tags">' + tags + '</div>' +
-        '<div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal()">' + esc(s[4]) + '</button></div>' +
+        '<div class="course-actions"><button class="btn btn-primary" onclick="openLeadModal(\'\',\'' + esc(s[4] + ' – ' + s[1]) + '\')">' + esc(s[4]) + '</button></div>' +
       '</div>' +
     '</div>';
   }).join('');
