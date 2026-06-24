@@ -818,7 +818,7 @@
               <div><label>Email *</label><input name="email" type="email" placeholder="you@email.com" required></div>
             </div>
             <div class="row2">
-              <div><label>Phone</label><input name="phone" type="text" placeholder="Optional"></div>
+              <div><label>Phone *</label><input name="phone" type="tel" placeholder="Your phone number" required></div>
               <div><label>Company</label><input name="company" type="text" placeholder="Optional"></div>
             </div>
             <div class="row2">
@@ -1365,7 +1365,7 @@ function openReviewModal(){
       '<div class="add-grid">' +
         '<div><label>Trainer</label><select id="rv_trainer">' + trainerOpts + '</select></div>' +
         '<div><label>Your Name</label><input type="text" id="rv_name" placeholder="Trainee name"></div>' +
-        '<div><label>Batch Number</label><input type="text" id="rv_batch" placeholder="e.g. B-2025-04"></div>' +
+        '<div><label>Batch Number *</label><input type="text" id="rv_batch" placeholder="e.g. B-2025-04" required></div>' +
       '</div>' +
       '<div style="margin-top:14px"><label>Ratings (1–5)</label>' + params + '</div>' +
       '<div style="margin-top:6px"><label>Comment</label><textarea id="rv_comment" placeholder="Share your experience…"></textarea></div>' +
@@ -1383,6 +1383,8 @@ function closeReviewModal(){ const ov = document.getElementById('rvModal'); ov.s
 async function submitReview(){
   const name = document.getElementById('rv_name').value.trim();
   if (!name) { alert('Please enter your name.'); return; }
+  const batch = document.getElementById('rv_batch').value.trim();
+  if (!batch) { alert('Please enter the batch number.'); return; }
   const sel = document.getElementById('rv_trainer');
   const trainerId = sel ? sel.value : '';
   const trainer = members.find(function(m){ return m.id === trainerId; });
@@ -1395,7 +1397,7 @@ async function submitReview(){
   const payload = {
     trainer:     trainer ? trainer.name : '',
     trainee:     name,
-    batch:       document.getElementById('rv_batch').value.trim(),
+    batch:       batch,
     comment:     document.getElementById('rv_comment').value.trim(),
     overall:     String(overall),
     depth:       String(scores.depth),
@@ -1450,12 +1452,13 @@ function goView(v){ closeNav(); location.hash = '#' + v; }
 /* ---- Lead capture ---- */
 function leadVal(form, n){ const el = form.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ''; }
 async function submitLead(form, source){
-  const name = leadVal(form, 'name'), email = leadVal(form, 'email');
+  const name = leadVal(form, 'name'), email = leadVal(form, 'email'), phone = leadVal(form, 'phone');
   if (!name) { alert('Please enter your name.'); return false; }
   if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert('Please enter a valid email address.'); return false; }
+  if (!phone) { alert('Please enter your phone number.'); return false; }
   const payload = {
     name: name, email: email,
-    phone:   leadVal(form, 'phone'),
+    phone:   phone,
     company: leadVal(form, 'company'),
     course:  leadVal(form, 'course'),
     mode:    leadVal(form, 'mode'),
@@ -1496,7 +1499,7 @@ function openLeadModal(course){
           '<div><label>Email *</label><input name="email" type="email" placeholder="you@email.com" required></div>' +
         '</div>' +
         '<div class="row2">' +
-          '<div><label>Phone</label><input name="phone" type="text" placeholder="Optional"></div>' +
+          '<div><label>Phone *</label><input name="phone" type="tel" placeholder="Your phone number" required></div>' +
           '<div><label>Company</label><input name="company" type="text" placeholder="Optional"></div>' +
         '</div>' +
         '<div class="row2">' +
