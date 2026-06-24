@@ -1662,14 +1662,24 @@ function renderHomeTrainers(){
   initCarousels();
 }
 
-/* Toggle the bio overlay on a home portrait card (+ ⇄ −) */
+/* Toggle the bio overlay on a home portrait card (+ ⇄ −).
+   Only one card stays open at a time — opening one collapses any other. */
+function resetHomeBioBtn(card){
+  const b = card.querySelector('.tp-plus');
+  if (b) { b.textContent = '+'; b.title = 'Show bio'; b.setAttribute('aria-label', 'Show bio'); }
+}
 function toggleHomeBio(e, id){
   if (e) e.stopPropagation();
   const card = document.getElementById('tp-' + id);
   if (!card) return;
-  const open = card.classList.toggle('open');
+  const willOpen = !card.classList.contains('open');
+  // Collapse every other open card first
+  document.querySelectorAll('.tp-card.open').forEach(function(c){
+    if (c !== card) { c.classList.remove('open'); resetHomeBioBtn(c); }
+  });
+  card.classList.toggle('open', willOpen);
   const btn = card.querySelector('.tp-plus');
-  if (btn) { btn.textContent = open ? '−' : '+'; btn.title = open ? 'Hide bio' : 'Show bio'; btn.setAttribute('aria-label', btn.title); }
+  if (btn) { btn.textContent = willOpen ? '−' : '+'; btn.title = willOpen ? 'Hide bio' : 'Show bio'; btn.setAttribute('aria-label', btn.title); }
 }
 
 /* ---- Scroll reveal + animated counters ---- */
