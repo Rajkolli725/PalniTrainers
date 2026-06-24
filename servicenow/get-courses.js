@@ -10,10 +10,10 @@
  *     number          <- number
  *     name            <- u_course_name
  *     about           <- u_about_the_course      (shown on the card front)
- *     certifications  <- u_certifications        (shown when expanded)
- *     highlights      <- description             (shown when expanded)
+ *     certifications  <- u_certifications        (comma list -> chips on the page)
+ *     highlights      <- u_highlights            (split by "." -> bullet points)
  *     duration        <- u_duration              (optional — see note below)
- *     image           <- u_course_image          (returned as a base64 data URI)
+ *     image           <- record attachment / u_course_image (base64 data URI)
  *
  * NOTE on "duration": the sample table has no duration column. If you want it on
  * the card, add a String field `u_duration` to the table — this script returns
@@ -43,21 +43,32 @@
 
     var TABLE = 'x_palni_servicen_1_course_offerings';
 
-    function imageDataUri(imgId) {
-        if (!imgId) return '';
+    // Return a base64 data URI for the first image attachment found.
+    function attToDataUri(att) {
         try {
-            var att = new GlideRecord('sys_attachment');
-            att.addQuery('table_name', 'db_image');
-            att.addQuery('table_sys_id', imgId);
-            att.orderByDesc('sys_created_on');
-            att.setLimit(1);
-            att.query();
-            if (att.next()) {
-                var b64 = new GlideSysAttachment().getContentBase64(att);
-                if (b64) return 'data:' + (att.getValue('content_type') || 'image/png') + ';base64,' + b64;
-            }
-        } catch (e) { /* fall through to empty -> card shows a placeholder */ }
+            var b64 = new GlideSysAttachment().getContentBase64(att);
+            if (b64) return 'data:' + (att.getValue('content_type') || 'image/png') + ';base64,' + b64;
+        } catch (e) {}
         return '';
+    }
+    function firstImageAtt(tableName, recId) {
+        if (!recId) return null;
+        var att = new GlideRecord('sys_attachment');
+        att.addQuery('table_name', tableName);
+        att.addQuery('table_sys_id', recId);
+        att.addQuery('content_type', 'STARTSWITH', 'image');
+        att.orderByDesc('sys_created_on');
+        att.setLimit(1);
+        att.query();
+        return att.next() ? att : null;
+    }
+    // Picks the course image the SAME way trainer photos are picked: the image
+    // attached to the course record. Falls back to the u_course_image field
+    // (which references a db_image record) if no record attachment exists.
+    function courseImage(recId, imgFieldId) {
+        var att = firstImageAtt(TABLE, recId);                 // attachment on the course record
+        if (!att && imgFieldId) att = firstImageAtt('db_image', imgFieldId);  // image field -> db_image
+        return att ? attToDataUri(att) : '';
     }
 
     var out = [];
@@ -69,10 +80,10 @@
             number:         gr.getValue('number'),
             name:           gr.getValue('u_course_name'),
             about:          gr.getValue('u_about_the_course'),
-            certifications: gr.getValue('u_certifications'),
-            highlights:     gr.getValue('description'),
+            certifications: gr.getValue('u_certifications'),       // comma-separated; split into chips on the page
+            highlights:     gr.getValue('u_highlights'),           // split by "." into bullet points on the page
             duration:       gr.getValue('u_duration') || '',
-            image:          imageDataUri(gr.getValue('u_course_image'))
+            image:          courseImage(gr.getUniqueValue(), gr.getValue('u_course_image'))
         });
     }
 

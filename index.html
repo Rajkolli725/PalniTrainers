@@ -510,33 +510,39 @@
   @media (max-width: 640px) { .hero-wrap { padding: 40px 16px 52px; } .pv-play { width: 64px; height: 64px; font-size: 1.4rem; } }
 
   /* ===================================================================
-     COURSE CARDS (square; click + to flip to details)
+     COURSE CARDS (square; click + to expand details to the right)
      =================================================================== */
-  .cc-card { position: relative; height: 100%; border-radius: var(--radius); overflow: hidden;
-    border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow);
+  .cc-card { position: relative; height: 100%; }
+  .cc-figure { position: relative; width: 100%; aspect-ratio: 1 / 1; display: flex; flex-direction: column;
+    border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow);
     transition: transform .18s, box-shadow .18s, border-color .18s; }
-  .cc-card:hover { transform: translateY(-6px); box-shadow: 0 18px 42px rgba(0,0,0,.28); border-color: var(--accent); }
-  .cc-photo { position: relative; aspect-ratio: 16 / 10; overflow: hidden;
-    background: linear-gradient(135deg, var(--primary-bg), #1a2c2d); }
+  .cc-card:hover .cc-figure { transform: translateY(-6px); box-shadow: 0 18px 42px rgba(0,0,0,.28); border-color: var(--accent); }
+  .cc-photo { position: relative; flex: 0 0 54%; overflow: hidden; background: linear-gradient(135deg, var(--primary-bg), #1a2c2d); }
   .cc-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .cc-photo .cc-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 2.6rem; }
-  .cc-body { padding: 16px 18px 20px; }
-  .cc-name { font-weight: 800; font-size: 1.12rem; margin: 0 0 6px; color: var(--ink); }
-  .cc-about { color: var(--muted); font-size: .9rem; margin: 0; line-height: 1.5; }
+  .cc-photo .cc-ph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+  .cc-body { flex: 1; min-height: 0; padding: 16px 18px; display: flex; flex-direction: column; }
+  .cc-name { font-weight: 800; font-size: 1.14rem; margin: 0 0 8px; color: var(--ink); text-align: center; }
+  .cc-about { color: var(--muted); font-size: .89rem; margin: 0; line-height: 1.5; text-align: justify;
+    overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; }
   .cc-plus { position: absolute; top: 12px; right: 12px; z-index: 5; width: 38px; height: 38px; border-radius: 50%; border: none;
     background: #122021; color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,.4); transition: transform .15s; }
   .cc-plus:hover { transform: scale(1.09); }
-  .cc-details { position: absolute; inset: 0; z-index: 4; background: var(--card); color: var(--ink);
-    padding: 20px 20px 18px; display: none; flex-direction: column; overflow-y: auto; }
+  .cc-details { position: absolute; top: 0; left: 100%; width: 290px; max-width: 82vw; height: 100%; z-index: 6;
+    background: var(--card); color: var(--ink); padding: 20px; overflow-y: auto; display: none; flex-direction: column;
+    border: 1px solid var(--line); border-radius: 0 16px 16px 0; box-shadow: 14px 0 34px rgba(0,0,0,.4); }
+  .cc-card.open { z-index: 7; }
   .cc-card.open .cc-details { display: flex; }
-  .cc-details h4 { margin: 0 0 12px; color: var(--accent); font-size: 1.05rem; padding-right: 34px; }
-  .cc-drow { font-size: .88rem; margin-bottom: 8px; color: var(--muted); }
-  .cc-drow b { color: var(--ink); }
-  .cc-high { font-size: .86rem; color: var(--muted); margin-bottom: 8px; }
-  .cc-high b { color: var(--ink); }
-  .cc-high p { margin: 5px 0 0; line-height: 1.5; text-align: justify; white-space: pre-line; }
+  .cc-details h4 { margin: 0 0 14px; color: var(--accent); font-size: 1.1rem; }
+  .cc-drow { font-size: .88rem; margin-bottom: 14px; }
+  .cc-drow b { display: block; color: var(--ink); margin-bottom: 6px; font-size: .82rem; text-transform: uppercase; letter-spacing: .04em; }
+  .cc-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .cc-chips span { font-size: .74rem; font-weight: 600; background: var(--gold-soft); color: var(--gold-ink); padding: 4px 11px; border-radius: 999px; }
+  .cc-highs { list-style: none; padding: 0; margin: 0; }
+  .cc-highs li { position: relative; padding-left: 24px; margin-bottom: 9px; font-size: .86rem; line-height: 1.45; color: var(--ink); }
+  .cc-highs li::before { content: "✓"; position: absolute; left: 0; top: 0; color: #63DF4E; font-weight: 800; }
   .cc-more { align-self: flex-end; margin-top: auto; }
+  #coursesList { align-items: start; }
 
   /* ===================================================================
      SPEAKER GRID (Meet Our Trainers — "Explore All Speakers" style)
@@ -710,7 +716,7 @@
         <h2>Career-Focused Tech Courses</h2>
         <p>Specialized, hands-on tracks built around the platforms enterprises hire for right now.</p>
       </div>
-      <div class="carousel" data-auto="4000">
+      <div class="carousel per3" data-auto="4000">
         <button class="carousel-btn prev" aria-label="Previous courses">&#8249;</button>
         <div class="carousel-track" id="coursesTrack"></div>
         <button class="carousel-btn next" aria-label="Next courses">&#8250;</button>
@@ -1757,18 +1763,30 @@ function courseCardHtml(c, i){
     ? '<img src="' + c.image + '" alt="' + esc(c.name) + '">'
     : '<span class="cc-ph">' + icon + '</span>';
   const safeName = esc((c.name || '').replace(/'/g, ''));
+  // Certifications: comma-separated -> one chip each
+  const certs = (c.certifications || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  const certChips = certs.length
+    ? '<div class="cc-chips">' + certs.map(function(x){ return '<span>' + esc(x) + '</span>'; }).join('') + '</div>'
+    : '';
+  // Highlights: split by "." -> first 3 points, each with a green tick
+  const highs = (c.highlights || '').split('.').map(function(s){ return s.trim(); }).filter(Boolean).slice(0, 3);
+  const highList = highs.length
+    ? '<ul class="cc-highs">' + highs.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'
+    : '';
   return '<div class="cc-card" id="cc-' + esc(c.id) + '">' +
-      '<button class="cc-plus" onclick="toggleCourse(event,\'' + esc(c.id) + '\')" aria-label="More details" title="More details">+</button>' +
-      '<div class="cc-photo">' + photo + '</div>' +
-      '<div class="cc-body">' +
-        '<h3 class="cc-name">' + esc(c.name) + '</h3>' +
-        '<p class="cc-about">' + (esc(c.about) || 'Hands-on, certification-focused training.') + '</p>' +
+      '<div class="cc-figure">' +
+        '<button class="cc-plus" onclick="toggleCourse(event,\'' + esc(c.id) + '\')" aria-label="More details" title="More details">+</button>' +
+        '<div class="cc-photo">' + photo + '</div>' +
+        '<div class="cc-body">' +
+          '<h3 class="cc-name">' + esc(c.name) + '</h3>' +
+          '<p class="cc-about">' + (esc(c.about) || 'Hands-on, certification-focused training.') + '</p>' +
+        '</div>' +
       '</div>' +
       '<div class="cc-details">' +
         '<h4>' + esc(c.name) + '</h4>' +
-        (c.duration ? '<div class="cc-drow"><b>Duration:</b> ' + esc(c.duration) + '</div>' : '') +
-        (c.certifications ? '<div class="cc-drow"><b>Certifications:</b> ' + esc(c.certifications) + '</div>' : '') +
-        (c.highlights ? '<div class="cc-high"><b>Highlights</b><p>' + esc(c.highlights) + '</p></div>' : '') +
+        (c.duration ? '<div class="cc-drow"><b>Duration</b>' + esc(c.duration) + '</div>' : '') +
+        (certChips ? '<div class="cc-drow"><b>Certifications</b>' + certChips + '</div>' : '') +
+        (highList ? '<div class="cc-drow"><b>Highlights</b>' + highList + '</div>' : '') +
         '<button class="btn btn-primary cc-more" onclick="openLeadModal(\'' + safeName + '\',\'View More – ' + safeName + '\')">View More</button>' +
       '</div>' +
     '</div>';
