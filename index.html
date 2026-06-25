@@ -1677,25 +1677,32 @@ let _tcTimers = [];
 
 function tcardInnerHtml(r){
   const ov = r.overall || avgScore(r.scores);
-  return '<div class="trate">' + stars(ov) + '</div>' +
+  return '<div class="trate">' + ov.toFixed(1) + '/5 ' + stars(ov) + '</div>' +
     '<p class="q">“' + esc(r.comment || 'A genuinely great learning experience.') + '”</p>' +
     '<div class="who"><div class="av">' + esc(initials(r.name || 'A')) + '</div>' +
       '<div><div class="nm">' + esc(r.name || 'Trainee') + '</div>' +
       '<div class="rl">' + (r.trainerName ? 'Trained by ' + esc(r.trainerName) : 'Verified trainee') + '</div></div></div>';
 }
-function rollCard(inner){
+// Pick n distinct reviews (shuffled) so no two visible cards show the same one.
+function pickDistinctReviews(n){
+  const pool = reviewPool.slice();
+  for (let i = pool.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = pool[i]; pool[i] = pool[j]; pool[j] = t; }
+  return pool.slice(0, Math.min(n, pool.length));
+}
+function rollAll(inners){
   if (reviewPool.length < 1) return;
-  let idx = Math.floor(Math.random() * reviewPool.length);
-  if (reviewPool.length > 1 && String(idx) === inner.dataset.idx) idx = (idx + 1) % reviewPool.length;
-  inner.dataset.idx = idx;
-  inner.innerHTML = tcardInnerHtml(reviewPool[idx]);
-  inner.classList.remove('roll'); void inner.offsetWidth; inner.classList.add('roll');   // restart slide-in
+  const picks = pickDistinctReviews(inners.length);
+  inners.forEach(function(inner, i){
+    inner.innerHTML = tcardInnerHtml(picks[i % picks.length]);
+    inner.classList.remove('roll'); void inner.offsetWidth; inner.classList.add('roll');   // restart slide-in
+  });
 }
 function startTestimonialSlots(){
   const box = document.getElementById('homeTestimonials');
   if (!box || !reviewPool.length) return;
   _tcTimers.forEach(clearInterval); _tcTimers = [];
   box.innerHTML = '';
+  const inners = [];
   for (let i = 0; i < 3; i++) {
     const card = document.createElement('div');
     card.className = 'tcard reveal';
@@ -1703,17 +1710,11 @@ function startTestimonialSlots(){
     inner.className = 'tcard-inner';
     card.appendChild(inner);
     box.appendChild(card);
-    rollCard(inner);                       // random review on load
+    inners.push(inner);
   }
+  rollAll(inners);                                  // initial: 3 distinct random reviews
   initReveal();
-  // each card flips on its own independent, slightly-random interval
-  box.querySelectorAll('.tcard-inner').forEach(function(inner, i){
-    const every = 3000 + Math.floor(Math.random() * 2600);   // 3.0–5.6s
-    setTimeout(function(){
-      rollCard(inner);
-      _tcTimers.push(setInterval(function(){ rollCard(inner); }, every));
-    }, 700 * i + Math.floor(Math.random() * 700));            // staggered start
-  });
+  _tcTimers.push(setInterval(function(){ rollAll(inners); }, 4500));   // all 3 flip together, every 4.5s
 }
 async function loadHomeTestimonials(){
   const box = document.getElementById('homeTestimonials');
