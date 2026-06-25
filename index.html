@@ -566,6 +566,11 @@
     .cc-close { display: grid; }
   }
 
+  /* Course image: icon placeholder + streamed image (covers the icon on load) */
+  .cph { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
+  .cimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 10px; display: block; }
+  .cd-hero-media { position: relative; }
+
   /* Course modal right column — tighter spacing between the three attributes */
   #courseModal .tr-stats { margin-bottom: 10px; }
   #courseModal .tr-col .field { margin-bottom: 10px; }
@@ -1047,6 +1052,7 @@ const REVIEWS_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/ge
 const REVIEWS_POST_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/post_trainee_feedback'; // POST -> submit (lands in staging table)
 const LEADS_API        = SN.instance + '/api/x_palni_servicen_1/team_profiles/register_lead';         // POST -> capture a website lead (x_palni_servicen_1_lead_registration)
 const COURSES_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_courses';            // GET -> list of course offerings
+const COURSE_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_image/';          // GET /{sys_id} -> course image (binary)
 
 // No auth header — the Scripted REST API is anonymous; credentials:'omit'
 // keeps it a clean cross-origin request governed only by the CORS rule.
@@ -1784,6 +1790,7 @@ const COURSE_ICONS = ['🛠️','☁️','🔥','❄️','🤖','⚙️','📊',
 function mapCourse(p){
   return {
     id:    p.number || p.sys_id || '',
+    sysId: p.sys_id || '',
     name:  p.name || 'Course',
     about: p.about || '',
     description:    p.description || '',
@@ -1792,9 +1799,17 @@ function mapCourse(p){
     prerequisites:  p.prerequisites || '',
     participants:   p.participants || '',
     rating:         +p.rating || 0,
-    duration:       p.duration || '',
-    image:          p.image || ''
+    duration:       p.duration || ''
   };
+}
+// Photo area: icon placeholder + (for real courses) the image streamed from
+// ServiceNow. The image covers the icon on load; on error it's removed so the
+// icon shows. Demo courses (no sysId) just show the icon.
+function coursePhoto(c, icon){
+  const ic = '<span class="cph">' + (icon || '🎓') + '</span>';
+  if (!c.sysId) return ic;
+  return ic + '<img class="cimg" src="' + COURSE_IMAGE_API + encodeURIComponent(c.sysId) + '" alt="' + esc(c.name) +
+    '" loading="lazy" onload="var p=this.previousElementSibling; if(p)p.style.display=\'none\'" onerror="this.remove()">';
 }
 // comma string -> array of light-orange chips (used on the course cards)
 function chipList(str){
@@ -1830,9 +1845,7 @@ function buildFallbackCourses(){
 
 function courseCardHtml(c, i){
   const icon = COURSE_ICONS[i % COURSE_ICONS.length];
-  const photo = c.image
-    ? '<img src="' + c.image + '" alt="' + esc(c.name) + '">'
-    : '<span class="cc-ph">' + icon + '</span>';
+  const photo = coursePhoto(c, icon);
   const safeName = esc((c.name || '').replace(/'/g, ''));
   // Certifications: comma-separated -> one chip each
   const certs = (c.certifications || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
@@ -1879,7 +1892,7 @@ function renderHomeCourses(){
 /* "Our Courses" page card: rating badge instead of +, click opens the modal */
 function courseGridCardHtml(c, i){
   const icon = COURSE_ICONS[i % COURSE_ICONS.length];
-  const photo = c.image ? '<img src="' + c.image + '" alt="' + esc(c.name) + '">' : '<span class="cg-ph">' + icon + '</span>';
+  const photo = coursePhoto(c, icon);
   const rate = c.rating ? '<span class="cg-rate">★ ' + c.rating.toFixed(1) + '</span>' : '';
   return '<button class="cg-card" onclick="openCourseModal(\'' + esc(c.id) + '\')" title="View ' + esc(c.name) + '">' +
       '<div class="cg-photo">' + photo + rate + '</div>' +
@@ -1903,7 +1916,7 @@ function openCourseModal(id){
   const c = courseById(id);
   if (!c) return;
   const icon = COURSE_ICONS[0];
-  const photo = c.image ? '<img src="' + c.image + '" alt="' + esc(c.name) + '">' : '<span class="avatar-initials">' + icon + '</span>';
+  const photo = coursePhoto(c, icon);
   const rt = c.rating ? '<div class="rating-row" style="margin-top:8px"><span class="rating-big">' + c.rating.toFixed(1) + '/5</span> <span class="stars">' + stars(c.rating) + '</span></div>' : '';
   const ov = document.getElementById('courseModal');
   ov.innerHTML =
@@ -1959,7 +1972,7 @@ function renderCourseDetail(id){
   const c = courseById(id);
   if (!c) { box.innerHTML = '<div class="view-head"><h1>Course not found</h1><p><a class="back-link" href="#all-courses" onclick="goView(\'all-courses\');return false">&larr; Back to Courses</a></p></div>'; return; }
   const sn = esc((c.name || '').replace(/'/g, ''));
-  const photo = c.image ? '<img src="' + c.image + '" alt="' + esc(c.name) + '">' : '<span class="cd-ph">' + COURSE_ICONS[0] + '</span>';
+  const photo = coursePhoto(c, COURSE_ICONS[0]);
   const rate = c.rating ? '<span class="cd-rate">' + c.rating.toFixed(1) + '/5 <span class="stars">' + stars(c.rating) + '</span></span>' : '';
   const features = (c.highlights || '').split('.').map(function(s){ return s.trim(); }).filter(Boolean);
   const featList = features.length ? '<ul class="cd-ticks">' + features.map(function(f){ return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' : '<p class="hint">Details coming soon.</p>';

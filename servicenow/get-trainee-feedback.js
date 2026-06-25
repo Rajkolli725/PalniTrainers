@@ -29,6 +29,7 @@
     var out = [];
 
     var gr = new GlideRecord(TABLE);
+    gr.addQuery('u_active', true);          // only active feedback records
     gr.orderByDesc('sys_created_on');
     gr.query();
     while (gr.next()) {

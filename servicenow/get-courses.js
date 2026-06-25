@@ -13,16 +13,16 @@
  *     certifications  <- u_certifications        (comma list -> chips on the page)
  *     highlights      <- u_highlights            (split by "." -> bullet points)
  *     duration        <- u_duration              (optional — see note below)
- *     image           <- record attachment / u_course_image (base64 data URI)
+ *     sys_id          <- record sys_id (the page loads the image from
+ *                        /course_image/{sys_id} — see get-course-image.js)
  *
  * NOTE on "duration": the sample table has no duration column. If you want it on
  * the card, add a String field `u_duration` to the table — this script returns
  * it automatically when present (empty string otherwise, and the card hides it).
  *
- * NOTE on the image: ServiceNow Image fields store a sys_id that points to a
- * db_image record; the bytes live in a sys_attachment on that db_image record.
- * imageDataUri() reads those bytes and returns a data: URI the browser can show
- * directly. If your image is stored differently, adjust imageDataUri().
+ * NOTE on the image: this list does NOT return the image bytes (base64-inlining
+ * every image exceeds ServiceNow's 32 MB response limit). It returns sys_id and
+ * the page loads each image from /course_image/{sys_id} (see get-course-image.js).
  *
  * DEPLOYED AS:
  *   Scripted REST API : Team Profiles  (x_palni_servicen_1 scope)
@@ -43,41 +43,13 @@
 
     var TABLE = 'x_palni_servicen_1_course_offerings';
 
-    var ga = new GlideSysAttachment();
-    // SAME approach as the working "members" (trainers) script: read the first
-    // image attachment ON THE COURSE RECORD and return it as a base64 data URI.
-    function recordImage(recId) {
-        if (!recId) return '';
-        var att = new GlideRecord('sys_attachment');
-        att.addQuery('table_sys_id', recId);
-        att.query();
-        while (att.next()) {
-            var ct = att.getValue('content_type') || '';
-            var fn = att.getValue('file_name') || '';
-            if (ct.indexOf('image/') === 0 || /image|photo|logo|course|banner|thumbnail/i.test(fn)) {
-                var b64 = ga.getContentBase64(att);
-                if (b64) return 'data:' + (ct || 'image/png') + ';base64,' + b64;
-            }
-        }
-        return '';
-    }
-    // Fallback: image set via the u_course_image field (references a db_image record).
-    function dbImage(imgId) {
-        if (!imgId) return '';
-        var att = new GlideRecord('sys_attachment');
-        att.addQuery('table_sys_id', imgId);
-        att.orderByDesc('sys_created_on');
-        att.setLimit(1);
-        att.query();
-        if (att.next()) {
-            var b64 = ga.getContentBase64(att);
-            if (b64) return 'data:' + (att.getValue('content_type') || 'image/png') + ';base64,' + b64;
-        }
-        return '';
-    }
-
+    // NOTE: images are NOT base64-encoded here. Inlining every course image
+    // blows past ServiceNow's 32 MB response-string limit. The page instead
+    // loads each image from the lightweight "Get Course Image" endpoint
+    // (/course_image/{sys_id}) using the sys_id returned below.
     var out = [];
     var gr = new GlideRecord(TABLE);
+    gr.addQuery('u_active', true);          // only active course records
     gr.orderBy('u_course_name');
     gr.query();
     while (gr.next()) {
@@ -92,7 +64,7 @@
             participants:   gr.getValue('u_participants_trained') || '', // comma-separated -> chips
             rating:         gr.getValue('u_rating') || '',             // number out of 5 (e.g. 4.8)
             duration:       gr.getValue('u_duration') || '',
-            image:          recordImage(gr.getUniqueValue()) || dbImage(gr.getValue('u_course_image'))
+            sys_id:         gr.getUniqueValue()        // page builds the image URL from this
         });
     }
 
