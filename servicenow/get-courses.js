@@ -84,9 +84,13 @@
         out.push({
             number:         gr.getValue('number'),
             name:           gr.getValue('u_course_name'),
-            about:          gr.getValue('u_about_the_course'),
-            certifications: gr.getValue('u_certifications'),       // comma-separated; split into chips on the page
-            highlights:     gr.getValue('u_highlights'),           // split by "." into bullet points on the page
+            about:          gr.getValue('u_about_the_course'),         // short blurb on the card front
+            description:    gr.getValue('description'),                // long description (modal + detail page)
+            certifications: gr.getValue('u_certifications'),           // comma-separated -> chips
+            highlights:     gr.getValue('u_highlights'),               // split by "." -> bullet points
+            prerequisites:  gr.getValue('u_pre_requisites') || '',     // comma-separated -> chips
+            participants:   gr.getValue('u_participants_trained') || '', // comma-separated -> chips
+            rating:         gr.getValue('u_rating') || '',             // number out of 5 (e.g. 4.8)
             duration:       gr.getValue('u_duration') || '',
             image:          recordImage(gr.getUniqueValue()) || dbImage(gr.getValue('u_course_image'))
         });
