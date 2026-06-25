@@ -492,7 +492,10 @@
   @media (max-width: 860px) {
     .hero-top { grid-template-columns: 1fr; gap: 22px; margin-bottom: 32px; }
     .hero-right .lede { text-align: left; }
-    .hero-left .hero-trust { white-space: normal; }
+    /* flow as normal wrapped text so stars + sentence align cleanly */
+    .hero-left .hero-trust { display: block; white-space: normal; line-height: 1.7; }
+    .hero-left .hero-trust .stars { display: inline; vertical-align: middle; margin-right: 6px; white-space: nowrap; }
+    .hero-left .hero-trust .pen-underline { white-space: nowrap; }
   }
   /* hero_titles_style = 2 + video: text stacked on the left, video on the right */
   @media (min-width: 861px) {
