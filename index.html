@@ -783,9 +783,9 @@
     <div class="container">
       <div class="stats-grid">
         <div><div class="stat-num" id="statPros" data-count="5000" data-suffix="+">0</div><div class="stat-lbl">Professionals Trained &amp; Placed</div></div>
-        <div><div class="stat-num" data-count="50" data-suffix="+">0</div><div class="stat-lbl">Expert Consultants &amp; Trainers</div></div>
-        <div><div class="stat-num gold" data-count="95" data-suffix="%">0</div><div class="stat-lbl">Project Success Rate</div></div>
-        <div><div class="stat-num" data-count="4.8" data-dec="1">0</div><div class="stat-lbl">Average Client Rating</div></div>
+        <div><div class="stat-num" id="statTrainers" data-count="50" data-suffix="+">0</div><div class="stat-lbl">Expert Consultants &amp; Trainers</div></div>
+        <div><div class="stat-num gold" id="statSuccess" data-count="95" data-suffix="%">0</div><div class="stat-lbl">Project Success Rate</div></div>
+        <div><div class="stat-num" id="statRating" data-count="4.8" data-dec="1">0</div><div class="stat-lbl">Average Client Rating</div></div>
       </div>
     </div>
   </section>
@@ -862,10 +862,10 @@
           <h2 style="font-size:2rem;margin:8px 0 12px">Talk to a Course Advisor</h2>
           <p style="color:var(--muted);margin:0 0 24px">Have questions about courses, schedules, or corporate training? Send us your details and we'll get back within 1 business day.</p>
           <ul class="contact-info">
-            <li><span class="ic">📧</span><div><b>Email</b><span>training@vtechinfotech.com</span></div></li>
-            <li><span class="ic">📞</span><div><b>Phone</b><span>+1 (555) 123-4567</span></div></li>
-            <li><span class="ic">🕒</span><div><b>Support Hours</b><span>Mon–Sat, 9:00 AM – 8:00 PM</span></div></li>
-            <li><span class="ic">🏢</span><div><b>Corporate Training</b><span>Custom team programs available on request</span></div></li>
+            <li><span class="ic">📧</span><div><b>Email</b><span id="contactEmail">training@vtechinfotech.com</span></div></li>
+            <li><span class="ic">📞</span><div><b>Phone</b><span id="contactPhone">+1 (555) 123-4567</span></div></li>
+            <li><span class="ic">🕒</span><div><b>Support Hours</b><span id="contactHours">Mon–Sat, 9:00 AM – 8:00 PM</span></div></li>
+            <li><span class="ic">🏢</span><div><b>Office Location</b><span id="contactLocation">Custom team programs available on request</span></div></li>
           </ul>
         </div>
         <div class="lead-card reveal">
@@ -1836,7 +1836,17 @@ function courseById(id){ return courses.filter(function(c){ return c.id === id; 
    Lets us tweak page content from ServiceNow without code changes.
    ============================================================ */
 let siteProps = {};
-const PROP = { proTrained: 'x_palni_servicen_1.professionals_trained' };
+const PROP = {
+  proTrained:   'x_palni_servicen_1.professionals_trained',
+  trainers:     'x_palni_servicen_1.trainers',
+  successRate:  'x_palni_servicen_1.success_rate',
+  clientRating: 'x_palni_servicen_1.client_rating',
+  supportEmail: 'x_palni_servicen_1.support_email',
+  supportNumber:'x_palni_servicen_1.support_number',
+  supportHours: 'x_palni_servicen_1.support_hours',
+  supportLocation:'x_palni_servicen_1.support_location',
+  showPromoVideo: 'x_palni_servicen_1.show_promo_video'
+};
 
 async function loadProperties(){
   try {
@@ -1851,25 +1861,44 @@ async function loadProperties(){
   applyProperties();
 }
 
+// Point a stat counter at a property value: count up to the numeric part,
+// keep the value's own suffix (e.g. "+", "%"), and don't add a thousands comma.
+function setStatFromProp(id, value){
+  const s = document.getElementById(id);
+  if (!s || !value) return;
+  const m = String(value).match(/^([\d.,]+)(.*)$/);
+  s.dataset.count  = m ? m[1].replace(/,/g, '') : '0';
+  s.dataset.suffix = m ? m[2] : '';
+  s.dataset.group  = 'false';
+  s.classList.remove('counted');
+  s.textContent = '0';
+}
+function setText(id, value){ const el = document.getElementById(id); if (el && value) el.textContent = value; }
+
 // Apply property values to the page (each falls back to the hard-coded default).
 function applyProperties(){
-  const pros = siteProps[PROP.proTrained];
-  if (pros) {
-    // Hero trust line — show the value exactly as stored.
+  // Hero trust line — show the value exactly as stored.
+  if (siteProps[PROP.proTrained]) {
     const h = document.getElementById('heroPros');
-    if (h) h.textContent = pros;
-    // Stats band — count up to the numeric part, keep the value's own suffix, no comma.
-    const s = document.getElementById('statPros');
-    if (s) {
-      const m = String(pros).match(/^([\d.,]+)(.*)$/);
-      s.dataset.count  = m ? m[1].replace(/,/g, '') : '0';
-      s.dataset.suffix = m ? m[2] : '';
-      s.dataset.group  = 'false';
-      s.classList.remove('counted');
-      s.textContent = '0';
-      initReveal();   // re-observe so it animates to the new value when scrolled into view
-    }
+    if (h) h.textContent = siteProps[PROP.proTrained];
   }
+  // Stats band
+  setStatFromProp('statPros',     siteProps[PROP.proTrained]);
+  setStatFromProp('statTrainers', siteProps[PROP.trainers]);
+  setStatFromProp('statSuccess',  siteProps[PROP.successRate]);
+  setStatFromProp('statRating',   siteProps[PROP.clientRating]);
+
+  // Contact section
+  setText('contactEmail',    siteProps[PROP.supportEmail]);
+  setText('contactPhone',    siteProps[PROP.supportNumber]);
+  setText('contactHours',    siteProps[PROP.supportHours]);
+  setText('contactLocation', siteProps[PROP.supportLocation]);
+
+  // Promo video — hide when the property is explicitly "false"
+  const pv = document.getElementById('promoVideo');
+  if (pv && String(siteProps[PROP.showPromoVideo]).toLowerCase() === 'false') pv.style.display = 'none';
+
+  initReveal();   // re-observe updated stat counters so they animate when scrolled into view
 }
 
 // Demo courses so the section is never empty if ServiceNow is unreachable.
