@@ -108,12 +108,16 @@
     border: none; cursor: pointer; font-size: .92rem; font-weight: 600;
     padding: 12px 18px; border-radius: 12px; transition: .15s; white-space: nowrap;
   }
-  .btn-primary { background: var(--primary-bg); color: #fff; }
-  .btn-primary:hover { background: var(--primary-hover); }
+  /* All primary call-to-action buttons are orange (accent). */
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { filter: brightness(.92); }
   .btn-ghost { background: var(--ghost-bg); color: var(--ink); }
   .btn-ghost:hover { background: var(--ghost-hover); }
   .btn-accent { background: var(--accent); color: #fff; }
   .btn-accent:hover { filter: brightness(.92); }
+  /* Navy button for non-CTA navigation (e.g. course "View More"). */
+  .btn-navy { background: var(--primary-bg); color: #fff; }
+  .btn-navy:hover { background: var(--primary-hover); }
 
   /* Header theme toggle */
   .head-actions { display: flex; align-items: center; gap: 10px; }
@@ -294,8 +298,8 @@
   }
 
   /* ---- Buttons (extends existing .btn) ---- */
-  .btn-gold { background: var(--gold); color: var(--gold-ink); }
-  .btn-gold:hover { filter: brightness(.95); }
+  .btn-gold { background: var(--accent); color: #fff; }
+  .btn-gold:hover { filter: brightness(.92); }
   .btn-lg { padding: 15px 26px; font-size: 1.02rem; border-radius: 14px; }
   .btn-outline-light { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.6); }
   .btn-outline-light:hover { background: rgba(255,255,255,.14); }
@@ -771,11 +775,11 @@
     <div class="container hero-wrap">
       <div class="hero-top">
         <div class="hero-left">
-          <h1>Your Partner for <span class="hl">Expert Training</span>,<br>IT Consulting &amp; Staffing</h1>
+          <h1 id="heroHeading">Your Partner for <span class="hl">Expert Training</span>,<br>IT Consulting &amp; Staffing</h1>
           <div class="hero-trust"><span class="stars">★★★★★</span> Trusted by <span class="pen-underline" id="heroPros">5,000+</span> professionals &amp; teams worldwide</div>
         </div>
         <div class="hero-right">
-          <p class="lede">VTech Infotech is a full-spectrum IT services company. We deliver technology projects, place vetted IT talent, and run hands-on training.</p>
+          <p class="lede" id="heroSubtext">VTech Infotech is a full-spectrum IT services company. We deliver technology projects, place vetted IT talent, and run hands-on training.</p>
           <div class="hero-cta">
             <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an Advisor (Hero)')">Talk to an Advisor</button>
           </div>
@@ -809,9 +813,8 @@
   <section class="section" id="courses">
     <div class="container">
       <div class="section-title reveal">
-        <div class="eyebrow2">Training Programs</div>
-        <h2>Career-Focused Tech Courses</h2>
-        <p>Specialized, hands-on tracks built around the platforms enterprises hire for right now.</p>
+        <h2 id="coursesHeading">Career-Focused Tech Courses</h2>
+        <p id="coursesSubheading">Specialized, hands-on tracks built around the platforms enterprises hire for right now.</p>
       </div>
       <div class="carousel per3" data-auto="4000">
         <button class="carousel-btn prev" aria-label="Previous courses">&#8249;</button>
@@ -826,9 +829,8 @@
   <section class="section alt">
     <div class="container">
       <div class="section-title reveal">
-        <div class="eyebrow2">Meet Our Trainers</div>
-        <h2>Learn From the Best in the Business</h2>
-        <p>Our consultants and trainers bring real enterprise experience to every engagement.</p>
+        <h2 id="trainersPreviewHeading">Learn From the Best in the Business</h2>
+        <p id="trainersPreviewSubheading">Our consultants and trainers bring real enterprise experience to every engagement.</p>
       </div>
       <div class="carousel" data-auto="3500">
         <button class="carousel-btn prev" aria-label="Previous trainers">&#8249;</button>
@@ -843,9 +845,8 @@
   <section class="section" id="testimonials">
     <div class="container">
       <div class="section-title reveal">
-        <div class="eyebrow2">Success Stories</div>
-        <h2>What Our Trainees Say</h2>
-        <p>Real feedback from learners who transformed their careers with VTech.</p>
+        <h2 id="feedbackHeading">What Our Trainees Say</h2>
+        <p id="feedbackSubheading">Real feedback from learners who transformed their careers with VTech.</p>
       </div>
       <div class="tcards" id="homeTestimonials"></div>
       <div style="text-align:center;margin-top:34px"><button class="btn btn-ghost btn-lg" onclick="goView('reviews')">Read All Reviews →</button></div>
@@ -856,7 +857,6 @@
   <section class="section alt" id="services">
     <div class="container">
       <div class="section-title reveal">
-        <div class="eyebrow2">What We Do</div>
         <h2>End-to-End IT Services</h2>
         <p>From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
       </div>
@@ -873,9 +873,8 @@
     <div class="container">
       <div class="contact-grid">
         <div class="reveal">
-          <div class="eyebrow2" style="color:var(--accent);font-weight:800;letter-spacing:.09em;text-transform:uppercase;font-size:.78rem">Get In Touch</div>
-          <h2 style="font-size:2rem;margin:8px 0 12px">Talk to a Course Advisor</h2>
-          <p style="color:var(--muted);margin:0 0 24px">Have questions about courses, schedules, or corporate training? Send us your details and we'll get back within 1 business day.</p>
+          <h2 id="supportHeading" style="font-size:2rem;margin:8px 0 12px">Talk to a Course Advisor</h2>
+          <p id="supportSubheading" style="color:var(--muted);margin:0 0 24px">Have questions about courses, schedules, or corporate training? Send us your details and we'll get back within 1 business day.</p>
           <ul class="contact-info">
             <li><span class="ic">📧</span><div><b>Email</b><a id="contactEmail" class="link" href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a></div></li>
             <li><span class="ic">📞</span><div><b>Phone</b><span id="contactPhone">+1 (555) 123-4567</span></div></li>
@@ -913,8 +912,8 @@
   <!-- ===== Trainers view ===== -->
   <div id="mainView">
     <div class="view-head">
-      <h1>Meet Our Trainers</h1>
-      <p>Industry experts who've delivered thousands of hours of hands-on training.</p>
+      <h1 id="trainersPageHeading">Meet Our Trainers</h1>
+      <p id="trainersPageSubheading">Industry experts who've delivered thousands of hours of hands-on training.</p>
     </div>
 
     <div class="toolbar">
@@ -1460,7 +1459,7 @@ function showAllReviews(){
   }
 
   const html =
-    '<div class="view-head"><h1>Reviews &amp; Feedback</h1><p>Real feedback from our trainees across every program.</p></div>' +
+    '<div class="view-head"><h1>' + esc(siteProps[PROP.reviewsHeading] || 'Reviews & Feedback') + '</h1><p>' + esc(siteProps[PROP.reviewsSub] || 'Real feedback from our trainees across every program.') + '</p></div>' +
     '<div class="reviews-head">' +
       '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Home</a>' +
       '<div class="reviews-actions">' +
@@ -1918,7 +1917,22 @@ const PROP = {
   supportHours: 'x_palni_servicen_1.support_hours',
   supportLocation:'x_palni_servicen_1.support_location',
   showPromoVideo: 'x_palni_servicen_1.show_promo_video',
-  heroStyle:      'x_palni_servicen_1.hero_titles_style'
+  heroStyle:      'x_palni_servicen_1.hero_titles_style',
+  // Headings & subheadings (each falls back to the hard-coded page text)
+  heroHeading:        'x_palni_servicen_1.hero_heading',
+  heroSubtext:        'x_palni_servicen_1.hero_subtext',
+  courseHeading:      'x_palni_servicen_1.home_course_main_heading',
+  courseSub:          'x_palni_servicen_1.home_course_subheading',
+  trainersHomeHeading:'x_palni_servicen_1.home_trainers_main_heading',
+  trainersHomeSub:    'x_palni_servicen_1.home_trainers_subheading',
+  feedbackHeading:    'x_palni_servicen_1.home_feedback_main_heading',
+  feedbackSub:        'x_palni_servicen_1.home_feedback_subheading',
+  reviewsHeading:     'x_palni_servicen_1.reviews_and_feedback_heading',
+  reviewsSub:         'x_palni_servicen_1.reviews_and_feedback_subheading',
+  supportHeading:     'x_palni_servicen_1.support_main_heading',
+  supportSub:         'x_palni_servicen_1.support_subheading',
+  trainersPageHeading:'x_palni_servicen_1.trainers_main_heading',
+  trainersPageSub:    'x_palni_servicen_1.trainers_subheading'
 };
 
 async function loadProperties(){
@@ -1970,6 +1984,20 @@ function applyProperties(){
   setText('contactHours',    siteProps[PROP.supportHours]);
   setText('contactLocation', siteProps[PROP.supportLocation]);
 
+  // Section headings & subheadings (Reviews view is set in showAllReviews)
+  setText('heroHeading',               siteProps[PROP.heroHeading]);
+  setText('heroSubtext',               siteProps[PROP.heroSubtext]);
+  setText('coursesHeading',            siteProps[PROP.courseHeading]);
+  setText('coursesSubheading',         siteProps[PROP.courseSub]);
+  setText('trainersPreviewHeading',    siteProps[PROP.trainersHomeHeading]);
+  setText('trainersPreviewSubheading', siteProps[PROP.trainersHomeSub]);
+  setText('feedbackHeading',           siteProps[PROP.feedbackHeading]);
+  setText('feedbackSubheading',        siteProps[PROP.feedbackSub]);
+  setText('supportHeading',            siteProps[PROP.supportHeading]);
+  setText('supportSubheading',         siteProps[PROP.supportSub]);
+  setText('trainersPageHeading',       siteProps[PROP.trainersPageHeading]);
+  setText('trainersPageSubheading',    siteProps[PROP.trainersPageSub]);
+
   // Hero layout based on hero_titles_style (default 1) + show_promo_video (default on):
   //   video off            -> two-column header, no video
   //   style 1 + video on   -> two-column header, video full-width below (default)
@@ -2018,10 +2046,6 @@ function courseCardHtml(c, i){
         '<div class="cc-body">' +
           '<h3 class="cc-name">' + esc(c.name) + '</h3>' +
           '<p class="cc-about">' + (esc(c.about) || 'Hands-on, certification-focused training.') + '</p>' +
-          '<div class="cc-actions">' +
-            '<button class="btn btn-primary" onclick="openLeadModal(\'' + safeName + '\',\'Enroll Now – ' + safeName + '\')">Enroll Now</button>' +
-            '<button class="btn btn-ghost" onclick="openLeadModal(\'' + safeName + '\',\'Book Free Demo – ' + safeName + '\')">Book Free Demo</button>' +
-          '</div>' +
         '</div>' +
       '</div>' +
       '<div class="cc-details">' +
@@ -2030,7 +2054,7 @@ function courseCardHtml(c, i){
         (c.duration ? '<div class="cc-drow">' + esc(c.duration) + '</div>' : '') +
         (certChips ? '<div class="cc-drow">' + certChips + '</div>' : '') +
         (highList ? '<div class="cc-drow">' + highList + '</div>' : '') +
-        '<button class="btn btn-primary cc-more" onclick="openLeadModal(\'' + safeName + '\',\'View More – ' + safeName + '\')">View More</button>' +
+        '<button class="btn btn-navy cc-more" onclick="openCourseDetail(\'' + esc(c.id) + '\')">View More</button>' +
       '</div>' +
     '</div>';
 }
@@ -2088,7 +2112,7 @@ function openCourseModal(id){
           participantStat(c.participants) +
           '<div class="field"><h4>Certifications</h4>' + chipRow(c.certifications, 'cert', 'left') + '</div>' +
           '<div class="field"><h4>Pre-requisites</h4>' + chipRow(c.prerequisites, '', 'left') + '</div>' +
-          '<button class="btn btn-accent cc-more" onclick="openCourseDetail(\'' + esc(c.id) + '\')">View More</button>' +
+          '<button class="btn btn-navy cc-more" onclick="openCourseDetail(\'' + esc(c.id) + '\')">View More</button>' +
         '</div>' +
       '</div>' +
     '</div>';
