@@ -455,6 +455,25 @@
   @keyframes waPulse { 0% { transform: scale(1); opacity: .5; } 70% { transform: scale(1.7); opacity: 0; } 100% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .wa-bubble::after { animation: none; } }
   @media (max-width: 600px) { .wa-bubble { right: 16px; bottom: 16px; width: 52px; height: 52px; } .wa-bubble svg { width: 30px; height: 30px; } }
+
+  /* ---- Alumni placements band (left text + right scrolling logos) ---- */
+  .alumni-band { background: var(--hover); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  .alumni-wrap { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 26px; padding: 16px 24px; }
+  .alumni-text { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
+  .al-eyebrow { font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+  .al-verified { font-size: .98rem; font-weight: 700; color: var(--ink); }
+  .al-verified b { color: var(--accent); }
+  .alumni-marquee { overflow: hidden; position: relative; min-width: 0;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 32s linear infinite; }
+  .alumni-marquee:hover .alumni-track { animation-play-state: paused; }
+  @keyframes alumniScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
+  @media (prefers-reduced-motion: reduce) { .alumni-track { animation: none; } }
+  .al-item { display: inline-flex; align-items: center; flex: 0 0 auto; }
+  .al-img { height: 46px; width: auto; max-width: 150px; object-fit: contain; display: block; }
+  .al-name { font-weight: 700; color: var(--muted); font-size: 1.02rem; white-space: nowrap; }
+  @media (max-width: 560px) { .alumni-wrap { grid-template-columns: 1fr; gap: 12px; } }
   /* Legal / FAQ page niceties */
   .legal-meta { color: var(--muted); font-size: .85rem; margin: 0 0 26px; }
   .legal-sec h2 { font-size: 1.25rem; }
@@ -942,6 +961,14 @@
     </div>
   </section>
 
+  <!-- Alumni placements band -->
+  <div class="container" style="margin-top:28px">
+    <div class="alumni-band"><div class="alumni-wrap">
+      <div class="alumni-text"><span class="al-eyebrow">Alumni working at</span><span class="al-verified">&#10003; Verified &middot; <b class="alumni-hires">100K+</b> hires</span></div>
+      <div class="alumni-marquee" aria-label="Companies where our alumni work"><div class="alumni-track"></div></div>
+    </div></div>
+  </div>
+
   <!-- Courses -->
   <section class="section" id="courses">
     <div class="container">
@@ -1053,6 +1080,10 @@
       <h1 id="trainersPageHeading">Meet Our Trainers</h1>
       <p id="trainersPageSubheading">Industry experts who've delivered thousands of hours of hands-on training.</p>
     </div>
+    <div class="alumni-band" style="margin-bottom:22px"><div class="alumni-wrap">
+      <div class="alumni-text"><span class="al-eyebrow">Alumni working at</span><span class="al-verified">&#10003; Verified &middot; <b class="alumni-hires">100K+</b> hires</span></div>
+      <div class="alumni-marquee" aria-label="Companies where our alumni work"><div class="alumni-track"></div></div>
+    </div></div>
 
     <div class="toolbar">
       <div class="search">
@@ -1079,6 +1110,10 @@
       <h1>Our Courses</h1>
       <p>Hands-on, certification-focused programs across the most in-demand platforms.</p>
     </div>
+    <div class="alumni-band" style="margin-bottom:26px"><div class="alumni-wrap">
+      <div class="alumni-text"><span class="al-eyebrow">Alumni working at</span><span class="al-verified">&#10003; Verified &middot; <b class="alumni-hires">100K+</b> hires</span></div>
+      <div class="alumni-marquee" aria-label="Companies where our alumni work"><div class="alumni-track"></div></div>
+    </div></div>
     <div class="cards-grid" id="coursesList"></div>
   </div>
 
@@ -1356,6 +1391,8 @@ const LEADS_API        = SN.instance + '/api/x_palni_servicen_1/team_profiles/re
 const COURSES_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_courses';            // GET -> list of course offerings
 const COURSE_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_image/';          // GET /{sys_id} -> course image (binary)
 const CURRICULUM_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_curriculum';       // GET ?course=<sys_id> -> { result: [ modules ] }
+const PLACEMENTS_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_placements';       // GET -> { result: [ { sys_id, name, profile_picture } ] }
+const PLACEMENT_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/placement_image/';    // GET /{sys_id} -> company logo (binary)
 const PROPS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_properties';         // GET -> { name: value } site properties
 
 // No auth header — the Scripted REST API is anonymous; credentials:'omit'
@@ -2173,6 +2210,7 @@ const PROP = {
   supportEmail: 'x_palni_servicen_1.support_email',
   supportNumber:'x_palni_servicen_1.support_number',
   whatsappNumber:'x_palni_servicen_1.whatsapp_number',
+  verifiedHires:'x_palni_servicen_1.verified_hires',
   supportHours: 'x_palni_servicen_1.support_hours',
   supportLocation:'x_palni_servicen_1.support_location',
   showPromoVideo: 'x_palni_servicen_1.show_promo_video',
@@ -2279,6 +2317,11 @@ function applyProperties(){
   setText('supportSubheading',         siteProps[PROP.supportSub]);
   setText('trainersPageHeading',       siteProps[PROP.trainersPageHeading]);
   setText('trainersPageSubheading',    siteProps[PROP.trainersPageSub]);
+
+  // Alumni band — "verified hires" count (e.g. 100K+) across all bands
+  if (siteProps[PROP.verifiedHires]) {
+    document.querySelectorAll('.alumni-hires').forEach(function(el){ el.textContent = siteProps[PROP.verifiedHires]; });
+  }
 
   // Hero layout based on hero_titles_style (default 1) + show_promo_video (default on):
   //   video off            -> two-column header, no video
@@ -2489,6 +2532,10 @@ function renderCourseDetail(id){
         '</div>' +
       '</div>' +
     '</div>' +
+    '<div class="alumni-band" style="margin:0 0 30px"><div class="alumni-wrap">' +
+      '<div class="alumni-text"><span class="al-eyebrow">Alumni Network</span><span class="al-verified">Where our ' + esc(c.name) + ' alumni work</span></div>' +
+      '<div class="alumni-marquee" aria-label="Companies where our alumni work"><div class="alumni-track"></div></div>' +
+    '</div></div>' +
     '<section class="cd-sec"><h2>Course Overview</h2><p class="cd-desc">' + (esc(c.description) || esc(c.about) || 'Overview coming soon.') + '</p></section>' +
     '<section class="cd-sec cd-2col">' +
       '<div><h2>Course Features</h2>' + featList + '</div>' +
@@ -2559,6 +2606,7 @@ function renderCourseDetail(id){
 
   window.scrollTo(0, 0);
   initReveal();
+  fillAlumniBands();   // populate this page's alumni logo marquee
   loadCurriculum(c);   // fetch + render the curriculum section (async)
 }
 
@@ -2709,6 +2757,49 @@ function curToggleLesson(i, j){
   if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
+/* ============================================================
+   Alumni placements band — logos from x_palni_servicen_1_placements
+   (field "profile_picture"). Fully data-driven with a demo fallback.
+   ============================================================ */
+let placements = [];
+function mapPlacement(p){
+  const sysId = p.sys_id || '';
+  // Prefer an embedded data URI; else stream the profile_picture by sys_id.
+  let logo = p.profile_picture || p.logo || p.photo || p.image || '';
+  if (!logo && sysId) logo = PLACEMENT_IMAGE_API + encodeURIComponent(sysId);
+  return { name: p.name || p.company || p.short_description || 'Company', logo: logo };
+}
+function buildFallbackPlacements(){
+  return ['PepsiCo', 'Wipro', 'Capgemini', 'Cognizant', 'HCL', 'Accenture', 'Deloitte', 'Infosys', 'IBM', 'TCS']
+    .map(function(n){ return { name: n, logo: '' }; });
+}
+function alumniLogo(p){
+  const name = esc(p.name);
+  // Plain logo image; if it fails (or none), fall back to the company name as text.
+  if (p.logo) {
+    return '<span class="al-item"><img class="al-img" src="' + esc(p.logo) + '" alt="' + name + '" title="' + name + '" loading="lazy" onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'inline\'"><span class="al-name" style="display:none">' + name + '</span></span>';
+  }
+  return '<span class="al-item"><span class="al-name">' + name + '</span></span>';
+}
+function fillAlumniBands(){
+  const list = placements.length ? placements : buildFallbackPlacements();
+  const logos = list.map(alumniLogo).join('');
+  // Duplicate the set so the marquee loops seamlessly.
+  document.querySelectorAll('.alumni-track').forEach(function(t){ t.innerHTML = logos + logos; });
+}
+async function loadPlacements(){
+  try {
+    const res = await snFetch(PLACEMENTS_GET_API);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    placements = (json.result || []).map(mapPlacement).filter(function(p){ return p.name; });
+  } catch (e) {
+    console.warn('Placements: using demo logos —', e.message);
+    placements = [];
+  }
+  fillAlumniBands();
+}
+
 /* Flip a course card to its details (+ ⇄ −); one open at a time */
 function toggleCourse(e, id){
   if (e) e.stopPropagation();
@@ -2840,6 +2931,7 @@ route();                 // show the correct view immediately
 initCarousels();         // wire arrows + autoplay (services now; trainers re-inits on load)
 loadMembers();           // fetch trainers (re-renders trainers view + home preview)
 loadHomeTestimonials();  // fetch top reviews for the home testimonials strip
+loadPlacements();        // fetch alumni placement logos -> fill the marquee bands
 initReveal();            // scroll-reveal + animated counters
 window.addEventListener('hashchange', route);
 // Subtle shadow on the translucent nav once the page is scrolled
