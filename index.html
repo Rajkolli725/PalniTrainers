@@ -474,6 +474,54 @@
   .al-img { height: 46px; width: auto; max-width: 150px; object-fit: contain; display: block; }
   .al-name { font-weight: 700; color: var(--muted); font-size: 1.02rem; white-space: nowrap; }
   @media (max-width: 560px) { .alumni-wrap { grid-template-columns: 1fr; gap: 12px; } }
+
+  /* ---- Interactive pricing (currency + training-type toggles) ---- */
+  .pricing { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+  .seg { position: relative; display: inline-flex; background: var(--hover); border: 1px solid var(--line); border-radius: 999px; padding: 4px; box-shadow: var(--shadow); }
+  .seg-thumb { position: absolute; top: 4px; bottom: 4px; left: 4px; right: 50%; border-radius: 999px; background: var(--primary-bg); box-shadow: 0 2px 8px rgba(0,0,0,.18); transition: left .28s ease, right .28s ease; }
+  .seg.r .seg-thumb { left: 50%; right: 4px; }
+  .seg-opt { position: relative; z-index: 1; border: none; background: none; cursor: pointer; font-family: inherit; font-weight: 700; font-size: .94rem; color: var(--ink); padding: 10px 26px; border-radius: 999px; white-space: nowrap; display: inline-flex; align-items: center; gap: 8px; transition: color .2s ease; }
+  .seg-opt.active { color: #fff; }
+  .seg-opt .fi { width: 20px; height: 14px; border-radius: 2px; object-fit: cover; }
+  @media (max-width: 480px) { .seg-opt { padding: 10px 16px; font-size: .88rem; } }
+
+  .pricing-body { width: 100%; margin-top: 10px; }
+  .price-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: stretch; animation: priceIn .32s ease; }
+  .price-grid.corp { grid-template-columns: 1fr; max-width: 760px; margin: 0 auto; }
+  @media (max-width: 760px) { .price-grid { grid-template-columns: 1fr; } }
+  @keyframes priceIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .price-grid { animation: none; } .seg-thumb { transition: none; } }
+
+  .plan-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; box-shadow: var(--shadow); display: flex; flex-direction: column; }
+  .plan-card.popular { border-color: var(--accent); box-shadow: 0 12px 34px rgba(60,20,25,.14); }
+  .plan-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+  .plan-ic { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 1.2rem; }
+  .plan-badge { font-size: .72rem; font-weight: 700; padding: 5px 12px; border-radius: 999px; background: var(--ghost-bg); color: var(--muted); }
+  .plan-badge.hot { background: var(--accent-soft); color: var(--accent); }
+  .plan-name { font-size: 1.4rem; margin: 0 0 6px; color: var(--ink); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .plan-sub { font-size: .82rem; font-weight: 600; color: var(--muted); }
+  .plan-hours { font-size: .72rem; font-weight: 700; color: var(--primary-bg); background: var(--hover); border: 1px solid var(--line); padding: 3px 10px; border-radius: 999px; }
+  body.dark .plan-hours { color: var(--ink); }
+  .plan-tag { color: var(--muted); font-size: .92rem; margin: 0 0 16px; line-height: 1.5; }
+  .plan-div { height: 1px; background: var(--line); margin: 0 0 16px; }
+  .plan-sec-title { font-size: .72rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); margin: 0 0 10px; }
+  .plan-list { list-style: none; padding: 0; margin: 0 0 16px; }
+  .plan-list li { position: relative; padding-left: 26px; margin-bottom: 10px; font-size: .92rem; color: var(--ink); line-height: 1.4; }
+  .plan-list li.ok::before { content: "✓"; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 800; }
+  .plan-list li.no { color: var(--muted); }
+  .plan-list li.no::before { content: "✕"; position: absolute; left: 0; top: 0; color: var(--muted); font-weight: 700; }
+  .plan-list.two { columns: 2; column-gap: 26px; }
+  .plan-list.two li { break-inside: avoid; }
+  @media (max-width: 560px) { .plan-list.two { columns: 1; } }
+  .plan-foot { margin-top: auto; padding-top: 16px; display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+  .plan-off { color: var(--accent); font-weight: 700; font-size: .82rem; display: block; margin-bottom: 2px; }
+  .plan-amounts { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .plan-now { font-size: 1.6rem; font-weight: 800; color: var(--ink); }
+  .plan-was { color: var(--muted); text-decoration: line-through; font-size: .95rem; }
+  .plan-per { color: var(--muted); font-size: .85rem; }
+  .plan-note { color: var(--muted); font-size: .78rem; margin-top: 5px; max-width: 280px; }
+  .plan-cta { white-space: nowrap; }
+  @media (max-width: 440px) { .plan-foot { flex-direction: column; align-items: stretch; } .plan-cta { width: 100%; } }
   /* Legal / FAQ page niceties */
   .legal-meta { color: var(--muted); font-size: .85rem; margin: 0 0 26px; }
   .legal-sec h2 { font-size: 1.25rem; }
@@ -2590,11 +2638,19 @@ function renderCourseDetail(id){
           '<circle class="ph-node" cx="180" cy="155" r="26"/><text class="ph-ico" x="180" y="163" text-anchor="middle">📝</text><text class="ph-lbl" x="144" y="160" text-anchor="end">Assignments</text>' +
         '</svg></div>' +
       '</div></section>' +
-    '<section class="cd-sec"><h2>Fee Structure</h2><div class="cards-grid">' +
-      '<div class="course-card"><h3>Self-Paced</h3><p>Recordings &amp; materials, learn at your pace.</p><p><b>Contact us for pricing</b></p></div>' +
-      '<div class="course-card"><h3>Live Online</h3><p>Instructor-led classes, labs &amp; mentorship.</p><p><b>Contact us for pricing</b></p></div>' +
-      '<div class="course-card"><h3>Corporate</h3><p>Custom team cohorts &amp; private batches.</p><p><b>Contact us for pricing</b></p></div>' +
-    '</div></section>' +
+    '<section class="cd-sec"><h2>Fee Structure</h2>' +
+      '<div class="pricing">' +
+        '<div class="seg seg-cur" id="segCur"><span class="seg-thumb"></span>' +
+          '<button type="button" class="seg-opt active" onclick="setPriceCur(\'INR\')"><img class="fi" src="https://flagcdn.com/w20/in.png" alt="India" width="20" height="14"> INR (₹)</button>' +
+          '<button type="button" class="seg-opt" onclick="setPriceCur(\'USD\')"><img class="fi" src="https://flagcdn.com/w20/us.png" alt="USA" width="20" height="14"> USD ($)</button>' +
+        '</div>' +
+        '<div class="seg seg-type" id="segType"><span class="seg-thumb"></span>' +
+          '<button type="button" class="seg-opt active" onclick="setPriceType(\'individual\')">Individual</button>' +
+          '<button type="button" class="seg-opt" onclick="setPriceType(\'corporate\')">Corporate</button>' +
+        '</div>' +
+        '<div id="pricingBody" class="pricing-body"></div>' +
+      '</div>' +
+    '</section>' +
     '<section class="cd-sec"><h2>Frequently Asked Questions</h2>' +
       faqItem('Do I need prior experience?', 'We start from the fundamentals; any pre-requisites are listed above.') +
       faqItem('Will I get a certificate?', 'Yes — plus targeted guidance to clear the official certifications listed above.') +
@@ -2607,6 +2663,7 @@ function renderCourseDetail(id){
   window.scrollTo(0, 0);
   initReveal();
   fillAlumniBands();   // populate this page's alumni logo marquee
+  initPricing(c.name); // wire the interactive pricing toggles + render cards
   loadCurriculum(c);   // fetch + render the curriculum section (async)
 }
 
@@ -2798,6 +2855,109 @@ async function loadPlacements(){
     placements = [];
   }
   fillAlumniBands();
+}
+
+/* ============================================================
+   Interactive pricing — currency (INR/USD) + type (Individual/Corporate)
+   ============================================================ */
+const PRICING = {
+  off: 20,
+  individual: [
+    { ic: '▶', name: 'Self-Paced', hours: '35 hrs', badge: 'Most flexible', popular: false,
+      tag: 'Learn anytime, at your own pace — complete the course in weeks or months.',
+      getTitle: 'What you get',
+      get: ['35 hours of {course} training videos', 'Curated & delivered by an SME', 'Hands-on lab sessions', 'Resources & materials', 'Sample resumes', 'One year LMS access', 'Community forum support', 'Free Agile & Scrum add-on course'],
+      no: ['Live instructor & Q&A sessions', '1-on-1 doubt clearing calls', 'Mock interview & resume review'],
+      inr: 9000, inrWas: 11250, usd: 108, usdWas: 135, cta: 'Get Full Access' },
+    { ic: '🎥', name: 'Live Online', sub: '(instructor-led)', hours: '35 hrs', badge: 'Most Popular', popular: true,
+      tag: 'Real-time classes with a certified expert — ask questions, get instant feedback, and walk away job-ready.',
+      getTitle: 'Everything in Self-Paced, plus',
+      get: ['Live Zoom/Meet sessions with instructor', '1-on-1 doubt clearing sessions', 'Live project walkthroughs', 'Certification guidance', 'Mock interviews with SME panel', 'Resume & LinkedIn profile review', 'Job referral to hiring partners', 'Session recordings to rewatch anytime', 'Agile & Scrum add-on course (FREE)'],
+      no: [],
+      inr: 19999, inrWas: 24999, usd: 239, usdWas: 299, cta: 'Register Now' }
+  ],
+  corporate: {
+    badge: 'Enterprise', name: 'Corporate Training',
+    tag: 'Upskill your whole team with a tailored private cohort — delivered online or onsite, on your schedule.',
+    getTitle: "What's included",
+    features: ['Customized corporate training', 'Team / batch training', 'Flexible scheduling', 'Online & onsite delivery', 'Dedicated trainer', 'Customized curriculum', 'Hands-on labs', 'Training completion certificate', 'Post-training support', 'Enterprise learning solutions'],
+    inrFrom: 7500, usdFrom: 90, cta: 'Get a Custom Quote'
+  }
+};
+let pricingState = { cur: 'INR', type: 'individual', course: '' };
+
+function fmtPrice(cur, amt){
+  return (cur === 'USD' ? '$' : '₹') + Number(amt).toLocaleString(cur === 'USD' ? 'en-US' : 'en-IN');
+}
+function setSeg(segId, idx){
+  const seg = document.getElementById(segId);
+  if (!seg) return;
+  seg.classList.toggle('r', idx === 1);
+  seg.querySelectorAll('.seg-opt').forEach(function(b, i){ b.classList.toggle('active', i === idx); });
+}
+function animatePriceNums(root){
+  (root || document).querySelectorAll('.plan-now[data-amt]').forEach(function(el){
+    const to = +el.dataset.amt, cur = pricingState.cur, dur = 600, start = performance.now();
+    function tick(now){
+      const p = Math.min(1, (now - start) / dur);
+      el.textContent = fmtPrice(cur, Math.round(to * (1 - Math.pow(1 - p, 3))));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+function pricingIndividualHtml(){
+  const cur = pricingState.cur, course = pricingState.course || 'this course';
+  const safe = course.replace(/'/g, '');
+  return '<div class="price-grid">' + PRICING.individual.map(function(p){
+    const now = cur === 'USD' ? p.usd : p.inr, was = cur === 'USD' ? p.usdWas : p.inrWas;
+    const got = p.get.map(function(f){ return '<li class="ok">' + esc(f.replace('{course}', course)) + '</li>'; }).join('');
+    const not = p.no.length ? '<div class="plan-sec-title">Not included</div><ul class="plan-list">' + p.no.map(function(f){ return '<li class="no">' + esc(f) + '</li>'; }).join('') + '</ul>' : '';
+    return '<div class="plan-card' + (p.popular ? ' popular' : '') + '">' +
+      '<div class="plan-top"><span class="plan-ic">' + p.ic + '</span><span class="plan-badge' + (p.popular ? ' hot' : '') + '">' + esc(p.badge) + '</span></div>' +
+      '<h3 class="plan-name">' + esc(p.name) + (p.sub ? ' <span class="plan-sub">' + esc(p.sub) + '</span>' : '') + ' <span class="plan-hours">' + esc(p.hours) + '</span></h3>' +
+      '<p class="plan-tag">' + esc(p.tag) + '</p>' +
+      '<div class="plan-div"></div>' +
+      '<div class="plan-sec-title">' + esc(p.getTitle) + '</div><ul class="plan-list">' + got + '</ul>' + not +
+      '<div class="plan-foot">' +
+        '<div class="plan-price"><span class="plan-off">' + PRICING.off + '% Off</span>' +
+          '<div class="plan-amounts"><span class="plan-now" data-amt="' + now + '">' + fmtPrice(cur, now) + '</span> <span class="plan-was">' + fmtPrice(cur, was) + '</span></div></div>' +
+        '<button class="btn btn-primary plan-cta" onclick="openLeadModal(\'' + safe + '\',\'Enroll ' + esc(p.name) + ' – ' + safe + '\')">' + esc(p.cta) + '</button>' +
+      '</div>' +
+    '</div>';
+  }).join('') + '</div>';
+}
+function pricingCorporateHtml(){
+  const cur = pricingState.cur, c = PRICING.corporate;
+  const safe = (pricingState.course || 'this course').replace(/'/g, '');
+  const from = cur === 'USD' ? c.usdFrom : c.inrFrom;
+  const feats = c.features.map(function(f){ return '<li class="ok">' + esc(f) + '</li>'; }).join('');
+  return '<div class="price-grid corp"><div class="plan-card popular">' +
+    '<div class="plan-top"><span class="plan-ic">🏢</span><span class="plan-badge hot">' + esc(c.badge) + '</span></div>' +
+    '<h3 class="plan-name">' + esc(c.name) + '</h3>' +
+    '<p class="plan-tag">' + esc(c.tag) + '</p>' +
+    '<div class="plan-div"></div>' +
+    '<div class="plan-sec-title">' + esc(c.getTitle) + '</div><ul class="plan-list two">' + feats + '</ul>' +
+    '<div class="plan-foot">' +
+      '<div class="plan-price"><span class="plan-off">Starting from</span>' +
+        '<div class="plan-amounts"><span class="plan-now" data-amt="' + from + '">' + fmtPrice(cur, from) + '</span> <span class="plan-per">/ participant</span></div>' +
+        '<div class="plan-note">Final pricing depends on team size — contact us for a custom quote.</div></div>' +
+      '<button class="btn btn-primary plan-cta" onclick="openLeadModal(\'' + safe + '\',\'Corporate Training – ' + safe + '\')">' + esc(c.cta) + '</button>' +
+    '</div>' +
+  '</div></div>';
+}
+function renderPricingBody(){
+  const body = document.getElementById('pricingBody');
+  if (!body) return;
+  body.innerHTML = pricingState.type === 'corporate' ? pricingCorporateHtml() : pricingIndividualHtml();
+  animatePriceNums(body);
+}
+function setPriceCur(v){ pricingState.cur = v; setSeg('segCur', v === 'USD' ? 1 : 0); renderPricingBody(); }
+function setPriceType(v){ pricingState.type = v; setSeg('segType', v === 'corporate' ? 1 : 0); renderPricingBody(); }
+function initPricing(course){
+  pricingState = { cur: 'INR', type: 'individual', course: course || '' };
+  setSeg('segCur', 0); setSeg('segType', 0);
+  renderPricingBody();
 }
 
 /* Flip a course card to its details (+ ⇄ −); one open at a time */
