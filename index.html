@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <meta name="description" content="VTech Infotech LLC — IT consulting, staffing and expert-led training. We deliver technology consulting, vetted IT talent, cloud, AI and hands-on courses in ServiceNow, Salesforce, Databricks and Snowflake." />
 <title>VTech Infotech LLC — IT Consulting, Staffing & Training | ServiceNow, Salesforce, Cloud, Data & AI</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #f5f6f9;
@@ -745,6 +748,95 @@
   .tr-stats { margin-bottom: 6px; }
   .tr-modal .field { margin-bottom: 14px; }
   .tr-modal .cta-row { margin-top: 18px; padding-top: 0; }
+
+  /* ===================================================================
+     PREMIUM CURRICULUM SECTION (data-driven; scoped palette per spec)
+     =================================================================== */
+  .curriculum {
+    --cur-bg:#F7F4EF; --cur-card:#FFFFFF; --cur-accent:#6D28D9; --cur-border:#E8E3DB;
+    --cur-head:#111111; --cur-body:#555555; --cur-muted:#777777; --cur-dark:#121018;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background: var(--cur-bg); border: 1px solid var(--cur-border); border-radius: 22px;
+    padding: 30px; color: var(--cur-body);
+  }
+  .cur-loading { text-align: center; color: var(--cur-muted); padding: 48px 16px; font-family: inherit; }
+  .cur-wrap { display: grid; grid-template-columns: 29% 1fr; gap: 30px; align-items: start; }
+
+  /* Left nav (sticky, independently scrollable) */
+  .cur-nav { position: sticky; top: 84px; max-height: calc(100vh - 110px); overflow-y: auto;
+    display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+  .cur-modtab { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
+    width: 100%; text-align: left; background: transparent; border: none; cursor: pointer;
+    padding: 15px 16px; border-radius: 18px; font-family: inherit; transition: background .2s ease, transform .2s ease; }
+  .cur-modtab:hover { background: rgba(109,40,217,.06); transform: translateX(2px); }
+  .cur-modtab:focus-visible { outline: 2px solid var(--cur-accent); outline-offset: 2px; }
+  .cur-modnum { font-family: Georgia, 'Times New Roman', serif; font-size: 1.15rem; font-weight: 700; color: var(--cur-muted); min-width: 26px; }
+  .cur-modtitle { font-size: .98rem; font-weight: 600; color: var(--cur-head); line-height: 1.3; }
+  .cur-modcount { font-size: .76rem; color: var(--cur-muted); white-space: nowrap; }
+  .cur-modtab.active { background: var(--cur-dark); }
+  .cur-modtab.active .cur-modtitle { color: #fff; }
+  .cur-modtab.active .cur-modnum { color: #c084fc; }
+  .cur-modtab.active .cur-modcount { color: rgba(255,255,255,.6); }
+
+  /* Right content */
+  .cur-main { min-width: 0; }
+  .cur-head { display: grid; grid-template-columns: auto 1fr; gap: 22px; align-items: start; }
+  .cur-bignum { font-family: Georgia, 'Times New Roman', serif; font-weight: 700; color: var(--cur-accent);
+    font-size: clamp(2.6rem, 5vw, 3.6rem); line-height: 1; }
+  .cur-modh { font-size: clamp(1.9rem, 4vw, 3rem); font-weight: 800; color: var(--cur-head);
+    margin: 0 0 10px; line-height: 1.08; letter-spacing: -.5px; }
+  .cur-moddesc { font-size: 1.05rem; color: var(--cur-body); margin: 0; line-height: 1.55; }
+  .cur-divider { height: 1px; background: var(--cur-border); margin: 24px 0 26px; }
+
+  /* Lesson accordion cards */
+  .cur-lessons { display: flex; flex-direction: column; gap: 16px; }
+  .cur-lesson { background: var(--cur-card); border: 1px solid rgba(109,40,217,.18); border-radius: 18px;
+    overflow: hidden; transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease; }
+  .cur-lesson:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(17,17,17,.06); border-color: rgba(109,40,217,.38); }
+  .cur-lhead { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 14px;
+    width: 100%; background: none; border: none; cursor: pointer; padding: 20px 22px; font-family: inherit; text-align: left; }
+  .cur-lhead:focus-visible { outline: 2px solid var(--cur-accent); outline-offset: -2px; border-radius: 18px; }
+  .cur-lnum { width: 40px; height: 40px; border-radius: 11px; background: rgba(109,40,217,.1); color: var(--cur-accent);
+    font-weight: 700; font-size: .9rem; display: grid; place-items: center; }
+  .cur-ltitle { font-size: clamp(1.05rem, 1.6vw, 1.4rem); font-weight: 600; color: var(--cur-head); line-height: 1.3; }
+  .cur-badge { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
+    padding: 6px 13px; border-radius: 999px; background: rgba(109,40,217,.1); color: var(--cur-accent); white-space: nowrap; }
+  .cur-badge[data-type="hands-on"], .cur-badge[data-type="lab"] { background: rgba(16,185,129,.13); color: #0e9f6e; }
+  .cur-badge[data-type="assignment"] { background: rgba(245,158,11,.15); color: #b45309; }
+  .cur-badge[data-type="project"] { background: rgba(37,99,235,.12); color: #1d4ed8; }
+  .cur-plus { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--cur-border); background: #fff;
+    color: var(--cur-accent); font-size: 1.35rem; line-height: 1; display: grid; place-items: center;
+    transition: transform .28s ease, background .2s ease, color .2s ease; }
+  .cur-lesson:hover .cur-plus { background: rgba(109,40,217,.08); }
+  .cur-lesson.open .cur-plus { transform: rotate(45deg); background: var(--cur-accent); color: #fff; border-color: var(--cur-accent); }
+  /* Smooth height animation via grid-template-rows 0fr -> 1fr */
+  .cur-lbody { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
+  .cur-lesson.open .cur-lbody { grid-template-rows: 1fr; }
+  .cur-lbody-inner { overflow: hidden; min-height: 0; }
+  .cur-topics { columns: 2; column-gap: 44px; list-style: none; margin: 0; padding: 4px 22px 24px; }
+  .cur-topics li { position: relative; padding-left: 20px; margin-bottom: 14px; color: var(--cur-body);
+    font-size: 1rem; line-height: 1.5; break-inside: avoid; }
+  .cur-topics li::before { content: "•"; position: absolute; left: 0; color: var(--cur-accent); font-weight: 700; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .cur-lbody, .cur-plus, .cur-lesson, .cur-modtab { transition: none; }
+  }
+  /* Tablet */
+  @media (max-width: 980px) {
+    .cur-wrap { grid-template-columns: 34% 1fr; gap: 22px; }
+    .cur-topics { columns: 1; }
+  }
+  /* Mobile: sidebar becomes horizontally scrollable tabs; full-width accordion */
+  @media (max-width: 720px) {
+    .curriculum { padding: 18px; }
+    .cur-wrap { grid-template-columns: 1fr; gap: 18px; }
+    .cur-nav { position: static; max-height: none; flex-direction: row; overflow-x: auto; gap: 10px; padding: 0 0 8px; }
+    .cur-modtab { flex: 0 0 auto; grid-template-columns: auto auto; padding: 12px 14px; }
+    .cur-modtab .cur-modcount { display: none; }
+    .cur-head { gap: 14px; }
+    .cur-lhead { grid-template-columns: auto 1fr auto; padding: 16px; }
+    .cur-lhead .cur-badge { grid-column: 2 / 3; grid-row: 2; justify-self: start; margin-top: 6px; }
+  }
 </style>
 </head>
 <body>
@@ -1101,6 +1193,7 @@ const REVIEWS_POST_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/po
 const LEADS_API        = SN.instance + '/api/x_palni_servicen_1/team_profiles/register_lead';         // POST -> capture a website lead (x_palni_servicen_1_lead_registration)
 const COURSES_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_courses';            // GET -> list of course offerings
 const COURSE_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_image/';          // GET /{sys_id} -> course image (binary)
+const CURRICULUM_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_curriculum';       // GET ?course=<sys_id> -> { result: [ modules ] }
 const PROPS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_properties';         // GET -> { name: value } site properties
 
 // No auth header — the Scripted REST API is anonymous; credentials:'omit'
@@ -2238,11 +2331,7 @@ function renderCourseDetail(id){
       '<div class="course-card"><h3>Project 2</h3><p>A portfolio-ready deliverable reviewed by mentors.</p></div>' +
       '<div class="course-card"><h3>Project 3</h3><p>A capstone integrating the full course.</p></div>' +
     '</div></section>' +
-    '<section class="cd-sec"><h2>Upcoming Cohort Batches</h2><div class="cd-table">' +
-      '<div class="cd-trow cd-thead"><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>' +
-      '<div class="cd-trow"><span>Weekday</span><span>To be announced</span><span>Mon–Fri, evenings</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\')">Notify Me</button></span></div>' +
-      '<div class="cd-trow"><span>Weekend</span><span>To be announced</span><span>Sat–Sun</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\')">Notify Me</button></span></div>' +
-    '</div></section>' +
+    '<section class="cd-sec"><h2>Curriculum</h2><div id="curriculumMount" class="curriculum"><div class="cur-loading">Loading curriculum…</div></div></section>' +
     '<section class="cd-sec"><h2>Fee Structure</h2><div class="cards-grid">' +
       '<div class="course-card"><h3>Self-Paced</h3><p>Recordings &amp; materials, learn at your pace.</p><p><b>Contact us for pricing</b></p></div>' +
       '<div class="course-card"><h3>Live Online</h3><p>Instructor-led classes, labs &amp; mentorship.</p><p><b>Contact us for pricing</b></p></div>' +
@@ -2259,6 +2348,154 @@ function renderCourseDetail(id){
 
   window.scrollTo(0, 0);
   initReveal();
+  loadCurriculum(c);   // fetch + render the curriculum section (async)
+}
+
+/* ============================================================
+   Curriculum (premium, fully data-driven from ServiceNow)
+   ------------------------------------------------------------
+   API: GET CURRICULUM_GET_API?course=<sys_id>  ->  { result: [
+     { number?, title, description?, lessons: [
+         { number?, title, type, topics: [ "...", ... ]  // topics may also be a
+       } ]                                                //  newline/";"-separated string
+     } ] }
+   Nothing in the UI is hard-coded — modules, lessons, badges and counts all
+   render from this response. A demo set renders if the API is unreachable.
+   ============================================================ */
+let curState = { modules: [], active: 0 };
+function pad2(n){ return (n < 10 ? '0' : '') + n; }
+
+// Normalize whatever the API returns into the shape the UI renders (tolerant of key variants).
+function mapCurriculum(raw){
+  return (raw || []).map(function(m, i){
+    const rawLessons = m.lessons || m.items || m.topics_list || [];
+    const lessons = rawLessons.map(function(l, j){
+      let topics = l.topics || l.points || l.bullets || l.details || [];
+      if (typeof topics === 'string') topics = topics.split(/\r?\n|•|•|;/).map(function(s){ return s.trim(); }).filter(Boolean);
+      return {
+        number: l.number || l.no || ((i + 1) + '.' + (j + 1)),
+        title:  l.title || l.name || ('Lesson ' + (j + 1)),
+        type:   l.type || l.badge || l.category || l.kind || '',
+        topics: Array.isArray(topics) ? topics : []
+      };
+    });
+    return {
+      number:      m.number || m.no || pad2(i + 1),
+      title:       m.title || m.name || m.module_title || ('Module ' + (i + 1)),
+      description: m.description || m.summary || m.about || '',
+      lessons:     lessons
+    };
+  });
+}
+
+// Demo curriculum so the section always renders when ServiceNow is unreachable.
+function buildFallbackCurriculum(){
+  const TYPES = ['Theory', 'Hands-on', 'Lab', 'Assignment', 'Project'];
+  const TITLES = ['Foundations', 'Core Skills', 'Advanced Topics', 'Capstone & Certification'];
+  const mods = [];
+  for (let i = 0; i < TITLES.length; i++) {
+    const lessons = [];
+    const n = 3 + (i % 3);
+    for (let j = 0; j < n; j++) {
+      lessons.push({
+        number: (i + 1) + '.' + (j + 1),
+        title: 'Key concepts and guided practice',
+        type: TYPES[(i + j) % TYPES.length],
+        topics: ['Concept overview & terminology', 'Step-by-step walkthrough', 'Real-world example', 'Common pitfalls & best practices', 'Hands-on exercise', 'Knowledge check']
+      });
+    }
+    mods.push({ number: pad2(i + 1), title: TITLES[i], description: 'This module builds on the previous one with guided, hands-on learning and a practical checkpoint.', lessons: lessons });
+  }
+  return mods;
+}
+
+async function loadCurriculum(course){
+  const mount = document.getElementById('curriculumMount');
+  if (!mount) return;
+  mount.innerHTML = '<div class="cur-loading">Loading curriculum…</div>';
+  let modules = [];
+  try {
+    const url = CURRICULUM_GET_API + '?course=' + encodeURIComponent(course.sysId || course.id || '');
+    const res = await snFetch(url);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    modules = mapCurriculum(json.result || json.modules || []);
+  } catch (e) {
+    console.warn('Curriculum: using demo data —', e.message);
+    modules = [];
+  }
+  if (!modules.length) modules = buildFallbackCurriculum();
+  curState = { modules: modules, active: 0 };
+  renderCurriculum();
+}
+
+function renderCurriculum(){
+  const mount = document.getElementById('curriculumMount');
+  if (!mount) return;
+  const mods = curState.modules;
+  if (!mods.length) { mount.innerHTML = '<div class="cur-loading">Curriculum coming soon.</div>'; return; }
+  const nav = mods.map(function(m, i){
+    const count = m.lessons.length + ' lesson' + (m.lessons.length !== 1 ? 's' : '');
+    return '<button class="cur-modtab' + (i === curState.active ? ' active' : '') + '" data-i="' + i + '" role="tab" ' +
+        'aria-selected="' + (i === curState.active) + '" onclick="curSelectModule(' + i + ')">' +
+        '<span class="cur-modnum">' + esc(m.number) + '</span>' +
+        '<span class="cur-modtitle">' + esc(m.title) + '</span>' +
+        '<span class="cur-modcount">' + count + '</span>' +
+      '</button>';
+  }).join('');
+  mount.innerHTML =
+    '<div class="cur-wrap">' +
+      '<aside class="cur-nav" role="tablist" aria-label="Course modules">' + nav + '</aside>' +
+      '<div class="cur-main" id="curMain">' + curMainHtml(mods[curState.active], curState.active) + '</div>' +
+    '</div>';
+}
+
+function curMainHtml(m, idx){
+  const lessons = m.lessons.map(function(l, j){
+    const topics = (l.topics || []).map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('');
+    const badge = l.type
+      ? '<span class="cur-badge" data-type="' + esc(String(l.type).toLowerCase().replace(/\s+/g, '-')) + '">' + esc(l.type) + '</span>'
+      : '<span></span>';
+    return '<div class="cur-lesson" id="curl-' + idx + '-' + j + '">' +
+      '<button class="cur-lhead" aria-expanded="false" onclick="curToggleLesson(' + idx + ',' + j + ')">' +
+        '<span class="cur-lnum">' + esc(l.number) + '</span>' +
+        '<span class="cur-ltitle">' + esc(l.title) + '</span>' +
+        badge +
+        '<span class="cur-plus" aria-hidden="true">+</span>' +
+      '</button>' +
+      (topics ? '<div class="cur-lbody"><div class="cur-lbody-inner"><ul class="cur-topics">' + topics + '</ul></div></div>' : '') +
+    '</div>';
+  }).join('');
+  return '<div class="cur-head">' +
+      '<div class="cur-bignum">' + esc(m.number) + '</div>' +
+      '<div><h3 class="cur-modh">' + esc(m.title) + '</h3>' +
+        (m.description ? '<p class="cur-moddesc">' + esc(m.description) + '</p>' : '') +
+      '</div>' +
+    '</div>' +
+    '<div class="cur-divider"></div>' +
+    '<div class="cur-lessons">' + lessons + '</div>';
+}
+
+function curSelectModule(i){
+  curState.active = i;
+  document.querySelectorAll('.cur-modtab').forEach(function(b){
+    const on = +b.dataset.i === i;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-selected', on);
+  });
+  const main = document.getElementById('curMain');
+  if (main) {
+    main.innerHTML = curMainHtml(curState.modules[i], i);
+    if (window.matchMedia('(max-width: 720px)').matches) main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function curToggleLesson(i, j){
+  const el = document.getElementById('curl-' + i + '-' + j);
+  if (!el) return;
+  const open = el.classList.toggle('open');
+  const head = el.querySelector('.cur-lhead');
+  if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
 }
 
 /* Flip a course card to its details (+ ⇄ −); one open at a time */
