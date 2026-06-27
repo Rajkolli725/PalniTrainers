@@ -466,7 +466,7 @@
   .alumni-marquee { overflow: hidden; position: relative; min-width: 0;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
             mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
-  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 32s linear infinite; }
+  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 18s linear infinite; }
   .alumni-marquee:hover .alumni-track { animation-play-state: paused; }
   @keyframes alumniScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
   @media (prefers-reduced-motion: reduce) { .alumni-track { animation: none; } }
@@ -2214,7 +2214,11 @@ function mapCourse(p){
     prerequisites:  p.prerequisites || '',
     participants:   p.participants || '',
     rating:         +p.rating || 0,
-    duration:       p.duration || ''
+    duration:       p.duration || '',
+    inr:            +(p.inr || p.u_inr) || 0,           // course price (INR)
+    usd:            +(p.usd || p.u_usd) || 0,           // course price (USD)
+    discount:       +(p.discount || p.u_discount) || 0, // discount %
+    hours:          p.hours || p.u_hours || p.duration || ''
   };
 }
 // Photo area: icon placeholder + (for real courses) the image streamed from
@@ -2425,7 +2429,7 @@ function applyColorProps(){
 
 // Demo courses so the section is never empty if ServiceNow is unreachable.
 function buildFallbackCourses(){
-  const D = function(o){ return Object.assign({ description: o.about, prerequisites: '', participants: '850+', rating: 4.7, image: '' }, o); };
+  const D = function(o){ return Object.assign({ description: o.about, prerequisites: '', participants: '850+', rating: 4.7, image: '', inr: 19999, usd: 239, discount: 20, hours: '35 hrs' }, o); };
   return [
     D({ id:'d1', name:'ServiceNow',            about:'Admin, CSA, CAD and ITSM implementation on the Now Platform.', certifications:'CSA, CAD, CIS-ITSM', highlights:'Hands-on instance work. Scripting & Flow Designer. Real implementation scenarios.', prerequisites:'Basic IT concepts', duration:'8 weeks', rating:4.9 }),
     D({ id:'d2', name:'Salesforce',            about:'Administrator, Developer and Platform App Builder.',           certifications:'Admin, PD1, App Builder', highlights:'CRM fundamentals. Apex & LWC. Flows and automation.', prerequisites:'None', duration:'8 weeks', rating:4.7 }),
@@ -2644,10 +2648,6 @@ function renderCourseDetail(id){
           '<button type="button" class="seg-opt active" onclick="setPriceCur(\'INR\')"><img class="fi" src="https://flagcdn.com/w20/in.png" alt="India" width="20" height="14"> INR (₹)</button>' +
           '<button type="button" class="seg-opt" onclick="setPriceCur(\'USD\')"><img class="fi" src="https://flagcdn.com/w20/us.png" alt="USA" width="20" height="14"> USD ($)</button>' +
         '</div>' +
-        '<div class="seg seg-type" id="segType"><span class="seg-thumb"></span>' +
-          '<button type="button" class="seg-opt active" onclick="setPriceType(\'individual\')">Individual</button>' +
-          '<button type="button" class="seg-opt" onclick="setPriceType(\'corporate\')">Corporate</button>' +
-        '</div>' +
         '<div id="pricingBody" class="pricing-body"></div>' +
       '</div>' +
     '</section>' +
@@ -2656,14 +2656,12 @@ function renderCourseDetail(id){
       faqItem('Will I get a certificate?', 'Yes — plus targeted guidance to clear the official certifications listed above.') +
       faqItem('Are the sessions recorded?', 'Yes, you get lifetime access to session recordings and course materials.') +
       faqItem('Do you help with placements?', 'We provide resume reviews, mock interviews and career guidance.') +
-    '</section>' +
-    '<section class="cd-sec cd-cta"><h2>Training for Corporates</h2><p>Upskill your whole team with a tailored private cohort.</p>' +
-      '<button class="btn btn-gold btn-lg" onclick="openLeadModal(\'' + sn + '\',\'Corporate Training – ' + sn + '\')">Talk to Us</button></section>';
+    '</section>';
 
   window.scrollTo(0, 0);
   initReveal();
   fillAlumniBands();   // populate this page's alumni logo marquee
-  initPricing(c.name); // wire the interactive pricing toggles + render cards
+  initPricing(c);      // wire the currency toggle + render Individual/Corporate cards
   loadCurriculum(c);   // fetch + render the curriculum section (async)
 }
 
@@ -2861,34 +2859,26 @@ async function loadPlacements(){
    Interactive pricing — currency (INR/USD) + type (Individual/Corporate)
    ============================================================ */
 const PRICING = {
-  off: 20,
-  individual: [
-    { ic: '▶', name: 'Self-Paced', hours: '35 hrs', badge: 'Most flexible', popular: false,
-      tag: 'Learn anytime, at your own pace — complete the course in weeks or months.',
-      getTitle: 'What you get',
-      get: ['35 hours of {course} training videos', 'Curated & delivered by an SME', 'Hands-on lab sessions', 'Resources & materials', 'Sample resumes', 'One year LMS access', 'Community forum support', 'Free Agile & Scrum add-on course'],
-      no: ['Live instructor & Q&A sessions', '1-on-1 doubt clearing calls', 'Mock interview & resume review'],
-      inr: 9000, inrWas: 11250, usd: 108, usdWas: 135, cta: 'Get Full Access' },
-    { ic: '🎥', name: 'Live Online', sub: '(instructor-led)', hours: '35 hrs', badge: 'Most Popular', popular: true,
-      tag: 'Real-time classes with a certified expert — ask questions, get instant feedback, and walk away job-ready.',
-      getTitle: 'Everything in Self-Paced, plus',
-      get: ['Live Zoom/Meet sessions with instructor', '1-on-1 doubt clearing sessions', 'Live project walkthroughs', 'Certification guidance', 'Mock interviews with SME panel', 'Resume & LinkedIn profile review', 'Job referral to hiring partners', 'Session recordings to rewatch anytime', 'Agile & Scrum add-on course (FREE)'],
-      no: [],
-      inr: 19999, inrWas: 24999, usd: 239, usdWas: 299, cta: 'Register Now' }
-  ],
+  individual: {
+    name: 'Individual',
+    tag: 'For individual learners — live, hands-on training that takes you from beginner to job-ready.',
+    getTitle: 'What you get',
+    features: ['Live instructor-led training', 'Hands-on labs & real projects', 'One year LMS access', 'Course materials & resources', 'Certification guidance', 'Mock interviews & resume review', 'Placement assistance', 'EMI option available']
+  },
   corporate: {
-    badge: 'Enterprise', name: 'Corporate Training',
+    name: 'Corporate',
     tag: 'Upskill your whole team with a tailored private cohort — delivered online or onsite, on your schedule.',
     getTitle: "What's included",
     features: ['Customized corporate training', 'Team / batch training', 'Flexible scheduling', 'Online & onsite delivery', 'Dedicated trainer', 'Customized curriculum', 'Hands-on labs', 'Training completion certificate', 'Post-training support', 'Enterprise learning solutions'],
-    inrFrom: 7500, usdFrom: 90, cta: 'Get a Custom Quote'
+    cta: 'Contact for Pricing'
   }
 };
-let pricingState = { cur: 'INR', type: 'individual', course: '' };
+let pricingState = { cur: 'INR', course: '', inr: 0, usd: 0, discount: 0, hours: '' };
 
 function fmtPrice(cur, amt){
   return (cur === 'USD' ? '$' : '₹') + Number(amt).toLocaleString(cur === 'USD' ? 'en-US' : 'en-IN');
 }
+function formatHours(h){ h = String(h || '').trim(); return h ? (/^\d+$/.test(h) ? h + ' hrs' : h) : ''; }
 function setSeg(segId, idx){
   const seg = document.getElementById(segId);
   if (!seg) return;
@@ -2906,57 +2896,58 @@ function animatePriceNums(root){
     requestAnimationFrame(tick);
   });
 }
-function pricingIndividualHtml(){
-  const cur = pricingState.cur, course = pricingState.course || 'this course';
-  const safe = course.replace(/'/g, '');
-  return '<div class="price-grid">' + PRICING.individual.map(function(p){
-    const now = cur === 'USD' ? p.usd : p.inr, was = cur === 'USD' ? p.usdWas : p.inrWas;
-    const got = p.get.map(function(f){ return '<li class="ok">' + esc(f.replace('{course}', course)) + '</li>'; }).join('');
-    const not = p.no.length ? '<div class="plan-sec-title">Not included</div><ul class="plan-list">' + p.no.map(function(f){ return '<li class="no">' + esc(f) + '</li>'; }).join('') + '</ul>' : '';
-    return '<div class="plan-card' + (p.popular ? ' popular' : '') + '">' +
-      '<div class="plan-top"><span class="plan-ic">' + p.ic + '</span><span class="plan-badge' + (p.popular ? ' hot' : '') + '">' + esc(p.badge) + '</span></div>' +
-      '<h3 class="plan-name">' + esc(p.name) + (p.sub ? ' <span class="plan-sub">' + esc(p.sub) + '</span>' : '') + ' <span class="plan-hours">' + esc(p.hours) + '</span></h3>' +
-      '<p class="plan-tag">' + esc(p.tag) + '</p>' +
-      '<div class="plan-div"></div>' +
-      '<div class="plan-sec-title">' + esc(p.getTitle) + '</div><ul class="plan-list">' + got + '</ul>' + not +
-      '<div class="plan-foot">' +
-        '<div class="plan-price"><span class="plan-off">' + PRICING.off + '% Off</span>' +
-          '<div class="plan-amounts"><span class="plan-now" data-amt="' + now + '">' + fmtPrice(cur, now) + '</span> <span class="plan-was">' + fmtPrice(cur, was) + '</span></div></div>' +
-        '<button class="btn btn-primary plan-cta" onclick="openLeadModal(\'' + safe + '\',\'Enroll ' + esc(p.name) + ' – ' + safe + '\')">' + esc(p.cta) + '</button>' +
-      '</div>' +
-    '</div>';
-  }).join('') + '</div>';
+// Individual card — price + discount from the course offering (u_inr / u_usd / u_discount).
+function pricingIndividualCard(){
+  const cur = pricingState.cur;
+  const orig = cur === 'USD' ? pricingState.usd : pricingState.inr;
+  const disc = pricingState.discount;
+  const now = orig ? Math.round(orig * (1 - disc / 100)) : 0;
+  const ind = PRICING.individual;
+  const hrs = formatHours(pricingState.hours);
+  const got = ind.features.map(function(f){ return '<li class="ok">' + esc(f) + '</li>'; }).join('');
+  let priceBlock;
+  if (orig) {
+    priceBlock = '<div class="plan-price">' +
+      (disc > 0 ? '<span class="plan-off">' + disc + '% off - limited period</span>' : '') +
+      '<div class="plan-amounts"><span class="plan-now" data-amt="' + now + '">' + fmtPrice(cur, now) + '</span>' +
+      (disc > 0 ? ' <span class="plan-was">' + fmtPrice(cur, orig) + '</span>' : '') +
+      '</div></div>';
+  } else {
+    priceBlock = '<div class="plan-price"><div class="plan-amounts"><span class="plan-now">Contact for pricing</span></div></div>';
+  }
+  return '<div class="plan-card popular">' +
+    '<div class="plan-top"><span class="plan-ic">🎓</span></div>' +
+    '<h3 class="plan-name">' + esc(ind.name) + (hrs ? ' <span class="plan-hours">' + esc(hrs) + '</span>' : '') + '</h3>' +
+    '<p class="plan-tag">' + esc(ind.tag) + '</p>' +
+    '<div class="plan-div"></div>' +
+    '<div class="plan-sec-title">' + esc(ind.getTitle) + '</div><ul class="plan-list">' + got + '</ul>' +
+    '<div class="plan-foot">' + priceBlock + '</div>' +
+  '</div>';
 }
-function pricingCorporateHtml(){
-  const cur = pricingState.cur, c = PRICING.corporate;
+// Corporate card — no price; CTA contacts us for pricing.
+function pricingCorporateCard(){
+  const c = PRICING.corporate;
   const safe = (pricingState.course || 'this course').replace(/'/g, '');
-  const from = cur === 'USD' ? c.usdFrom : c.inrFrom;
   const feats = c.features.map(function(f){ return '<li class="ok">' + esc(f) + '</li>'; }).join('');
-  return '<div class="price-grid corp"><div class="plan-card popular">' +
-    '<div class="plan-top"><span class="plan-ic">🏢</span><span class="plan-badge hot">' + esc(c.badge) + '</span></div>' +
+  return '<div class="plan-card">' +
+    '<div class="plan-top"><span class="plan-ic">🏢</span></div>' +
     '<h3 class="plan-name">' + esc(c.name) + '</h3>' +
     '<p class="plan-tag">' + esc(c.tag) + '</p>' +
     '<div class="plan-div"></div>' +
-    '<div class="plan-sec-title">' + esc(c.getTitle) + '</div><ul class="plan-list two">' + feats + '</ul>' +
-    '<div class="plan-foot">' +
-      '<div class="plan-price"><span class="plan-off">Starting from</span>' +
-        '<div class="plan-amounts"><span class="plan-now" data-amt="' + from + '">' + fmtPrice(cur, from) + '</span> <span class="plan-per">/ participant</span></div>' +
-        '<div class="plan-note">Final pricing depends on team size — contact us for a custom quote.</div></div>' +
-      '<button class="btn btn-primary plan-cta" onclick="openLeadModal(\'' + safe + '\',\'Corporate Training – ' + safe + '\')">' + esc(c.cta) + '</button>' +
-    '</div>' +
-  '</div></div>';
+    '<div class="plan-sec-title">' + esc(c.getTitle) + '</div><ul class="plan-list">' + feats + '</ul>' +
+    '<div class="plan-foot"><button class="btn btn-primary plan-cta" onclick="openLeadModal(\'' + safe + '\',\'Corporate Training – ' + safe + '\')">' + esc(c.cta) + '</button></div>' +
+  '</div>';
 }
 function renderPricingBody(){
   const body = document.getElementById('pricingBody');
   if (!body) return;
-  body.innerHTML = pricingState.type === 'corporate' ? pricingCorporateHtml() : pricingIndividualHtml();
+  body.innerHTML = '<div class="price-grid">' + pricingIndividualCard() + pricingCorporateCard() + '</div>';
   animatePriceNums(body);
 }
 function setPriceCur(v){ pricingState.cur = v; setSeg('segCur', v === 'USD' ? 1 : 0); renderPricingBody(); }
-function setPriceType(v){ pricingState.type = v; setSeg('segType', v === 'corporate' ? 1 : 0); renderPricingBody(); }
-function initPricing(course){
-  pricingState = { cur: 'INR', type: 'individual', course: course || '' };
-  setSeg('segCur', 0); setSeg('segType', 0);
+function initPricing(c){
+  pricingState = { cur: 'INR', course: (c && c.name) || '', inr: +(c && c.inr) || 0, usd: +(c && c.usd) || 0, discount: +(c && c.discount) || 0, hours: (c && c.hours) || '' };
+  setSeg('segCur', 0);
   renderPricingBody();
 }
 
