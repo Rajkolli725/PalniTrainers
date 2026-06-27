@@ -753,8 +753,9 @@
      PREMIUM CURRICULUM SECTION (data-driven; scoped palette per spec)
      =================================================================== */
   .curriculum {
-    --cur-bg:#F7F4EF; --cur-card:#FFFFFF; --cur-accent:#6D28D9; --cur-border:#E8E3DB;
-    --cur-head:#111111; --cur-body:#555555; --cur-muted:#777777; --cur-dark:#121018;
+    /* Mapped to the site theme so it matches the brand and adapts to light/dark. */
+    --cur-bg: var(--hover); --cur-card: var(--card); --cur-accent: var(--accent); --cur-border: var(--line);
+    --cur-head: var(--ink); --cur-body: var(--muted); --cur-muted: var(--muted); --cur-dark: var(--primary-bg);
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: var(--cur-bg); border: 1px solid var(--cur-border); border-radius: 22px;
     padding: 30px; color: var(--cur-body);
@@ -768,14 +769,14 @@
   .cur-modtab { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
     width: 100%; text-align: left; background: transparent; border: none; cursor: pointer;
     padding: 15px 16px; border-radius: 18px; font-family: inherit; transition: background .2s ease, transform .2s ease; }
-  .cur-modtab:hover { background: rgba(109,40,217,.06); transform: translateX(2px); }
+  .cur-modtab:hover { background: var(--accent-soft); transform: translateX(2px); }
   .cur-modtab:focus-visible { outline: 2px solid var(--cur-accent); outline-offset: 2px; }
   .cur-modnum { font-family: Georgia, 'Times New Roman', serif; font-size: 1.15rem; font-weight: 700; color: var(--cur-muted); min-width: 26px; }
   .cur-modtitle { font-size: .98rem; font-weight: 600; color: var(--cur-head); line-height: 1.3; }
   .cur-modcount { font-size: .76rem; color: var(--cur-muted); white-space: nowrap; }
   .cur-modtab.active { background: var(--cur-dark); }
   .cur-modtab.active .cur-modtitle { color: #fff; }
-  .cur-modtab.active .cur-modnum { color: #c084fc; }
+  .cur-modtab.active .cur-modnum { color: var(--accent); }
   .cur-modtab.active .cur-modcount { color: rgba(255,255,255,.6); }
 
   /* Right content */
@@ -790,24 +791,24 @@
 
   /* Lesson accordion cards */
   .cur-lessons { display: flex; flex-direction: column; gap: 16px; }
-  .cur-lesson { background: var(--cur-card); border: 1px solid rgba(109,40,217,.18); border-radius: 18px;
+  .cur-lesson { background: var(--cur-card); border: 1px solid var(--cur-border); border-radius: 18px;
     overflow: hidden; transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease; }
-  .cur-lesson:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(17,17,17,.06); border-color: rgba(109,40,217,.38); }
+  .cur-lesson:hover { transform: translateY(-2px); box-shadow: var(--shadow); border-color: var(--accent); }
   .cur-lhead { display: grid; grid-template-columns: auto 1fr auto auto; align-items: center; gap: 14px;
     width: 100%; background: none; border: none; cursor: pointer; padding: 20px 22px; font-family: inherit; text-align: left; }
   .cur-lhead:focus-visible { outline: 2px solid var(--cur-accent); outline-offset: -2px; border-radius: 18px; }
-  .cur-lnum { width: 40px; height: 40px; border-radius: 11px; background: rgba(109,40,217,.1); color: var(--cur-accent);
+  .cur-lnum { width: 40px; height: 40px; border-radius: 11px; background: var(--accent-soft); color: var(--cur-accent);
     font-weight: 700; font-size: .9rem; display: grid; place-items: center; }
   .cur-ltitle { font-size: clamp(1.05rem, 1.6vw, 1.4rem); font-weight: 600; color: var(--cur-head); line-height: 1.3; }
   .cur-badge { font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
-    padding: 6px 13px; border-radius: 999px; background: rgba(109,40,217,.1); color: var(--cur-accent); white-space: nowrap; }
+    padding: 6px 13px; border-radius: 999px; background: var(--accent-soft); color: var(--cur-accent); white-space: nowrap; }
   .cur-badge[data-type="hands-on"], .cur-badge[data-type="lab"] { background: rgba(16,185,129,.13); color: #0e9f6e; }
   .cur-badge[data-type="assignment"] { background: rgba(245,158,11,.15); color: #b45309; }
   .cur-badge[data-type="project"] { background: rgba(37,99,235,.12); color: #1d4ed8; }
-  .cur-plus { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--cur-border); background: #fff;
+  .cur-plus { width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--cur-border); background: var(--cur-card);
     color: var(--cur-accent); font-size: 1.35rem; line-height: 1; display: grid; place-items: center;
     transition: transform .28s ease, background .2s ease, color .2s ease; }
-  .cur-lesson:hover .cur-plus { background: rgba(109,40,217,.08); }
+  .cur-lesson:hover .cur-plus { background: var(--accent-soft); }
   .cur-lesson.open .cur-plus { transform: rotate(45deg); background: var(--cur-accent); color: #fff; border-color: var(--cur-accent); }
   /* Smooth height animation via grid-template-rows 0fr -> 1fr */
   .cur-lbody { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .28s ease; }
@@ -2330,6 +2331,11 @@ function renderCourseDetail(id){
       '<div class="course-card"><h3>Project 1</h3><p>A real-world build to apply what you learn. <span class="hint">(Add real projects in ServiceNow.)</span></p></div>' +
       '<div class="course-card"><h3>Project 2</h3><p>A portfolio-ready deliverable reviewed by mentors.</p></div>' +
       '<div class="course-card"><h3>Project 3</h3><p>A capstone integrating the full course.</p></div>' +
+    '</div></section>' +
+    '<section class="cd-sec"><h2>Upcoming Cohort Batches</h2><div class="cd-table">' +
+      '<div class="cd-trow cd-thead"><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>' +
+      '<div class="cd-trow"><span>Weekday</span><span>To be announced</span><span>Mon–Fri, evenings</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\')">Notify Me</button></span></div>' +
+      '<div class="cd-trow"><span>Weekend</span><span>To be announced</span><span>Sat–Sun</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\')">Notify Me</button></span></div>' +
     '</div></section>' +
     '<section class="cd-sec"><h2>Curriculum</h2><div id="curriculumMount" class="curriculum"><div class="cur-loading">Loading curriculum…</div></div></section>' +
     '<section class="cd-sec"><h2>Fee Structure</h2><div class="cards-grid">' +
