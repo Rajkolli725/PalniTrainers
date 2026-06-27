@@ -2172,6 +2172,7 @@ const PROP = {
   clientRating: 'x_palni_servicen_1.client_rating',
   supportEmail: 'x_palni_servicen_1.support_email',
   supportNumber:'x_palni_servicen_1.support_number',
+  whatsappNumber:'x_palni_servicen_1.whatsapp_number',
   supportHours: 'x_palni_servicen_1.support_hours',
   supportLocation:'x_palni_servicen_1.support_location',
   showPromoVideo: 'x_palni_servicen_1.show_promo_video',
@@ -2251,9 +2252,11 @@ function applyProperties(){
     if (em) { em.textContent = siteProps[PROP.supportEmail]; em.href = 'mailto:' + siteProps[PROP.supportEmail]; }
   }
   setText('contactPhone',    siteProps[PROP.supportNumber]);
-  if (siteProps[PROP.supportNumber]) {
+  // WhatsApp bubble: prefer a dedicated whatsapp_number, else fall back to support_number.
+  const waNum = siteProps[PROP.whatsappNumber] || siteProps[PROP.supportNumber];
+  if (waNum) {
     const wa = document.getElementById('waBubble');
-    const digits = String(siteProps[PROP.supportNumber]).replace(/[^\d]/g, '');
+    const digits = String(waNum).replace(/[^\d]/g, '');
     if (wa && digits) wa.href = 'https://wa.me/' + digits + '?text=' + encodeURIComponent('Hi VTech Infotech, I\'d like to know more about your courses.');
   }
   setText('contactHours',    siteProps[PROP.supportHours]);
