@@ -436,6 +436,26 @@
   .footer-logo { height: 40px; margin-bottom: 14px; background: #fff; padding: 6px 8px; border-radius: 8px; }
   .footer-about { color: #c0aaad; font-size: .9rem; max-width: 280px; }
   .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); margin-top: 36px; padding-top: 18px; text-align: center; font-size: .83rem; color: #a98e92; }
+  /* Footer social icons */
+  .footer-social { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+  .footer-social a { display: grid; place-items: center; width: 40px; height: 40px; margin: 0; border-radius: 10px;
+    background: rgba(255,255,255,.08); color: #e9d9db; transition: background .15s ease, color .15s ease, transform .15s ease; }
+  .footer-social a:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
+  .footer-social svg { width: 19px; height: 19px; fill: currentColor; }
+  .footer-social .fs-udemy { font-weight: 800; font-size: .82rem; letter-spacing: .01em; }
+  /* Legal / FAQ page niceties */
+  .legal-meta { color: var(--muted); font-size: .85rem; margin: 0 0 26px; }
+  .legal-sec h2 { font-size: 1.25rem; }
+  .legal-sec p, .legal-sec li { color: var(--ink); line-height: 1.7; }
+  /* About page */
+  .about-hero { background: var(--brand-grad); color: #fff; border-radius: var(--radius); padding: 56px 30px; text-align: center; margin-bottom: 34px; }
+  .about-hero h1 { color: #fff; font-size: clamp(1.9rem, 4vw, 2.8rem); margin: 0 0 12px; }
+  .about-hero p { color: rgba(255,255,255,.92); max-width: 740px; margin: 0 auto; font-size: 1.08rem; line-height: 1.6; }
+  .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 0 0 42px; }
+  @media (max-width: 640px) { .about-stats { grid-template-columns: 1fr 1fr; } }
+  .about-stat { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px 18px; text-align: center; box-shadow: var(--shadow); }
+  .about-stat .n { font-size: clamp(1.7rem, 3vw, 2.2rem); font-weight: 800; color: var(--accent); line-height: 1; }
+  .about-stat .l { color: var(--muted); font-size: .9rem; margin-top: 7px; }
 
   /* ---- View head (Trainers / Reviews) ---- */
   .view-head { text-align: center; margin: 30px 0 26px; }
@@ -853,6 +873,7 @@
       <a class="navlink" onclick="goSection('courses')">Courses</a>
       <a class="navlink" onclick="goView('trainers')">Experts</a>
       <a class="navlink" onclick="goSection('services')">Services</a>
+      <a class="navlink" onclick="goView('about')">About</a>
       <a class="navlink" onclick="goSection('contact')">Contact</a>
       <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
       <button class="btn btn-accent" onclick="openLeadModal('','Book Free Demo (Nav)')">Book Free Demo</button>
@@ -1040,23 +1061,37 @@
   <!-- ===== Course detail page (populated by renderCourseDetail) ===== -->
   <div id="courseDetailView" style="display:none"></div>
 
-  <!-- ===== About Us ===== -->
+  <!-- ===== About Us (redesigned) ===== -->
   <div id="aboutView" style="display:none">
-    <div class="view-head">
+    <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
+    <div class="about-hero">
       <h1>About VTech Infotech</h1>
-      <p>Your partner for expert training, IT consulting &amp; staffing.</p>
+      <p>We're a full-spectrum IT services company — turning ambition into job-ready skills and technology into measurable business outcomes through expert training, consulting, and staffing.</p>
+    </div>
+    <div class="about-stats">
+      <div class="about-stat"><div class="n">15,000+</div><div class="l">Professionals Trained &amp; Placed</div></div>
+      <div class="about-stat"><div class="n">50+</div><div class="l">Expert Consultants &amp; Trainers</div></div>
+      <div class="about-stat"><div class="n">98%</div><div class="l">Project Success Rate</div></div>
+      <div class="about-stat"><div class="n">4.8/5</div><div class="l">Average Client Rating</div></div>
     </div>
     <section class="cd-sec">
       <h2>Who We Are</h2>
       <p class="cd-desc">VTech Infotech LLC is a full-spectrum IT services company. We help individuals and organizations turn technology into a competitive advantage — through hands-on, certification-focused training, the delivery of real technology projects, and the placement of vetted IT talent. Our trainers and consultants bring deep, real-world enterprise experience across ServiceNow, Salesforce, Cloud, Data and AI.</p>
     </section>
     <section class="cd-sec cd-2col">
-      <div><h2>Our Mission</h2><p class="cd-desc">To make in-demand technology skills accessible and practical — so every learner leaves job-ready, and every client gets dependable delivery.</p></div>
-      <div><h2>Our Approach</h2><ul class="cd-ticks">
-        <li>Live, instructor-led learning with real labs and projects</li>
-        <li>Mentorship and career support, not just slides</li>
-        <li>Consultants who have actually shipped enterprise solutions</li>
-      </ul></div>
+      <div><h2>Our Mission</h2><p class="cd-desc">To make in-demand technology skills accessible and practical — so every learner leaves job-ready, and every client gets dependable, real-world delivery.</p></div>
+      <div><h2>Our Vision</h2><p class="cd-desc">To be the trusted technology partner that bridges talent and opportunity — building careers and powering enterprise success across the platforms that shape tomorrow.</p></div>
+    </section>
+    <section class="cd-sec">
+      <h2>Our Values</h2>
+      <div class="feat-grid">
+        <div class="feat"><div class="fic">🎯</div><div><h4>Outcomes First</h4><p>We measure success by the jobs landed and the projects delivered — not slides covered.</p></div></div>
+        <div class="feat"><div class="fic">🧪</div><div><h4>Hands-On Always</h4><p>Real labs, real environments and real projects in everything we teach and build.</p></div></div>
+        <div class="feat"><div class="fic">🤝</div><div><h4>Integrity</h4><p>Honest guidance, vetted talent and dependable delivery our clients can trust.</p></div></div>
+        <div class="feat"><div class="fic">🌱</div><div><h4>Growth Mindset</h4><p>We keep our curriculum and consultants current with the platforms enterprises hire for.</p></div></div>
+        <div class="feat"><div class="fic">💡</div><div><h4>Mentorship</h4><p>Career support, resume reviews and interview prep — not just course completion.</p></div></div>
+        <div class="feat"><div class="fic">⭐</div><div><h4>Excellence</h4><p>Enterprise-grade quality across training, consulting and staffing engagements.</p></div></div>
+      </div>
     </section>
     <section class="cd-sec">
       <h2>What We Do</h2>
@@ -1066,11 +1101,84 @@
         <div class="feat"><div class="fic">🤝</div><div><h4>IT Staffing</h4><p>We place vetted, ready-to-contribute IT talent with your teams.</p></div></div>
       </div>
     </section>
+    <section class="cd-sec cd-2col">
+      <div><h2>Why Choose VTech</h2><ul class="cd-ticks">
+        <li>Live, instructor-led learning with real labs and projects</li>
+        <li>Mentorship and career support, not just slides</li>
+        <li>Consultants who have actually shipped enterprise solutions</li>
+      </ul></div>
+      <div><h2>How We Help</h2><ul class="cd-ticks">
+        <li>Certification-focused curriculum and exam preparation</li>
+        <li>Flexible weekday, weekend and corporate cohorts</li>
+        <li>Vetted talent placement for contract, C2H and full-time roles</li>
+      </ul></div>
+    </section>
     <section class="cd-sec cd-cta">
       <h2>Let's Build Your Future</h2>
       <p>Talk to an advisor about training, consulting or staffing for you or your team.</p>
       <button class="btn btn-gold btn-lg" onclick="openLeadModal('','About - Talk to an Advisor')">Talk to an Advisor</button>
     </section>
+  </div>
+
+  <!-- ===== FAQs ===== -->
+  <div id="faqView" style="display:none">
+    <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
+    <div class="view-head">
+      <h1>Frequently Asked Questions</h1>
+      <p>Answers to common questions about our training, consulting and staffing services.</p>
+    </div>
+    <section class="cd-sec">
+      <details class="cd-faq"><summary>What does VTech Infotech do?</summary><p>VTech Infotech is a full-spectrum IT services company offering expert-led training, IT consulting, and staffing across ServiceNow, Salesforce, Cloud, Data and AI.</p></details>
+      <details class="cd-faq"><summary>Who are your courses for?</summary><p>Our programs suit beginners looking to break into tech, working professionals upskilling for new roles, and teams seeking corporate training. Any pre-requisites are listed on each course page.</p></details>
+      <details class="cd-faq"><summary>Are classes live or self-paced?</summary><p>We offer live, instructor-led sessions with hands-on labs, plus recordings and materials for self-paced review. Weekday, weekend and fast-track cohorts are available.</p></details>
+      <details class="cd-faq"><summary>Do you provide certificates and certification preparation?</summary><p>Yes. You receive a course completion certificate and targeted guidance, mock exams and resources to help you clear the official certifications listed on each course.</p></details>
+      <details class="cd-faq"><summary>Do you help with job placement?</summary><p>We provide resume reviews, interview preparation and career guidance, and we place vetted talent with our hiring partners for contract, contract-to-hire and full-time roles.</p></details>
+      <details class="cd-faq"><summary>How do I enroll or book a free demo?</summary><p>Click “Enroll Now” or “Book Free Demo” on any course, or “Talk to an Advisor” anywhere on the site. A course advisor will reach out within one business day.</p></details>
+      <details class="cd-faq"><summary>Do you offer corporate or team training?</summary><p>Yes. We design custom private cohorts tailored to your team’s goals, schedule and tech stack. Use “Talk to an Advisor” to start a conversation.</p></details>
+      <details class="cd-faq"><summary>How can I contact support?</summary><p>Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link" href="tel:+12145010690">+1 (214) 501-0690</a>. See the Contact section on our home page for hours.</p></details>
+    </section>
+  </div>
+
+  <!-- ===== Privacy Policy ===== -->
+  <div id="privacyView" style="display:none">
+    <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
+    <div class="view-head">
+      <h1>Privacy Policy</h1>
+      <p>How VTech Infotech LLC collects, uses and protects your information.</p>
+    </div>
+    <p class="legal-meta">Last updated: June 2026</p>
+    <section class="cd-sec legal-sec"><h2>1. Introduction</h2><p>This Privacy Policy explains how VTech Infotech LLC (“we”, “us”, “our”) handles personal information collected through our website and services. By using our site, you agree to the practices described here.</p></section>
+    <section class="cd-sec legal-sec"><h2>2. Information We Collect</h2><p>We collect information you provide directly — such as your name, email, phone number, company and the details you include in enquiry, enrollment or review forms. We also collect limited technical data (such as browser type and pages visited) to improve our website.</p></section>
+    <section class="cd-sec legal-sec"><h2>3. How We Use Your Information</h2><ul class="cd-ticks"><li>To respond to enquiries and provide the training, consulting or staffing services you request</li><li>To process enrollments and share course or batch information</li><li>To send relevant updates you have asked for</li><li>To improve our website, content and services</li></ul></section>
+    <section class="cd-sec legal-sec"><h2>4. Cookies</h2><p>Our site may use cookies or similar technologies (for example, to remember your light/dark theme preference). You can control cookies through your browser settings; disabling them may affect some features.</p></section>
+    <section class="cd-sec legal-sec"><h2>5. Sharing &amp; Third Parties</h2><p>We do not sell your personal information. We may share it with trusted service providers who help us operate our business (such as our CRM/ServiceNow platform), and with hiring partners only where you have requested placement support, subject to appropriate safeguards.</p></section>
+    <section class="cd-sec legal-sec"><h2>6. Data Security</h2><p>We apply reasonable technical and organizational measures to protect your information. No method of transmission or storage is completely secure, and we cannot guarantee absolute security.</p></section>
+    <section class="cd-sec legal-sec"><h2>7. Data Retention</h2><p>We retain personal information only for as long as necessary to fulfill the purposes described in this policy or as required by law.</p></section>
+    <section class="cd-sec legal-sec"><h2>8. Your Rights</h2><p>Depending on your location, you may have the right to access, correct, or delete your personal information, or to object to certain processing. To exercise these rights, contact us using the details below.</p></section>
+    <section class="cd-sec legal-sec"><h2>9. Changes to This Policy</h2><p>We may update this Privacy Policy from time to time. Material changes will be reflected by the “Last updated” date above.</p></section>
+    <section class="cd-sec legal-sec"><h2>10. Contact Us</h2><p>Questions about this policy? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
+  </div>
+
+  <!-- ===== Terms & Conditions ===== -->
+  <div id="termsView" style="display:none">
+    <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
+    <div class="view-head">
+      <h1>Terms &amp; Conditions</h1>
+      <p>The terms that govern your use of VTech Infotech LLC’s website and services.</p>
+    </div>
+    <p class="legal-meta">Last updated: June 2026</p>
+    <section class="cd-sec legal-sec"><h2>1. Acceptance of Terms</h2><p>By accessing or using this website and our services, you agree to be bound by these Terms &amp; Conditions. If you do not agree, please do not use the site or services.</p></section>
+    <section class="cd-sec legal-sec"><h2>2. Services</h2><p>VTech Infotech LLC provides IT training, consulting and staffing services. Specific deliverables, schedules and pricing are described at the time of enrollment or in a separate agreement.</p></section>
+    <section class="cd-sec legal-sec"><h2>3. Enrollment &amp; Payments</h2><p>Course fees, payment schedules and start dates are communicated during enrollment. Your place in a cohort is confirmed once the agreed payment terms are met.</p></section>
+    <section class="cd-sec legal-sec"><h2>4. Cancellations &amp; Refunds</h2><p>Cancellation and refund eligibility depends on the program and timing of your request. Please contact us before a program begins to discuss available options.</p></section>
+    <section class="cd-sec legal-sec"><h2>5. Intellectual Property</h2><p>All course materials, recordings, content and branding are the property of VTech Infotech LLC or its licensors and may not be copied, redistributed or resold without written permission.</p></section>
+    <section class="cd-sec legal-sec"><h2>6. Acceptable Use</h2><p>You agree to use our website and materials lawfully and not to share account access or course content with unauthorized parties, nor to disrupt or misuse our services.</p></section>
+    <section class="cd-sec legal-sec"><h2>7. Third-Party Links</h2><p>Our site may link to third-party websites. We are not responsible for the content or privacy practices of those sites.</p></section>
+    <section class="cd-sec legal-sec"><h2>8. Disclaimers</h2><p>Services are provided “as is.” While we strive for high-quality, job-focused outcomes, we do not guarantee specific employment results, certification outcomes or earnings.</p></section>
+    <section class="cd-sec legal-sec"><h2>9. Limitation of Liability</h2><p>To the maximum extent permitted by law, VTech Infotech LLC shall not be liable for any indirect, incidental or consequential damages arising from your use of our website or services.</p></section>
+    <section class="cd-sec legal-sec"><h2>10. Changes to These Terms</h2><p>We may update these Terms from time to time. Continued use of the site after changes constitutes acceptance of the revised Terms.</p></section>
+    <section class="cd-sec legal-sec"><h2>11. Governing Law</h2><p>These Terms are governed by the laws of the State of Texas, USA, without regard to its conflict-of-law principles.</p></section>
+    <section class="cd-sec legal-sec"><h2>12. Contact Us</h2><p>Questions about these Terms? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
   </div>
 </div>
 
@@ -1081,13 +1189,28 @@
       <div>
         <img class="footer-logo" src="vtech-logo.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.5rem&quot;><span style=&quot;color:var(--accent)&quot;>V</span>TECH</strong>'">
         <p class="footer-about">VTech Infotech LLC — IT consulting, staffing and expert-led training that turns technology into a competitive advantage.</p>
+        <h5 style="margin-top:22px">Follow Us</h5>
+        <div class="footer-social">
+          <a href="https://vtechinfotech.com" target="_blank" rel="noopener" title="Website" aria-label="Website">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3C9.5 5.6 9.5 18.4 12 21"/></svg>
+          </a>
+          <a href="https://www.linkedin.com/company/vtech-infotech" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
+          </a>
+          <a href="https://twitter.com/vtechinfotech" target="_blank" rel="noopener" title="Twitter / X" aria-label="Twitter">
+            <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.674l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"/></svg>
+          </a>
+          <a href="https://www.udemy.com/user/vtech-infotech" target="_blank" rel="noopener" title="Udemy" aria-label="Udemy"><span class="fs-udemy">Ud</span></a>
+          <a href="https://www.youtube.com/@vtechinfotech" target="_blank" rel="noopener" title="YouTube" aria-label="YouTube">
+            <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
+          </a>
+        </div>
       </div>
       <div>
-        <h5>Services</h5>
-        <a onclick="goSection('services')">IT Consulting</a>
-        <a onclick="goSection('services')">IT Staffing</a>
-        <a onclick="goSection('services')">Cloud &amp; AI</a>
-        <a onclick="goSection('courses')">Training</a>
+        <h5>Quick Links</h5>
+        <a onclick="goView('faq')">FAQs</a>
+        <a onclick="goView('privacy')">Privacy Policy</a>
+        <a onclick="goView('terms')">Terms &amp; Conditions</a>
       </div>
       <div>
         <h5>Company</h5>
@@ -1669,7 +1792,7 @@ function fillCourseSelects(){
 /* ---- Nav helpers ---- */
 function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
 function closeNav(){ const n = document.getElementById('navLinks'); if (n) n.classList.remove('open'); }
-function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0); }
+function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0 || h.indexOf('#faq') === 0 || h.indexOf('#privacy') === 0 || h.indexOf('#terms') === 0); }
 function scrollToId(id){ const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 function goSection(id){ closeNav(); if (!onHome()) { location.hash = ''; setTimeout(function(){ scrollToId(id); }, 90); } else { scrollToId(id); } }
 function goHome(){ closeNav(); if (!onHome()) { location.hash = ''; } else { route(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
@@ -1679,11 +1802,15 @@ function goView(v){ closeNav(); location.hash = '#' + v; }
 function leadVal(form, n){ const el = form.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ''; }
 async function submitLead(form, source){
   const name = leadVal(form, 'name'), email = leadVal(form, 'email'), phone = leadVal(form, 'phone'), cc = leadVal(form, 'cc');
-  if (!name) { alert('Please enter your name.'); return false; }
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) { alert('Please enter a valid email address.'); return false; }
-  if (!phone) { alert('Please enter your phone number.'); return false; }
+  const focusField = function(n){ const el = form.querySelector('[name="' + n + '"]'); if (el) el.focus(); };
+  if (!name) { alert('Please enter your name.'); focusField('name'); return false; }
+  // Email: local part, "@", domain, and a TLD of 2+ characters, no spaces.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) { alert('Please enter a valid email address (e.g. you@example.com).'); focusField('email'); return false; }
+  // Phone: digits only after removing spaces / dashes / brackets / dots; 6–15 digits (optional leading +).
+  const phoneDigits = phone.replace(/[\s\-().]/g, '');
+  if (!/^\+?\d{6,15}$/.test(phoneDigits)) { alert('Please enter a valid phone number (6–15 digits).'); focusField('phone'); return false; }
   const message = leadVal(form, 'message');
-  if (!message) { alert('Please enter a message.'); return false; }
+  if (!message) { alert('Please enter a message.'); focusField('message'); return false; }
   const payload = {
     name: name, email: email,
     phone:   (cc || '') + phone.replace(/[\s\-()]/g, ''),
@@ -2566,6 +2693,9 @@ function route(){
   const isCourses  = h.indexOf('#all-courses') === 0;
   const isCourseDetail = h.indexOf('#course-') === 0;
   const isAbout    = h.indexOf('#about') === 0;
+  const isFaq      = h.indexOf('#faq') === 0;
+  const isPrivacy  = h.indexOf('#privacy') === 0;
+  const isTerms    = h.indexOf('#terms') === 0;
   const home = document.getElementById('homeView');
   const wrap = document.getElementById('appWrap');
   const mainView = document.getElementById('mainView');
@@ -2573,8 +2703,11 @@ function route(){
   const coursesView = document.getElementById('coursesView');
   const courseDetailView = document.getElementById('courseDetailView');
   const aboutView = document.getElementById('aboutView');
+  const faqView = document.getElementById('faqView');
+  const privacyView = document.getElementById('privacyView');
+  const termsView = document.getElementById('termsView');
   closeReviewModal(); closeLeadModal(); closeTrainer(); closeCourseModal(); closeNav();
-  const wrapKids = [mainView, reviewsView, coursesView, courseDetailView, aboutView];
+  const wrapKids = [mainView, reviewsView, coursesView, courseDetailView, aboutView, faqView, privacyView, termsView];
   function show(el){ wrapKids.forEach(function(v){ v.style.display = v === el ? '' : 'none'; }); }
 
   if (isReviews) {
@@ -2591,6 +2724,15 @@ function route(){
     renderCourseDetail(h.slice('#course-'.length)); window.scrollTo(0, 0);
   } else if (isAbout) {
     home.style.display = 'none'; wrap.style.display = ''; show(aboutView);
+    window.scrollTo(0, 0);
+  } else if (isFaq) {
+    home.style.display = 'none'; wrap.style.display = ''; show(faqView);
+    window.scrollTo(0, 0);
+  } else if (isPrivacy) {
+    home.style.display = 'none'; wrap.style.display = ''; show(privacyView);
+    window.scrollTo(0, 0);
+  } else if (isTerms) {
+    home.style.display = 'none'; wrap.style.display = ''; show(termsView);
     window.scrollTo(0, 0);
   } else {
     wrap.style.display = 'none'; home.style.display = '';
