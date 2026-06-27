@@ -423,6 +423,8 @@
   .contact-info .ic { font-size: 1.25rem; width: 30px; flex-shrink: 0; }
   .contact-info b { display: block; font-size: .95rem; }
   .contact-info span { color: var(--muted); font-size: .9rem; }
+  .contact-map { margin-top: 22px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); box-shadow: var(--shadow); }
+  .contact-map iframe { display: block; width: 100%; height: 240px; border: 0; }
 
   /* ---- Footer ---- */
   .site-footer { background: #1b1012; color: #e9d9db; padding: 56px 0 26px; }
@@ -995,6 +997,11 @@
             <li><span class="ic">🕒</span><div><b>Support Hours</b><span id="contactHours">Mon–Sat, 9:00 AM – 8:00 PM</span></div></li>
             <li><span class="ic">🏢</span><div><b>Office Location</b><span id="contactLocation">Custom team programs available on request</span></div></li>
           </ul>
+          <div class="contact-map">
+            <iframe id="contactMap" title="VTech Infotech office location"
+              src="https://www.google.com/maps?q=8751%20Collin%20McKinney%20Pkwy%20STE%20801%2C%20McKinney%2C%20TX%2075070&output=embed"
+              loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+          </div>
         </div>
         <div class="lead-card reveal">
           <h3>Request Information</h3>
@@ -2224,6 +2231,10 @@ function applyProperties(){
   setText('contactPhone',    siteProps[PROP.supportNumber]);
   setText('contactHours',    siteProps[PROP.supportHours]);
   setText('contactLocation', siteProps[PROP.supportLocation]);
+  if (siteProps[PROP.supportLocation]) {
+    const mp = document.getElementById('contactMap');
+    if (mp) mp.src = 'https://www.google.com/maps?q=' + encodeURIComponent(siteProps[PROP.supportLocation]) + '&output=embed';
+  }
 
   // Hero heading — wrap the configured highlight phrase in the orange .hl span.
   applyHeroHeading();
