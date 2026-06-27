@@ -962,6 +962,8 @@
   .cur-topics li { position: relative; padding-left: 20px; margin-bottom: 14px; color: var(--cur-body);
     font-size: 1rem; line-height: 1.5; break-inside: avoid; }
   .cur-topics li::before { content: "•"; position: absolute; left: 0; color: var(--cur-accent); font-weight: 700; }
+  .cur-topics li .cur-topic-title { display: block; color: var(--cur-head); font-weight: 600; }
+  .cur-topics li .cur-topic-desc { display: block; margin-top: 3px; font-size: .9rem; color: var(--cur-muted); line-height: 1.5; }
 
   @media (prefers-reduced-motion: reduce) {
     .cur-lbody, .cur-plus, .cur-lesson, .cur-modtab { transition: none; }
@@ -2778,12 +2780,20 @@ function mapCurriculum(raw){
     const rawLessons = m.lessons || m.items || m.topics_list || [];
     const lessons = rawLessons.map(function(l, j){
       let topics = l.topics || l.points || l.bullets || l.details || [];
-      if (typeof topics === 'string') topics = topics.split(/\r?\n|•|•|;/).map(function(s){ return s.trim(); }).filter(Boolean);
+      if (typeof topics === 'string') topics = topics.split(/\r?\n|•|•|;/);
+      // Each chapter normalizes to { title, description } (strings are tolerated).
+      topics = (Array.isArray(topics) ? topics : []).map(function(t){
+        if (typeof t === 'string') return { title: t.trim(), description: '' };
+        return {
+          title:       (t.title || t.name || t.topic || '').toString().trim(),
+          description: (t.description || t.desc || t.short_description || '').toString().trim()
+        };
+      }).filter(function(t){ return t.title; });
       return {
         number: l.number || l.no || ((i + 1) + '.' + (j + 1)),
         title:  l.title || l.name || ('Lesson ' + (j + 1)),
         type:   l.type || l.badge || l.category || l.kind || '',
-        topics: Array.isArray(topics) ? topics : []
+        topics: topics
       };
     });
     return {
@@ -2808,7 +2818,14 @@ function buildFallbackCurriculum(){
         number: (i + 1) + '.' + (j + 1),
         title: 'Key concepts and guided practice',
         type: TYPES[(i + j) % TYPES.length],
-        topics: ['Concept overview & terminology', 'Step-by-step walkthrough', 'Real-world example', 'Common pitfalls & best practices', 'Hands-on exercise', 'Knowledge check']
+        topics: [
+          { title: 'Concept overview & terminology', description: 'This module builds on the previous one with guided, hands-on learning and a practical checkpoint.' },
+          { title: 'Step-by-step walkthrough', description: 'A guided demonstration you can follow along with in your own instance.' },
+          { title: 'Real-world example', description: 'See how the concept is applied on a realistic enterprise scenario.' },
+          { title: 'Common pitfalls & best practices', description: 'What to avoid and the patterns the pros rely on.' },
+          { title: 'Hands-on exercise', description: 'Practice the skill yourself with a short guided task.' },
+          { title: 'Knowledge check', description: 'A quick checkpoint to confirm you are ready to move on.' }
+        ]
       });
     }
     mods.push({ number: pad2(i + 1), title: TITLES[i], description: 'This module builds on the previous one with guided, hands-on learning and a practical checkpoint.', lessons: lessons });
@@ -2859,7 +2876,11 @@ function renderCurriculum(){
 
 function curMainHtml(m, idx){
   const lessons = m.lessons.map(function(l, j){
-    const topics = (l.topics || []).map(function(t){ return '<li>' + esc(t) + '</li>'; }).join('');
+    const topics = (l.topics || []).map(function(t){
+      return '<li><span class="cur-topic-title">' + esc(t.title) + '</span>' +
+        (t.description ? '<span class="cur-topic-desc">' + esc(t.description) + '</span>' : '') +
+      '</li>';
+    }).join('');
     const badge = l.type
       ? '<span class="cur-badge" data-type="' + esc(String(l.type).toLowerCase().replace(/\s+/g, '-')) + '">' + esc(l.type) + '</span>'
       : '<span></span>';
