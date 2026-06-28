@@ -939,11 +939,12 @@
   /* Left nav (sticky, independently scrollable) */
   .cur-nav { position: sticky; top: 84px; max-height: calc(100vh - 110px); overflow-y: auto;
     display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
-  .cur-foot { margin-top: 26px; padding-top: 22px; border-top: 1px solid var(--cur-border); }
+  .cur-foot { margin-top: 18px; }
   .cur-dl-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px;
     color: #0066cc; font-weight: 700; font-size: .92rem; text-decoration: none;
     cursor: pointer; border-radius: 12px; }
   .cur-dl-link:hover { background: rgba(0,102,204,.10); }
+  .cur-dl-ic { width: 18px; height: 18px; flex: 0 0 auto; }
   .cur-dl-link:focus-visible { outline: 2px solid #0066cc; outline-offset: 2px; }
   .cur-modtab { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 12px;
     width: 100%; text-align: left; background: transparent; border: none; cursor: pointer;
@@ -3118,7 +3119,7 @@ function renderCurriculum(){
         'onclick="openLeadModal(\'' + esc(safeName) + '\',\'Download Curriculum – ' + esc(safeName) + '\',' +
         '{title:\'Download Course Curriculum\',subtitle:\'Enter your details and your curriculum download will begin.\',' +
         'submitLabel:\'Download Course Curriculum\',downloadCurriculumSysId:\'' + esc(curState.courseSysId) + '\'})">' +
-        'Download Course Curriculum ⤓</a>'
+        'Download Course Curriculum <svg class="cur-dl-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg></a>'
     : '';
   mount.innerHTML =
     '<div class="cur-wrap">' +
