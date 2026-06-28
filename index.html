@@ -1322,7 +1322,7 @@
       <h1>Frequently Asked Questions</h1>
       <p>Answers to common questions about our training, consulting and staffing services.</p>
     </div>
-    <section class="cd-sec">
+    <section class="cd-sec" id="faqPageList">
       <details class="cd-faq"><summary>What does VTech Infotech do?</summary><p>VTech Infotech is a full-spectrum IT services company offering expert-led training, IT consulting, and staffing across ServiceNow, Salesforce, Cloud, Data and AI.</p></details>
       <details class="cd-faq"><summary>Who are your courses for?</summary><p>Our programs suit beginners looking to break into tech, working professionals upskilling for new roles, and teams seeking corporate training. Any pre-requisites are listed on each course page.</p></details>
       <details class="cd-faq"><summary>Are classes live or self-paced?</summary><p>We offer live, instructor-led sessions with hands-on labs, plus recordings and materials for self-paced review. Weekday, weekend and fast-track cohorts are available.</p></details>
@@ -2742,6 +2742,7 @@ async function loadFaqs(){
     faqs = [];
   }
   renderHomeFaqs();
+  renderFaqPage();
   const cm = document.getElementById('courseFaqMount');
   if (cm) renderCourseFaqs(cm.dataset.course || '');
 }
@@ -2752,6 +2753,13 @@ function renderHomeFaqs(){
   if (!mount || !faqs || !faqs.length) return;          // keep defaults until data is ready
   const list = faqs.filter(function(f){ return !f.associated_to; });
   if (list.length) mount.innerHTML = list.map(function(f){ return faqItem(f.question, f.answer); }).join('');
+}
+
+// Dedicated FAQ page: ALL FAQs (server already sorts desc by u_order).
+function renderFaqPage(){
+  const mount = document.getElementById('faqPageList');
+  if (!mount || !faqs || !faqs.length) return;          // keep defaults until data is ready
+  mount.innerHTML = faqs.map(function(f){ return faqItem(f.question, f.answer); }).join('');
 }
 
 // Course page: global FAQs + this course's FAQs (server already sorts desc).
