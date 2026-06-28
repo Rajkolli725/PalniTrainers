@@ -317,20 +317,29 @@
   #idleScreen { position: fixed; inset: 0; z-index: 9999; display: none; place-items: center; text-align: center;
     background: #0a1530; color: #fff; opacity: 0; transition: opacity .4s ease; }
   #idleScreen.show { display: grid; opacity: 1; }
-  .idle-aura { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;
-    width: min(78vw, 460px); height: min(78vw, 460px); border-radius: 50%; padding: 30px;
-    background: radial-gradient(circle at center, rgba(255,255,255,.06), rgba(255,255,255,0) 70%);
-    box-shadow: 0 0 0 2px rgba(245,158,11,.35), 0 0 60px rgba(245,158,11,.35), inset 0 0 80px rgba(245,158,11,.12);
+  .idle-aura { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 26px;
+    width: min(78vw, 420px); height: min(78vw, 420px); border-radius: 50%; padding: 30px;
+    background: radial-gradient(circle at center, rgba(245,158,11,.22) 0%, rgba(245,158,11,.10) 45%, rgba(245,158,11,0) 70%);
+    box-shadow: 0 0 0 2px rgba(245,158,11,.45), 0 0 70px rgba(245,158,11,.40), inset 0 0 80px rgba(245,158,11,.14);
     animation: idleGlow 2.6s ease-in-out infinite; }
+  /* Rotating sun rays (the disc + text stay still; only this layer spins clockwise) */
+  .idle-aura::before { content: ''; position: absolute; inset: -16%; border-radius: 50%; z-index: 0; pointer-events: none;
+    background: repeating-conic-gradient(from 0deg,
+      rgba(245,158,11,.85) 0deg 4deg, rgba(245,158,11,0) 4deg 15deg);
+    -webkit-mask: radial-gradient(circle, transparent 0 46%, #000 49% 70%, transparent 73%);
+            mask: radial-gradient(circle, transparent 0 46%, #000 49% 70%, transparent 73%);
+    animation: idleSpin 22s linear infinite; }
+  .idle-aura > * { position: relative; z-index: 1; }
+  @keyframes idleSpin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
   @keyframes idleGlow {
-    0%, 100% { box-shadow: 0 0 0 2px rgba(245,158,11,.35), 0 0 40px rgba(245,158,11,.25), inset 0 0 80px rgba(245,158,11,.10); }
-    50%      { box-shadow: 0 0 0 2px rgba(245,158,11,.55), 0 0 80px rgba(245,158,11,.55), inset 0 0 90px rgba(245,158,11,.18); }
+    0%, 100% { box-shadow: 0 0 0 2px rgba(245,158,11,.40), 0 0 50px rgba(245,158,11,.30), inset 0 0 80px rgba(245,158,11,.12); }
+    50%      { box-shadow: 0 0 0 2px rgba(245,158,11,.60), 0 0 90px rgba(245,158,11,.60), inset 0 0 90px rgba(245,158,11,.20); }
   }
   #idleScreen h2 { margin: 0; color: #f59e0b; font-size: clamp(1.4rem, 4.5vw, 2.4rem); font-weight: 800; line-height: 1.25; max-width: 90%; }
   .idle-cta { background: #f59e0b; color: #0a1530; border: none; cursor: pointer; font-family: inherit;
     font-weight: 800; font-size: 1.02rem; padding: 14px 30px; border-radius: 999px; }
   .idle-cta:hover { filter: brightness(1.06); }
-  @media (prefers-reduced-motion: reduce) { .idle-aura { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .idle-aura, .idle-aura::before { animation: none; } }
 
   /* ---- Buttons (extends existing .btn) ---- */
   .btn-gold { background: var(--accent); color: #fff; }
@@ -426,6 +435,24 @@
   .step .num { width: 56px; height: 56px; border-radius: 50%; background: var(--brand-grad); color: #fff; font-weight: 800; font-size: 1.35rem; display: grid; place-items: center; margin: 0 auto 14px; }
   .step h4 { margin: 0 0 6px; }
   .step p { margin: 0; color: var(--muted); font-size: .9rem; }
+
+  /* ---- Animated learning journey (circles + arrows, data-driven, looping) ---- */
+  .journey { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 12px 2px; padding: 8px 0 4px; min-height: 200px; }
+  .jstep { position: relative; width: 132px; padding-top: 46px; text-align: center;
+    opacity: 0; transform: translateY(12px) scale(.9); transition: opacity .5s ease, transform .5s ease; }
+  .jstep.show { opacity: 1; transform: none; }
+  .jstep-head { position: absolute; top: 0; left: 2px; right: 2px; height: 42px; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    font-size: .82rem; font-weight: 700; color: var(--accent); line-height: 1.2; }
+  .jstep-circle { width: 116px; height: 116px; margin: 0 auto; border-radius: 50%; border: 3px solid var(--accent);
+    background: var(--accent-soft); display: grid; place-items: center; padding: 12px; box-sizing: border-box; }
+  .jstep-circle span { font-size: .78rem; line-height: 1.25; color: var(--ink); font-weight: 600; }
+  .jarrow { flex: 0 0 auto; margin-top: 93px; width: 0; height: 0;
+    border-top: 11px solid transparent; border-bottom: 11px solid transparent; border-left: 15px solid var(--accent);
+    opacity: 0; transform: scale(.4); transition: opacity .45s ease, transform .45s ease; }
+  .jarrow.show { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) { .jstep, .jarrow { transition: none; } }
+  @media (max-width: 560px) { .jstep { width: 44%; } .jarrow { display: none; } }
 
   /* ---- Testimonials ---- */
   .tcards { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; }
@@ -2277,7 +2304,8 @@ function mapCourse(p){
     inr:            +(p.inr || p.u_inr) || 0,           // course price (INR)
     usd:            +(p.usd || p.u_usd) || 0,           // course price (USD)
     discount:       +(p.discount || p.u_discount) || 0, // discount %
-    hours:          p.hours || p.u_hours || p.duration || ''
+    hours:          p.hours || p.u_hours || p.duration || '',
+    learningSteps:  p.learning_steps || p.u_learning_steps || ''   // JSON object of {heading: description}
   };
 }
 // Photo area: icon placeholder + (for real courses) the image streamed from
@@ -2701,12 +2729,7 @@ function renderCourseDetail(id){
       '<div><h2>Certification Details</h2><p class="hint">This program prepares you for:</p>' + (chipList(c.certifications) || '<p class="hint">—</p>') + '</div>' +
       '<div><h2>Trusted By</h2><p class="hint">Participants &amp; organizations trained so far:</p>' + (chipList(c.participants) || '<p class="hint">—</p>') + '</div>' +
     '</section>' +
-    '<section class="cd-sec"><h2>Your Learning Journey</h2><div class="steps">' +
-      '<div class="step"><div class="num">1</div><h4>Foundations</h4><p>Core concepts and environment setup.</p></div>' +
-      '<div class="step"><div class="num">2</div><h4>Hands-on Labs</h4><p>Guided exercises on real scenarios.</p></div>' +
-      '<div class="step"><div class="num">3</div><h4>Capstone Project</h4><p>Build an end-to-end solution.</p></div>' +
-      '<div class="step"><div class="num">4</div><h4>Certify &amp; Get Hired</h4><p>Exam prep, mock interviews, career support.</p></div>' +
-    '</div></section>' +
+    '<section class="cd-sec"><h2>Your Learning Journey</h2><div id="journeyMount" class="journey"></div></section>' +
     '<section class="cd-sec"><h2>Projects You\'ll Build</h2><div class="cards-grid">' +
       '<div class="course-card"><h3>Project 1</h3><p>A real-world build to apply what you learn. <span class="hint">(Add real projects in ServiceNow.)</span></p></div>' +
       '<div class="course-card"><h3>Project 2</h3><p>A portfolio-ready deliverable reviewed by mentors.</p></div>' +
@@ -2758,6 +2781,102 @@ function renderCourseDetail(id){
   fillAlumniBands();   // populate this page's alumni logo marquee
   initPricing(c);      // wire the currency toggle + render Individual/Corporate cards
   loadCurriculum(c);   // fetch + render the curriculum section (async)
+  renderJourney(c);    // build + animate the data-driven learning journey
+}
+
+/* ============================================================
+   Learning journey — data-driven from u_learning_steps (a JSON
+   object of { "heading": "description" }). Steps reveal one-by-one
+   from step 1, hold, fade out, then loop from the start.
+   ============================================================ */
+let journeyTimer = null;
+
+// Parse the u_learning_steps value into an ordered [{heading, text}] list.
+// Primary format is a JSON object; falls back to "key = value" / "key : value" lines.
+function parseLearningSteps(raw){
+  const out = [];
+  if (!raw) return out;
+  if (typeof raw === 'object' && !Array.isArray(raw)) {
+    Object.keys(raw).forEach(function(k){ out.push({ heading: String(k), text: String(raw[k] == null ? '' : raw[k]) }); });
+    return out;
+  }
+  const s = String(raw).trim();
+  try {
+    const obj = JSON.parse(s);
+    if (obj && typeof obj === 'object' && !Array.isArray(obj)) {
+      Object.keys(obj).forEach(function(k){ out.push({ heading: String(k), text: String(obj[k] == null ? '' : obj[k]) }); });
+      return out;
+    }
+  } catch (e) { /* not JSON — try line-based below */ }
+  s.split(/\r?\n/).forEach(function(line){
+    const m = line.match(/^\s*(.+?)\s*[:=]\s*(.*)$/);
+    if (m && m[1]) out.push({ heading: m[1].trim(), text: m[2].trim() });
+  });
+  return out;
+}
+
+// Demo journey so the section never renders empty (e.g. ServiceNow unreachable).
+function buildFallbackJourney(){
+  return [
+    { heading: 'Kickoff',       text: '4–6 week intensive training' },
+    { heading: 'Live Learning', text: 'Interactive sessions with individual attention' },
+    { heading: 'Practice',      text: '20+ hands-on labs and practice exercises' },
+    { heading: 'Daily Reps',    text: 'Daily assignments' },
+    { heading: 'Feedback',      text: 'Assignment review and feedback' },
+    { heading: 'Build',         text: 'Real-world mini project' },
+    { heading: 'Specialize',    text: 'Empower to develop Gen AI skills' },
+    { heading: 'Launch',        text: 'Career opportunities' }
+  ];
+}
+
+function renderJourney(course){
+  const mount = document.getElementById('journeyMount');
+  if (!mount) return;
+  let steps = parseLearningSteps(course && course.learningSteps);
+  if (!steps.length) steps = buildFallbackJourney();
+
+  mount.innerHTML = steps.map(function(s, i){
+    const arrow = i > 0 ? '<div class="jarrow" aria-hidden="true"></div>' : '';
+    return arrow +
+      '<div class="jstep">' +
+        '<div class="jstep-head">' + esc(s.heading) + '</div>' +
+        '<div class="jstep-circle"><span>' + esc(s.text) + '</span></div>' +
+      '</div>';
+  }).join('');
+
+  startJourneyLoop(mount);
+}
+
+// Reveal each child (arrow + step) one-by-one, hold, fade all out, then loop.
+function startJourneyLoop(mount){
+  if (journeyTimer) { clearTimeout(journeyTimer); journeyTimer = null; }
+  const items = Array.prototype.slice.call(mount.children);
+  if (!items.length) return;
+
+  // Honor reduced-motion: show everything at once, no looping.
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    items.forEach(function(el){ el.classList.add('show'); });
+    return;
+  }
+
+  const STEP_MS = 600, HOLD_MS = 2000, FADE_MS = 600;
+  function cycle(){
+    items.forEach(function(el){ el.classList.remove('show'); });
+    let k = 0;
+    (function next(){
+      if (k < items.length) {
+        items[k].classList.add('show');
+        k++;
+        journeyTimer = setTimeout(next, STEP_MS);
+      } else {
+        journeyTimer = setTimeout(function(){
+          items.forEach(function(el){ el.classList.remove('show'); });   // fade out
+          journeyTimer = setTimeout(cycle, FADE_MS + 150);               // restart from step 1
+        }, HOLD_MS);
+      }
+    })();
+  }
+  cycle();
 }
 
 /* ============================================================
@@ -2921,9 +3040,17 @@ function curSelectModule(i){
 function curToggleLesson(i, j){
   const el = document.getElementById('curl-' + i + '-' + j);
   if (!el) return;
-  const open = el.classList.toggle('open');
+  const willOpen = !el.classList.contains('open');
+  // Single-open accordion: collapse every other lesson first.
+  document.querySelectorAll('.cur-lesson.open').forEach(function(other){
+    if (other === el) return;
+    other.classList.remove('open');
+    const h = other.querySelector('.cur-lhead');
+    if (h) h.setAttribute('aria-expanded', 'false');
+  });
+  el.classList.toggle('open', willOpen);
   const head = el.querySelector('.cur-lhead');
-  if (head) head.setAttribute('aria-expanded', open ? 'true' : 'false');
+  if (head) head.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
 }
 
 /* ============================================================

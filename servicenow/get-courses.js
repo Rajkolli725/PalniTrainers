@@ -13,6 +13,8 @@
  *     certifications  <- u_certifications        (comma list -> chips on the page)
  *     highlights      <- u_highlights            (split by "." -> bullet points)
  *     duration        <- u_duration              (optional — see note below)
+ *     learning_steps  <- u_learning_steps         (JSON object {heading: description}
+ *                        -> the animated "Your Learning Journey" section)
  *     sys_id          <- record sys_id (the page loads the image from
  *                        /course_image/{sys_id} — see get-course-image.js)
  *
@@ -64,6 +66,7 @@
             participants:   gr.getValue('u_participants_trained') || '', // comma-separated -> chips
             rating:         gr.getValue('u_rating') || '',             // number out of 5 (e.g. 4.8)
             duration:       gr.getValue('u_duration') || '',
+            learning_steps: gr.getValue('u_learning_steps') || '', // JSON object {heading: description} -> animated journey
             sys_id:         gr.getUniqueValue()        // page builds the image URL from this
         });
     }
