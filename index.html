@@ -438,18 +438,18 @@
 
   /* ---- Animated learning journey (circles + arrows, data-driven, looping) ---- */
   .journey { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: center; gap: 12px 2px; padding: 8px 0 4px; min-height: 200px; }
-  .jstep { position: relative; width: 132px; padding-top: 50px; text-align: center;
-    opacity: 0; transform: translateY(12px) scale(.9); transition: opacity .55s ease, transform .55s ease; }
+  .jstep { position: relative; width: 132px; padding-top: 62px; text-align: center;
+    opacity: 0; transform: translateY(12px) scale(.9); transition: opacity .605s ease, transform .605s ease; }
   .jstep.show { opacity: 1; transform: none; }
-  .jstep-head { position: absolute; top: 0; left: 2px; right: 2px; height: 46px; overflow: hidden;
+  .jstep-head { position: absolute; top: 0; left: 2px; right: 2px; height: 58px; overflow: hidden; margin: 0;
     display: flex; align-items: center; justify-content: center;
-    font-size: .95rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
+    font-size: 1.2rem; font-weight: 700; color: var(--ink); line-height: 1.2; }
   .jstep-circle { width: 116px; height: 116px; margin: 0 auto; border-radius: 50%; border: 3px solid var(--accent);
     background: transparent; display: grid; place-items: center; padding: 12px; box-sizing: border-box; }
   .jstep-circle span { font-size: .78rem; line-height: 1.25; color: var(--ink); font-weight: 600; }
-  .jarrow { flex: 0 0 auto; margin-top: 97px; width: 0; height: 0;
+  .jarrow { flex: 0 0 auto; margin-top: 109px; width: 0; height: 0;
     border-top: 11px solid transparent; border-bottom: 11px solid transparent; border-left: 15px solid var(--accent);
-    opacity: 0; transform: scale(.4); transition: opacity .5s ease, transform .5s ease; }
+    opacity: 0; transform: scale(.4); transition: opacity .55s ease, transform .55s ease; }
   .jarrow.show { opacity: 1; transform: none; }
   @media (prefers-reduced-motion: reduce) { .jstep, .jarrow { transition: none; } }
   @media (max-width: 560px) { .jstep { width: 44%; } .jarrow { display: none; } }
@@ -2839,7 +2839,7 @@ function renderJourney(course){
     const arrow = i > 0 ? '<div class="jarrow" aria-hidden="true"></div>' : '';
     return arrow +
       '<div class="jstep">' +
-        '<div class="jstep-head">' + esc(s.heading) + '</div>' +
+        '<h3 class="jstep-head">' + esc(s.heading) + '</h3>' +
         '<div class="jstep-circle"><span>' + esc(s.text) + '</span></div>' +
       '</div>';
   }).join('');
@@ -2859,7 +2859,7 @@ function startJourneyLoop(mount){
     return;
   }
 
-  const STEP_MS = 660, HOLD_MS = 2200, FADE_MS = 660;   // 10% slower than the original cadence
+  const STEP_MS = 726, HOLD_MS = 2420, FADE_MS = 726;   // ~21% slower than the original cadence
   function cycle(){
     items.forEach(function(el){ el.classList.remove('show'); });
     let k = 0;
