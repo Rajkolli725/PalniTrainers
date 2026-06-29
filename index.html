@@ -260,6 +260,7 @@
   .scale-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent), #22c55e); }
   .rv-comment { font-size: .94rem; text-align: justify; }
   .rv-comment h4 { margin: 0 0 8px; font-size: .72rem; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); }
+  .rv-posted-foot { padding: 12px 20px; border-top: 1px solid var(--line); font-size: .8rem; color: var(--muted); text-align: right; }
   .rv-comment .quote { color: var(--ink); }
 
   /* Responsive */
@@ -1886,12 +1887,12 @@ function reviewCard(r){
       '<span class="rv-name">' + esc(r.name || 'Anonymous') + '</span>' +
       '<span class="rv-rating">' + overall.toFixed(1) + '/5 <span class="stars">' + stars(overall) + '</span></span>' +
       '<span class="rv-batch">Batch: ' + esc(r.batch || '—') + '</span>' +
-      (r.posted ? '<span class="rv-batch">Posted: ' + esc(fmtPostedDate(r.posted)) + '</span>' : '') +
     '</div>' +
     '<div class="review-body">' +
       '<div class="rv-scales">' + scales + '</div>' +
       '<div class="rv-comment"><h4>Comment</h4><div class="quote">' + esc(r.comment) + '</div></div>' +
     '</div>' +
+    (r.posted ? '<div class="rv-posted-foot">Posted on ' + esc(fmtPostedDate(r.posted)) + '</div>' : '') +
   '</div>';
 }
 
