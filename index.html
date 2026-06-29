@@ -1767,17 +1767,26 @@ let snReviews = [];          // reviews loaded from ServiceNow
 let reviewsState = 'idle';   // idle | loading | ready | error
 let reviewsError = '';
 let reviewSort = 'recent';   // default: most recently posted first
-const REVIEWS_INITIAL = 5;    // reviews shown before any "Load More" click
-const REVIEWS_STEP = 20;      // additional reviews revealed per "Load More" click
-let reviewsShown = REVIEWS_INITIAL;
-function loadMoreReviews(){ reviewsShown += REVIEWS_STEP; showAllReviews(); }
+const REVIEWS_INITIAL = 5;    // first page size
+const REVIEWS_STEP = 20;      // page size for every page after the first
+let reviewStart = 0;          // index of the first review on the current page
+let reviewWindow = REVIEWS_INITIAL;   // current page size (5 first, then 20)
+function resetReviewPaging(){ reviewStart = 0; reviewWindow = REVIEWS_INITIAL; }
+// Next page: advance past the current window, then use the 20-size window.
+function loadMoreReviews(){ reviewStart += reviewWindow; reviewWindow = REVIEWS_STEP; showAllReviews(); }
+// Previous page: step back to the prior window (back to the first 5 when at the top).
+function previousReviews(){
+  if (reviewStart <= REVIEWS_INITIAL) { reviewStart = 0; reviewWindow = REVIEWS_INITIAL; }
+  else { reviewStart -= REVIEWS_STEP; reviewWindow = REVIEWS_STEP; }
+  showAllReviews();
+}
 
 function avgScore(scores){
   const vals = REVIEW_PARAMS.map(p => +scores[p[0]] || 0);
   return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) * 10) / 10;
 }
 function backToTrainers(e){ if (e) e.preventDefault(); location.hash = ''; }
-function setReviewSort(v){ reviewSort = v; reviewsShown = REVIEWS_INITIAL; showAllReviews(); }
+function setReviewSort(v){ reviewSort = v; resetReviewPaging(); showAllReviews(); }
 function sortValue(r){ return reviewSort === 'overall' ? (r.overall || avgScore(r.scores)) : (+r.scores[reviewSort] || 0); }
 
 // Map a ServiceNow trainee_feedback record -> the review object the UI renders.
@@ -1854,7 +1863,7 @@ function buildFallbackReviews(){
 // Load all reviews from the anonymous Scripted REST API.
 async function loadReviews(){
   reviewsState = 'loading';
-  reviewsShown = REVIEWS_INITIAL;   // collapse back to the 5 most recent on every (re)load
+  resetReviewPaging();   // back to the first page of 5 on every (re)load
   showAllReviews();
   try {
     const res = await snFetch(REVIEWS_GET_API);
@@ -1918,16 +1927,26 @@ function showAllReviews(){
     if (reviewSort === 'recent') list.sort(function(a,b){ return (b.postedTs || 0) - (a.postedTs || 0); });
     else list.sort(function(a,b){ return sortValue(b) - sortValue(a); });
     const total = list.length;
-    const shown = list.slice(0, reviewsShown);
+    // Guard against an out-of-range page (e.g. after the list changed).
+    if (reviewStart >= total) resetReviewPaging();
+    const start = reviewStart;
+    const end = Math.min(start + reviewWindow, total);
+    const shown = list.slice(start, end);   // only this page — previous reviews are hidden
     const cards = shown.length
       ? shown.map(reviewCard).join('')
       : '<div class="empty">No reviews yet. Be the first to submit one.</div>';
-    const moreBtn = (total > reviewsShown)
-      ? '<div style="text-align:center;margin-top:26px">' +
-          '<button class="btn btn-primary btn-lg" onclick="loadMoreReviews()">Load More (' + (total - reviewsShown) + ' more)</button>' +
-        '</div>'
-      : '';
-    body = '<div class="review-cards">' + cards + '</div>' + moreBtn;
+    const hasPrev = start > 0;
+    const hasNext = end < total;
+    let nav = '';
+    if (total > REVIEWS_INITIAL) {
+      nav =
+        '<div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px">' +
+          (hasPrev ? '<button class="btn btn-ghost btn-lg" onclick="previousReviews()">&larr; Previous</button>' : '') +
+          (hasNext ? '<button class="btn btn-primary btn-lg" onclick="loadMoreReviews()">Load More (' + (total - end) + ' more)</button>' : '') +
+        '</div>' +
+        '<div class="hint" style="text-align:center;margin-top:10px">Showing ' + (start + 1) + '–' + end + ' of ' + total + ' reviews</div>';
+    }
+    body = '<div class="review-cards">' + cards + '</div>' + nav;
   }
 
   const html =
