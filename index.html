@@ -302,18 +302,16 @@
   }
   /* ---- Announcement banner (flashing + scrolling, driven by the "offers" property) ---- */
   /* Pinned just below the sticky nav (top offset = measured nav height). */
-  .offer-banner { position: sticky; top: var(--nav-h, 94px); z-index: 43; color: #0e1a2e; overflow: hidden;
+  .offer-banner { position: sticky; top: var(--nav-h, 94px); z-index: 43; color: #fff; overflow: hidden;
     box-shadow: 0 4px 14px rgba(0,0,0,.18); background: var(--accent); }
   .offer-banner[hidden] { display: none; }
   .offer-marquee { overflow: hidden; white-space: nowrap; }
   .offer-track { display: inline-block; white-space: nowrap; padding: 9px 0; font-weight: 700;
     font-size: .95rem; letter-spacing: .015em; will-change: transform; animation: offerScroll 24s linear infinite; }
-  /* Text keeps flashing to grab attention (independent of the scroll). */
-  .offer-track span { display: inline-block; padding: 0 2.6rem; animation: offerTextFlash 1.05s steps(1, end) infinite; }
+  .offer-track span { display: inline-block; padding: 0 2.6rem; }
   .offer-banner:hover .offer-track { animation-play-state: paused; }
   @keyframes offerScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-  @keyframes offerTextFlash { 0%, 100% { opacity: 1; } 50% { opacity: .25; } }
-  @media (prefers-reduced-motion: reduce) { .offer-track, .offer-track span { animation: none; opacity: 1; } }
+  @media (prefers-reduced-motion: reduce) { .offer-track { animation: none; } }
   /* Services mega-panel (slides down under the nav) */
   .svc-ov { position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 44; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
   .svc-ov.open { opacity: 1; pointer-events: auto; }
