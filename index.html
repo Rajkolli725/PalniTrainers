@@ -1339,7 +1339,7 @@
       <details class="cd-faq"><summary>Do you help with job placement?</summary><p>We provide resume reviews, interview preparation and career guidance, and we place vetted talent with our hiring partners for contract, contract-to-hire and full-time roles.</p></details>
       <details class="cd-faq"><summary>How do I enroll or book a free demo?</summary><p>Click “Enroll Now” or “Book Free Demo” on any course, or “Talk to an Advisor” anywhere on the site. A course advisor will reach out within one business day.</p></details>
       <details class="cd-faq"><summary>Do you offer corporate or team training?</summary><p>Yes. We design custom private cohorts tailored to your team’s goals, schedule and tech stack. Use “Talk to an Advisor” to start a conversation.</p></details>
-      <details class="cd-faq"><summary>How can I contact support?</summary><p>Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link" href="tel:+12145010690">+1 (214) 501-0690</a>. See the Contact section on our home page for hours.</p></details>
+      <details class="cd-faq"><summary>How can I contact support?</summary><p>Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link js-support-phone" href="tel:+12145010690">+1 (214) 501-0690</a>. See the Contact section on our home page for hours.</p></details>
     </section>
   </div>
 
@@ -1360,7 +1360,7 @@
     <section class="cd-sec legal-sec"><h2>7. Data Retention</h2><p>We retain personal information only for as long as necessary to fulfill the purposes described in this policy or as required by law.</p></section>
     <section class="cd-sec legal-sec"><h2>8. Your Rights</h2><p>Depending on your location, you may have the right to access, correct, or delete your personal information, or to object to certain processing. To exercise these rights, contact us using the details below.</p></section>
     <section class="cd-sec legal-sec"><h2>9. Changes to This Policy</h2><p>We may update this Privacy Policy from time to time. Material changes will be reflected by the “Last updated” date above.</p></section>
-    <section class="cd-sec legal-sec"><h2>10. Contact Us</h2><p>Questions about this policy? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
+    <section class="cd-sec legal-sec"><h2>10. Contact Us</h2><p>Questions about this policy? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link js-support-phone" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
   </div>
 
   <!-- ===== Terms & Conditions ===== -->
@@ -1382,7 +1382,7 @@
     <section class="cd-sec legal-sec"><h2>9. Limitation of Liability</h2><p>To the maximum extent permitted by law, VTech Infotech LLC shall not be liable for any indirect, incidental or consequential damages arising from your use of our website or services.</p></section>
     <section class="cd-sec legal-sec"><h2>10. Changes to These Terms</h2><p>We may update these Terms from time to time. Continued use of the site after changes constitutes acceptance of the revised Terms.</p></section>
     <section class="cd-sec legal-sec"><h2>11. Governing Law</h2><p>These Terms are governed by the laws of the State of Texas, USA, without regard to its conflict-of-law principles.</p></section>
-    <section class="cd-sec legal-sec"><h2>12. Contact Us</h2><p>Questions about these Terms? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
+    <section class="cd-sec legal-sec"><h2>12. Contact Us</h2><p>Questions about these Terms? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link js-support-phone" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
   </div>
 </div>
 
@@ -1428,7 +1428,7 @@
         <h5>Get Started</h5>
         <a onclick="openLeadModal('','Talk to an Advisor (Footer)')">Talk to an Advisor</a>
         <a href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a>
-        <a href="tel:+15551234567">+1 (555) 123-4567</a>
+        <a class="js-support-phone" href="tel:+15551234567">+1 (555) 123-4567</a>
       </div>
     </div>
     <div class="footer-bottom">© <span id="yr"></span> VTech Infotech LLC. All rights reserved.</div>
@@ -2601,6 +2601,15 @@ function applyProperties(){
     if (em) { em.textContent = siteProps[PROP.supportEmail]; em.href = 'mailto:' + siteProps[PROP.supportEmail]; }
   }
   setText('contactPhone',    siteProps[PROP.supportNumber]);
+  // Support number across the footer, privacy, terms and FAQ contact links.
+  if (siteProps[PROP.supportNumber]) {
+    const num = siteProps[PROP.supportNumber];
+    const tel = 'tel:' + String(num).replace(/[^\d+]/g, '');
+    document.querySelectorAll('.js-support-phone').forEach(function(a){
+      a.textContent = num;
+      a.setAttribute('href', tel);
+    });
+  }
   // WhatsApp bubble: prefer a dedicated whatsapp_number, else fall back to support_number.
   const waNum = siteProps[PROP.whatsappNumber] || siteProps[PROP.supportNumber];
   if (waNum) {
