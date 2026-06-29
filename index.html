@@ -1767,16 +1767,17 @@ let snReviews = [];          // reviews loaded from ServiceNow
 let reviewsState = 'idle';   // idle | loading | ready | error
 let reviewsError = '';
 let reviewSort = 'recent';   // default: most recently posted first
-let reviewsExpanded = false;  // false -> show only the 5 most recent; true -> show all
-const REVIEWS_PAGE = 5;
-function loadMoreReviews(){ reviewsExpanded = true; showAllReviews(); }
+const REVIEWS_INITIAL = 5;    // reviews shown before any "Load More" click
+const REVIEWS_STEP = 20;      // additional reviews revealed per "Load More" click
+let reviewsShown = REVIEWS_INITIAL;
+function loadMoreReviews(){ reviewsShown += REVIEWS_STEP; showAllReviews(); }
 
 function avgScore(scores){
   const vals = REVIEW_PARAMS.map(p => +scores[p[0]] || 0);
   return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) * 10) / 10;
 }
 function backToTrainers(e){ if (e) e.preventDefault(); location.hash = ''; }
-function setReviewSort(v){ reviewSort = v; reviewsExpanded = false; showAllReviews(); }
+function setReviewSort(v){ reviewSort = v; reviewsShown = REVIEWS_INITIAL; showAllReviews(); }
 function sortValue(r){ return reviewSort === 'overall' ? (r.overall || avgScore(r.scores)) : (+r.scores[reviewSort] || 0); }
 
 // Map a ServiceNow trainee_feedback record -> the review object the UI renders.
@@ -1853,7 +1854,7 @@ function buildFallbackReviews(){
 // Load all reviews from the anonymous Scripted REST API.
 async function loadReviews(){
   reviewsState = 'loading';
-  reviewsExpanded = false;   // collapse back to the 5 most recent on every (re)load
+  reviewsShown = REVIEWS_INITIAL;   // collapse back to the 5 most recent on every (re)load
   showAllReviews();
   try {
     const res = await snFetch(REVIEWS_GET_API);
@@ -1917,13 +1918,13 @@ function showAllReviews(){
     if (reviewSort === 'recent') list.sort(function(a,b){ return (b.postedTs || 0) - (a.postedTs || 0); });
     else list.sort(function(a,b){ return sortValue(b) - sortValue(a); });
     const total = list.length;
-    const shown = reviewsExpanded ? list : list.slice(0, REVIEWS_PAGE);
+    const shown = list.slice(0, reviewsShown);
     const cards = shown.length
       ? shown.map(reviewCard).join('')
       : '<div class="empty">No reviews yet. Be the first to submit one.</div>';
-    const moreBtn = (!reviewsExpanded && total > REVIEWS_PAGE)
+    const moreBtn = (total > reviewsShown)
       ? '<div style="text-align:center;margin-top:26px">' +
-          '<button class="btn btn-primary btn-lg" onclick="loadMoreReviews()">Load More (' + (total - REVIEWS_PAGE) + ' more)</button>' +
+          '<button class="btn btn-primary btn-lg" onclick="loadMoreReviews()">Load More (' + (total - reviewsShown) + ' more)</button>' +
         '</div>'
       : '';
     body = '<div class="review-cards">' + cards + '</div>' + moreBtn;
