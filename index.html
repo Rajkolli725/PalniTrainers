@@ -2097,15 +2097,48 @@ async function submitLead(form, source){
   return false;
 }
 
-// Trigger a file download (hidden iframe, so the SPA never navigates away).
-// The endpoint sends Content-Disposition: attachment, so the browser downloads it.
-function downloadCurriculum(courseSysId){
+// Fetch the curriculum file and trigger a download. If the endpoint reports no
+// file (404 / JSON error), tell the user instead of failing silently.
+async function downloadCurriculum(courseSysId){
   if (!courseSysId) return;
-  const iframe = document.createElement('iframe');
-  iframe.style.display = 'none';
-  iframe.src = CURRICULUM_FILE_API + encodeURIComponent(courseSysId);
-  document.body.appendChild(iframe);
-  setTimeout(function(){ if (iframe.parentNode) iframe.parentNode.removeChild(iframe); }, 60000);
+  try {
+    const res = await snFetch(CURRICULUM_FILE_API + encodeURIComponent(courseSysId));
+    const ct = (res.headers.get('Content-Type') || '').toLowerCase();
+    // The endpoint returns the file as a binary attachment; a JSON body or a
+    // non-OK status means "no curriculum file" (or it isn't available).
+    if (!res.ok || ct.indexOf('application/json') === 0 || ct.indexOf('text/html') === 0) {
+      alert('Sorry — the curriculum for this course isn’t available to download yet. Our team will share it with you shortly.');
+      return;
+    }
+    const blob = await res.blob();
+    if (!blob || !blob.size) {
+      alert('Sorry — the curriculum for this course isn’t available to download yet. Our team will share it with you shortly.');
+      return;
+    }
+    const url = URL.createObjectURL(blob);
+    const base = ((curState && curState.courseName) ? curState.courseName : 'course').replace(/[^\w.-]+/g, '_');
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = base + '-curriculum' + curriculumExt(ct);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 30000);
+  } catch (e) {
+    console.warn('Curriculum download failed:', e.message);
+    alert('Sorry — we couldn’t download the curriculum right now. Please try again in a moment.');
+  }
+}
+// Pick a file extension from the response Content-Type (Content-Type is a
+// CORS-safelisted response header, so it's readable cross-origin).
+function curriculumExt(ct){
+  if (ct.indexOf('pdf') > -1) return '.pdf';
+  if (ct.indexOf('word') > -1 || ct.indexOf('msword') > -1 || ct.indexOf('wordprocessing') > -1) return '.docx';
+  if (ct.indexOf('presentation') > -1 || ct.indexOf('powerpoint') > -1) return '.pptx';
+  if (ct.indexOf('sheet') > -1 || ct.indexOf('excel') > -1) return '.xlsx';
+  if (ct.indexOf('zip') > -1) return '.zip';
+  if (ct.indexOf('text/plain') > -1) return '.txt';
+  return '';
 }
 
 /* Formal confirmation shown after any CTA form submits successfully */
