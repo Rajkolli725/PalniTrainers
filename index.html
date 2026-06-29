@@ -300,6 +300,18 @@
     .navlink { padding: 13px 12px; }
     .nav-links .btn, .nav-links .icon-toggle { width: 100%; }
   }
+  /* ---- Announcement banner (flashing + scrolling, driven by the "offers" property) ---- */
+  .offer-banner { color: #fff; overflow: hidden; box-shadow: 0 4px 14px rgba(0,0,0,.18);
+    animation: offerFlash 1.15s steps(1, end) infinite; }
+  .offer-banner[hidden] { display: none; }
+  .offer-marquee { overflow: hidden; white-space: nowrap; }
+  .offer-track { display: inline-block; white-space: nowrap; padding: 9px 0; font-weight: 700;
+    font-size: .95rem; letter-spacing: .015em; will-change: transform; animation: offerScroll 24s linear infinite; }
+  .offer-track span { display: inline-block; padding: 0 2.6rem; }
+  .offer-banner:hover .offer-track { animation-play-state: paused; }
+  @keyframes offerScroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes offerFlash { 0%, 100% { background: var(--accent); } 50% { background: #b8400f; } }
+  @media (prefers-reduced-motion: reduce) { .offer-track { animation: none; } .offer-banner { animation: none; background: var(--accent); } }
   /* Services mega-panel (slides down under the nav) */
   .svc-ov { position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 44; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
   .svc-ov.open { opacity: 1; pointer-events: auto; }
@@ -398,7 +410,7 @@
 
   /* ---- Stats band ---- */
   .stats-band { background: var(--brand-grad); color: #fff; }
-  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 48px 0; text-align: center; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 38px 0; text-align: center; }
   .stat-num { font-size: 2.7rem; font-weight: 800; line-height: 1; }
   .stat-num .gold { color: var(--gold); }
   .stat-lbl { margin-top: 8px; font-size: .92rem; color: rgba(255,255,255,.85); }
@@ -517,6 +529,10 @@
   @media (max-width: 600px) { .wa-bubble { right: 16px; bottom: 16px; width: 52px; height: 52px; } .wa-bubble svg { width: 30px; height: 30px; } }
 
   /* ---- Alumni placements band (left text + right scrolling logos) ---- */
+  /* Docked flush directly under the stats band — no gap, top edge merges with
+     the gradient above so the two read as one continuous unit. */
+  .alumni-dock { margin-top: 0; }
+  .alumni-dock .alumni-band { border-top: none; border-top-left-radius: 0; border-top-right-radius: 0; }
   .alumni-band { background: var(--hover); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .alumni-wrap { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 26px; padding: 16px 24px; }
   .alumni-text { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
@@ -526,7 +542,7 @@
   .alumni-marquee { overflow: hidden; position: relative; min-width: 0;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
             mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
-  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 10s linear infinite; }
+  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 13s linear infinite; }
   .alumni-marquee:hover .alumni-track { animation-play-state: paused; }
   @keyframes alumniScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
   @media (prefers-reduced-motion: reduce) { .alumni-track { animation: none; } }
@@ -722,7 +738,7 @@
   .cc-actions { display: flex; gap: 8px; margin-top: auto; padding-top: 12px; }
   .cc-actions .btn { flex: 1; padding: 9px 6px; font-size: .78rem; }
   .cc-plus { position: absolute; top: 12px; right: 12px; z-index: 5; width: 38px; height: 38px; border-radius: 50%; border: none;
-    background: #0e1a2e; color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center;
+    background: var(--accent); color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,.4); transition: transform .15s; }
   .cc-plus:hover { transform: scale(1.09); }
   /* attached to the parent card's right edge; darker than the card; left side
@@ -839,7 +855,7 @@
   .tp-divider { display: block; width: 34px; height: 3px; border-radius: 2px; background: #5aa2ff; margin: 9px auto; }
   .tp-role { color: rgba(255,255,255,.85); font-size: .85rem; font-weight: 500; }
   .tp-plus { position: absolute; top: 12px; right: 12px; z-index: 3; width: 38px; height: 38px; border-radius: 50%; border: none;
-    background: #0e1a2e; color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center;
+    background: var(--accent); color: #fff; font-size: 1.5rem; line-height: 1; cursor: pointer; display: grid; place-items: center;
     box-shadow: 0 4px 12px rgba(0,0,0,.4); transition: transform .15s; }
   .tp-plus:hover { transform: scale(1.09); }
   .tp-bio { position: absolute; top: 0; left: 100%; width: 250px; max-width: 74vw; height: 100%; z-index: 5;
@@ -854,6 +870,13 @@
     border: none; border-radius: 50%; background: rgba(255,255,255,.16); color: #fff; font-size: 1.25rem;
     line-height: 1; cursor: pointer; place-items: center; }
   .tp-bio-close:hover { background: rgba(255,255,255,.28); }
+  /* LinkedIn / email / download icons inside the expanded bio panel (dark bg) */
+  .tp-bio .cta-row { gap: 10px; padding-top: 14px; margin-top: 12px; border-top: 1px solid rgba(255,255,255,.12); }
+  .tp-bio .icon-btn { width: 38px; height: 38px; border-radius: 10px; background: rgba(255,255,255,.12);
+    border-color: rgba(255,255,255,.22); color: #fff; }
+  .tp-bio .icon-btn:hover { background: #fff; color: var(--accent); border-color: #fff; }
+  .tp-bio .icon-btn.linkedin:hover { color: #0a66c2; border-color: #0a66c2; }
+  .tp-bio .icon-btn svg { width: 18px; height: 18px; }
 
   /* Desktop / tablet: an open card pushes its neighbour aside instead of overlapping it */
   @media (min-width: 561px) {
@@ -1035,7 +1058,7 @@
     <div class="nav-links" id="navLinks">
       <a class="navlink" onclick="goHome()">Home</a>
       <a class="navlink" onclick="goSection('courses')">Courses</a>
-      <a class="navlink" onclick="goView('trainers')">Experts</a>
+      <a class="navlink" onclick="goView('trainers')">Trainers</a>
       <a class="navlink" onclick="toggleServicesPanel()">Services</a>
       <a class="navlink" onclick="goView('about')">About Us</a>
       <a class="navlink" onclick="goSection('contact')">Contact</a>
@@ -1044,6 +1067,11 @@
     </div>
   </div>
 </nav>
+
+<!-- Announcement banner — shows on every page when the "offers" property is set (flashing + scrolling) -->
+<div id="offerBanner" class="offer-banner" role="status" aria-live="polite" hidden>
+  <div class="offer-marquee"><div class="offer-track" id="offerTrack"></div></div>
+</div>
 
 <!-- Services mega-panel (opens from the Services nav link) -->
 <div id="servicesOv" class="svc-ov" onclick="toggleServicesPanel(false)"></div>
@@ -1106,8 +1134,8 @@
     </div>
   </section>
 
-  <!-- Alumni placements band -->
-  <div class="container" style="margin-top:28px">
+  <!-- Alumni placements band — docked flush under the stats band (one unit) -->
+  <div class="container alumni-dock">
     <div class="alumni-band"><div class="alumni-wrap">
       <div class="alumni-text"><span class="al-eyebrow">Alumni working at</span><span class="al-verified">&#10003; Verified &middot; <b class="alumni-hires">100K+</b> hires</span></div>
       <div class="alumni-marquee" aria-label="Companies where our alumni work"><div class="alumni-track"></div></div>
@@ -1119,7 +1147,6 @@
     <div class="container">
       <div class="section-title reveal">
         <h2 id="coursesHeading">Career-Focused Tech Courses</h2>
-        <p id="coursesSubheading">Specialized, hands-on tracks built around the platforms enterprises hire for right now.</p>
       </div>
       <div class="carousel per3" data-auto="4000">
         <button class="carousel-btn prev" aria-label="Previous courses">&#8249;</button>
@@ -2399,6 +2426,24 @@ function initCarousels(){
   });
 }
 
+/* Social / attachment icon row (LinkedIn, email, download résumé) — shared by the
+   trainer modal and the home card's expanded (+) bio panel. */
+function trainerCtaRow(m){
+  const linkedin = m.linkedin || ('https://www.linkedin.com/search/results/all/?keywords=' + encodeURIComponent(m.name));
+  const hasResume = !!m.resumeId;
+  return '<div class="cta-row">' +
+      '<a class="icon-btn linkedin" href="' + esc(linkedin) + '" target="_blank" rel="noopener" title="Connect on LinkedIn">' +
+        '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>' +
+      '</a>' +
+      '<a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=' + encodeURIComponent('Inquiry about ' + m.name) + '" title="Contact (training@vtechinfotech.com)">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>' +
+      '</a>' +
+      '<button class="icon-btn ' + (hasResume ? '' : 'disabled') + '" onclick="downloadResume(\'' + esc(m.id) + '\')" title="' + (hasResume ? 'Download resume' : 'No resume available') + '">' +
+        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>' +
+      '</button>' +
+    '</div>';
+}
+
 /* ---- Home: top trainers preview ---- */
 function renderHomeTrainers(){
   const box = document.getElementById('homeTrainers');
@@ -2416,6 +2461,7 @@ function renderHomeTrainers(){
         '<div class="tp-bio">' +
           '<button class="tp-bio-close" onclick="toggleHomeBio(event,\'' + m.id + '\')" aria-label="Close bio" title="Close">&times;</button>' +
           '<h4>About ' + esc(m.name.split(' ')[0]) + '</h4><p>' + about + '</p>' +
+          trainerCtaRow(m) +
         '</div>' +
         '<div class="tp-figure">' +
           '<button class="tp-plus" onclick="toggleHomeBio(event,\'' + m.id + '\')" aria-label="Show bio" title="Show bio">+</button>' +
@@ -2450,6 +2496,7 @@ function toggleHomeBio(e, id){
   card.classList.toggle('open', willOpen);
   const btn = card.querySelector('.tp-plus');
   if (btn) { btn.textContent = willOpen ? '−' : '+'; btn.title = willOpen ? 'Hide bio' : 'Show bio'; btn.setAttribute('aria-label', btn.title); }
+  if (willOpen) centerOpenCard(card, 250);
 }
 
 /* ============================================================
@@ -2655,6 +2702,7 @@ function applyProperties(){
   if (heroWrap) heroWrap.classList.toggle('hs2', heroStyle === '2');
 
   applyColorProps();   // theme colors from ServiceNow (light + dark)
+  applyOfferBanner();  // flashing/scrolling announcement banner (only if the offers property is set)
   initIdleScreen();    // idle "offers" attractor screen (only if the offers property is set)
 
   initReveal();   // re-observe updated stat counters so they animate when scrolled into view
@@ -2677,6 +2725,24 @@ function hideIdleScreen(){
   el.classList.remove('show');
   el.setAttribute('aria-hidden', 'true');
 }
+/* Announcement banner — flashing + horizontally scrolling marquee shown just
+   below the nav (on every view) whenever the "offers" property is set. The text
+   is duplicated so the marquee loops seamlessly (-50% per cycle). */
+function applyOfferBanner(){
+  const banner = document.getElementById('offerBanner');
+  const track  = document.getElementById('offerTrack');
+  if (!banner || !track) return;
+  const offer = siteProps[PROP.offers];
+  if (offer && String(offer).trim()) {
+    const t = esc(String(offer).trim());
+    track.innerHTML = '<span>' + t + '</span><span>' + t + '</span>';
+    banner.hidden = false;
+  } else {
+    track.innerHTML = '';
+    banner.hidden = true;
+  }
+}
+
 function initIdleScreen(){
   const offer = siteProps[PROP.offers];
   // No offer configured -> ensure nothing ever fires.
@@ -2781,7 +2847,7 @@ function courseCardHtml(c, i){
         (c.duration ? '<div class="cc-drow">' + esc(c.duration) + '</div>' : '') +
         (certChips ? '<div class="cc-drow">' + certChips + '</div>' : '') +
         (highList ? '<div class="cc-drow">' + highList + '</div>' : '') +
-        '<button class="btn btn-navy cc-more" onclick="openCourseDetail(\'' + esc(c.id) + '\')">View More</button>' +
+        '<button class="btn btn-accent cc-more" onclick="openCourseDetail(\'' + esc(c.id) + '\')">View More</button>' +
       '</div>' +
     '</div>';
 }
@@ -3448,6 +3514,26 @@ function initPricing(c){
   renderPricingBody();
 }
 
+/* When a card's (+) panel opens, scroll its carousel so the card AND the panel
+   that unfolds to its right are both visible (centered). Desktop/tablet only —
+   on mobile the card flips in place, so no scrolling is needed.
+   panelW = width the panel occupies to the right of the card (px); null = one
+   full card width (course cards). */
+function centerOpenCard(card, panelW){
+  if (!card || !window.matchMedia('(min-width: 561px)').matches) return;
+  const track = card.closest('.carousel-track');
+  const wrap  = card.closest('.carousel-card');
+  if (!track || !wrap) return;
+  setTimeout(function(){
+    const cr = wrap.getBoundingClientRect();
+    const tr = track.getBoundingClientRect();
+    const leftInContent = (cr.left - tr.left) + track.scrollLeft;
+    const group = cr.width + (panelW == null ? cr.width : panelW);   // card + unfolded panel
+    const target = leftInContent - (track.clientWidth - group) / 2;  // centre the pair
+    track.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+  }, 60);
+}
+
 /* Flip a course card to its details (+ ⇄ −); one open at a time */
 function toggleCourse(e, id){
   if (e) e.stopPropagation();
@@ -3460,6 +3546,7 @@ function toggleCourse(e, id){
   card.classList.toggle('open', willOpen);
   const btn = card.querySelector('.cc-plus');
   if (btn) { btn.textContent = willOpen ? '−' : '+'; btn.title = willOpen ? 'Hide details' : 'More details'; }
+  if (willOpen) centerOpenCard(card, null);
 }
 
 /* ---- Scroll reveal + animated counters ---- */
