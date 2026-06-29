@@ -1320,7 +1320,7 @@
     <section class="cd-sec cd-cta">
       <h2>Let's Build Your Future</h2>
       <p>Talk to an advisor about training, consulting or staffing for you or your team.</p>
-      <button class="btn btn-gold btn-lg" onclick="openLeadModal('','About - Talk to an Advisor')">Talk to an Advisor</button>
+      <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an Advisor (About)')">Talk to an Advisor</button>
     </section>
   </div>
 
@@ -2123,12 +2123,24 @@ function showLeadThanks(name){
 }
 
 /* ---- Lead modal ---- */
+// Turn a CTA `source` into a clean submit-button label by dropping the
+// trailing context: "Contact Us (Home)" -> "Contact Us",
+// "Enroll Now – ServiceNow" -> "Enroll Now", "Batch Enquiry – X" -> "Batch Enquiry".
+function ctaLabel(source){
+  let s = String(source || '').split('(')[0];   // drop "(Home)" / "(Nav)" context
+  s = s.split(/\s[–-]\s/)[0];                    // drop " – Course" / " - Course" context
+  s = s.trim();
+  return s || 'Request Free Demo';
+}
+
 function openLeadModal(course, source, opts){
   opts = opts || {};
   source = (source || 'Book a Free Demo').replace(/'/g, '');
   const title      = opts.title || 'Book Your Free Demo';
   const subtitle   = opts.subtitle || 'Tell us a bit about you and we’ll get in touch within 1 business day.';
-  const submitLabel = opts.submitLabel || 'Request Free Demo';
+  // Button text reflects the CTA that opened the form (derived from `source`),
+  // e.g. "Contact Us (Home)" -> "Contact Us", "Enroll Now – ServiceNow" -> "Enroll Now".
+  const submitLabel = opts.submitLabel || ctaLabel(source);
   const dlCourse   = opts.downloadCurriculumSysId || '';   // if set: download the curriculum after the lead saves
   const ov = document.getElementById('leadModal');
   ov.innerHTML =
@@ -2892,8 +2904,8 @@ function renderCourseDetail(id){
     '</div></section>' +
     '<section class="cd-sec"><h2>Upcoming Cohort Batches</h2><div class="cd-table">' +
       '<div class="cd-trow cd-thead"><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>' +
-      '<div class="cd-trow"><span>Weekday</span><span>To be announced</span><span>Mon–Fri, evenings</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\')">Notify Me</button></span></div>' +
-      '<div class="cd-trow"><span>Weekend</span><span>To be announced</span><span>Sat–Sun</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\')">Notify Me</button></span></div>' +
+      '<div class="cd-trow"><span>Weekday</span><span>To be announced</span><span>Mon–Fri, evenings</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button></span></div>' +
+      '<div class="cd-trow"><span>Weekend</span><span>To be announced</span><span>Sat–Sun</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button></span></div>' +
     '</div></section>' +
     '<section class="cd-sec"><h2>Curriculum</h2><div id="curriculumMount" class="curriculum"><div class="cur-loading">Loading curriculum…</div></div></section>' +
     '<section class="cd-sec"><h2>Interview Preparation &amp; Mock Practice</h2>' +
