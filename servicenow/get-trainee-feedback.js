@@ -30,7 +30,8 @@
 
     var gr = new GlideRecord(TABLE);
     gr.addQuery('u_active', true);          // only active feedback records
-    gr.orderByDesc('sys_created_on');
+    gr.orderByDesc('u_posted_on');          // most recently posted first
+    gr.orderByDesc('sys_created_on');       // tiebreaker for records with no posted_on
     gr.query();
     while (gr.next()) {
         out.push({
@@ -48,6 +49,7 @@
             planning:    gr.getValue('u_session_planning_and_flow'),
             mentorship:  gr.getValue('u_mentorship_and_guidance'),
             recommend:   gr.getValue('u_likelihood_to_recommend_this_program'),
+            posted_on:   gr.getValue('u_posted_on'),    // datetime the review was posted
             created:     gr.getValue('sys_created_on')
         });
     }

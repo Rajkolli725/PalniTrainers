@@ -1765,18 +1765,42 @@ const REVIEW_PARAMS = [
 let snReviews = [];          // reviews loaded from ServiceNow
 let reviewsState = 'idle';   // idle | loading | ready | error
 let reviewsError = '';
-let reviewSort = 'overall';
+let reviewSort = 'recent';   // default: most recently posted first
+let reviewsExpanded = false;  // false -> show only the 5 most recent; true -> show all
+const REVIEWS_PAGE = 5;
+function loadMoreReviews(){ reviewsExpanded = true; showAllReviews(); }
 
 function avgScore(scores){
   const vals = REVIEW_PARAMS.map(p => +scores[p[0]] || 0);
   return Math.round((vals.reduce((a,b)=>a+b,0) / vals.length) * 10) / 10;
 }
 function backToTrainers(e){ if (e) e.preventDefault(); location.hash = ''; }
-function setReviewSort(v){ reviewSort = v; showAllReviews(); }
+function setReviewSort(v){ reviewSort = v; reviewsExpanded = false; showAllReviews(); }
 function sortValue(r){ return reviewSort === 'overall' ? (r.overall || avgScore(r.scores)) : (+r.scores[reviewSort] || 0); }
 
 // Map a ServiceNow trainee_feedback record -> the review object the UI renders.
 // The GET Scripted REST API returns these clean keys (see servicenow/get-trainee-feedback.js).
+// Parse a ServiceNow datetime ("YYYY-MM-DD HH:MM:SS") into a sortable timestamp.
+function parseSnDate(s){
+  if (!s) return 0;
+  const m = String(s).match(/(\d{4})-(\d{2})-(\d{2})[ T](\d{2}):(\d{2}):(\d{2})/);
+  if (m) return Date.UTC(+m[1], +m[2]-1, +m[3], +m[4], +m[5], +m[6]);
+  const d = Date.parse(s);
+  return isNaN(d) ? 0 : d;
+}
+// Current local time as a ServiceNow-style datetime string "YYYY-MM-DD HH:MM:SS".
+function snNowString(){
+  const d = new Date(), p = function(n){ return String(n).padStart(2, '0'); };
+  return d.getFullYear() + '-' + p(d.getMonth()+1) + '-' + p(d.getDate()) + ' ' + p(d.getHours()) + ':' + p(d.getMinutes()) + ':' + p(d.getSeconds());
+}
+// Friendly "Jun 28, 2026" from a ServiceNow datetime (uses the date part as-is, no TZ shift).
+function fmtPostedDate(s){
+  const m = String(s || '').match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return '';
+  const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return MON[(+m[2]-1)] + ' ' + (+m[3]) + ', ' + m[1];
+}
+
 function mapReview(p){
   return {
     id: p.number || p.sys_id || '',
@@ -1784,6 +1808,8 @@ function mapReview(p){
     name: p.trainee || '',
     batch: p.batch || '',
     comment: p.comment || '',
+    posted: p.posted_on || '',
+    postedTs: parseSnDate(p.posted_on || p.created),
     overall: +p.overall || 0,
     scores: {
       depth:       +p.depth || 0,
@@ -1811,17 +1837,22 @@ function buildFallbackReviews(){
     ['Omar H.', 'Cloud & DevOps', 'B-2025-12', 'Solid coverage of CI/CD, Docker and Kubernetes with labs that mirror real work.']
   ];
   const keys = REVIEW_PARAMS.map(p => p[0]);
+  const now = Date.now();
   return demo.map(function(d, i){
     const base = 4.4 + ((i % 3) * 0.2);
     const scores = {};
     keys.forEach(function(k, j){ scores[k] = Math.max(4, Math.min(5, Math.round((base - ((i + j) % 3) * 0.25) * 2) / 2)); });
-    return { id: 'demo-' + i, trainerName: d[1], name: d[0], batch: d[2], comment: d[3], overall: base, scores: scores };
+    const ts = now - (i * 86400000);   // each demo review one day older than the last
+    const dt = new Date(ts);
+    const posted = dt.getFullYear() + '-' + String(dt.getMonth()+1).padStart(2,'0') + '-' + String(dt.getDate()).padStart(2,'0') + ' 12:00:00';
+    return { id: 'demo-' + i, trainerName: d[1], name: d[0], batch: d[2], comment: d[3], overall: base, scores: scores, posted: posted, postedTs: ts };
   });
 }
 
 // Load all reviews from the anonymous Scripted REST API.
 async function loadReviews(){
   reviewsState = 'loading';
+  reviewsExpanded = false;   // collapse back to the 5 most recent on every (re)load
   showAllReviews();
   try {
     const res = await snFetch(REVIEWS_GET_API);
@@ -1855,6 +1886,7 @@ function reviewCard(r){
       '<span class="rv-name">' + esc(r.name || 'Anonymous') + '</span>' +
       '<span class="rv-rating">' + overall.toFixed(1) + '/5 <span class="stars">' + stars(overall) + '</span></span>' +
       '<span class="rv-batch">Batch: ' + esc(r.batch || '—') + '</span>' +
+      (r.posted ? '<span class="rv-batch">Posted: ' + esc(fmtPostedDate(r.posted)) + '</span>' : '') +
     '</div>' +
     '<div class="review-body">' +
       '<div class="rv-scales">' + scales + '</div>' +
@@ -1864,7 +1896,7 @@ function reviewCard(r){
 }
 
 function showAllReviews(){
-  const sortOpts = [['overall','Overall']].concat(REVIEW_PARAMS).map(function(p){
+  const sortOpts = [['recent','Most Recent'],['overall','Overall']].concat(REVIEW_PARAMS).map(function(p){
     return '<option value="' + p[0] + '"' + (reviewSort === p[0] ? ' selected' : '') + '>Sort: ' + esc(p[1]) + '</option>';
   }).join('');
 
@@ -1880,11 +1912,20 @@ function showAllReviews(){
         '<div style="margin-top:14px"><button class="btn btn-primary" onclick="loadReviews()">Retry</button></div>' +
       '</div>';
   } else {
-    const list = snReviews.slice().sort(function(a,b){ return sortValue(b) - sortValue(a); });
-    body =
-      '<div class="review-cards">' +
-        (list.length ? list.map(reviewCard).join('') : '<div class="empty">No reviews yet. Be the first to submit one.</div>') +
-      '</div>';
+    const list = snReviews.slice();
+    if (reviewSort === 'recent') list.sort(function(a,b){ return (b.postedTs || 0) - (a.postedTs || 0); });
+    else list.sort(function(a,b){ return sortValue(b) - sortValue(a); });
+    const total = list.length;
+    const shown = reviewsExpanded ? list : list.slice(0, REVIEWS_PAGE);
+    const cards = shown.length
+      ? shown.map(reviewCard).join('')
+      : '<div class="empty">No reviews yet. Be the first to submit one.</div>';
+    const moreBtn = (!reviewsExpanded && total > REVIEWS_PAGE)
+      ? '<div style="text-align:center;margin-top:26px">' +
+          '<button class="btn btn-primary btn-lg" onclick="loadMoreReviews()">Load More (' + (total - REVIEWS_PAGE) + ' more)</button>' +
+        '</div>'
+      : '';
+    body = '<div class="review-cards">' + cards + '</div>' + moreBtn;
   }
 
   const html =
@@ -1920,6 +1961,7 @@ function openReviewModal(){
         '<div><label>Trainer</label><select id="rv_trainer">' + trainerOpts + '</select></div>' +
         '<div><label>Your Name</label><input type="text" id="rv_name" placeholder="Trainee name"></div>' +
         '<div><label>Batch Number *</label><input type="text" id="rv_batch" placeholder="e.g. B-2025-04" required></div>' +
+        '<div><label>Posted On</label><input type="text" id="rv_posted" value="' + esc(fmtPostedDate(snNowString())) + '" readonly title="Set automatically when you submit"></div>' +
       '</div>' +
       '<div style="margin-top:14px"><label>Ratings (1–5)</label>' + params + '</div>' +
       '<div style="margin-top:6px"><label>Comment</label><textarea id="rv_comment" placeholder="Share your experience…"></textarea></div>' +

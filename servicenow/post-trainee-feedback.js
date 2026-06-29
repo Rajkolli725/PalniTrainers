@@ -52,7 +52,13 @@
         u_session_planning_and_flow:   body.planning,
         u_mentorship_and_guidance:     body.mentorship,
         u_likelihood_t_d_this_program: body.recommend,     // <- truncated column
-        sys_import_state_comment:      body.comment
+        sys_import_state_comment:      body.comment,
+        // "Posted on" = the moment the review is submitted (authoritative server time).
+        // For this to land in the target's u_posted_on, the STAGING table needs a
+        // u_posted_on column that the transform map maps to the target field.
+        // (Alternative with NO staging/transform changes: set a Default value of
+        //  javascript:gs.nowDateTime() on u_posted_on in the target table instead.)
+        u_posted_on:                   gs.nowDateTime()
     };
 
     // Insert one row into the staging table. The transform map runs on its own.
