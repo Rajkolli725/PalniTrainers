@@ -302,7 +302,7 @@
   }
   /* ---- Announcement banner (flashing + scrolling, driven by the "offers" property) ---- */
   /* Pinned just below the sticky nav (top offset = measured nav height). */
-  .offer-banner { position: sticky; top: var(--nav-h, 94px); z-index: 43; color: #fff; overflow: hidden;
+  .offer-banner { position: sticky; top: var(--nav-h, 94px); z-index: 43; color: #0e1a2e; overflow: hidden;
     box-shadow: 0 4px 14px rgba(0,0,0,.18); background: var(--accent); }
   .offer-banner[hidden] { display: none; }
   .offer-marquee { overflow: hidden; white-space: nowrap; }
@@ -544,7 +544,7 @@
   .alumni-marquee { overflow: hidden; position: relative; min-width: 0;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
             mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
-  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 18.2s linear infinite; }
+  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 23.7s linear infinite; }
   .alumni-marquee:hover .alumni-track { animation-play-state: paused; }
   @keyframes alumniScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
   @media (prefers-reduced-motion: reduce) { .alumni-track { animation: none; } }
