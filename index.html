@@ -412,7 +412,7 @@
 
   /* ---- Stats band ---- */
   .stats-band { background: var(--brand-grad); color: #fff; }
-  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 34px 0; text-align: center; }
+  .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 14px 0; text-align: center; }
   .stat-num { font-size: 2.7rem; font-weight: 800; line-height: 1; }
   .stat-num .gold { color: var(--gold); }
   .stat-lbl { margin-top: 8px; font-size: .92rem; color: rgba(255,255,255,.85); }
@@ -544,7 +544,7 @@
   .alumni-marquee { overflow: hidden; position: relative; min-width: 0;
     -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
             mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
-  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 13s linear infinite; }
+  .alumni-track { display: flex; align-items: center; gap: 46px; width: max-content; animation: alumniScroll 18.2s linear infinite; }
   .alumni-marquee:hover .alumni-track { animation-play-state: paused; }
   @keyframes alumniScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
   @media (prefers-reduced-motion: reduce) { .alumni-track { animation: none; } }
@@ -2737,21 +2737,40 @@ function syncNavHeight(){
   const nav = document.querySelector('.nav');
   if (nav) document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
 }
+// Build the marquee so it ALWAYS fills the full screen width and loops
+// seamlessly: repeat the message enough times to exceed the viewport, then
+// duplicate that run so the -50% scroll wraps with no jump or empty gap.
+function buildOfferMarquee(){
+  const track  = document.getElementById('offerTrack');
+  const banner = document.getElementById('offerBanner');
+  if (!track || !banner || banner.hidden) return;
+  const raw = track.dataset.msg || '';
+  if (!raw) return;
+  const t = esc(raw);
+  track.innerHTML = '<span>' + t + '</span>';                  // measure one copy
+  const unitW = (track.firstElementChild && track.firstElementChild.offsetWidth) || 240;
+  const vw = window.innerWidth || 1280;
+  const copies = Math.max(2, Math.ceil(vw / unitW) + 1);       // enough to span the screen + 1
+  const run = ('<span>' + t + '</span>').repeat(copies);
+  track.innerHTML = run + run;                                 // two identical runs -> seamless 50% wrap
+  track.style.animationDuration = Math.max(16, Math.round((unitW * copies) / 55)) + 's';  // ~constant speed
+}
 function applyOfferBanner(){
   const banner = document.getElementById('offerBanner');
   const track  = document.getElementById('offerTrack');
   if (!banner || !track) return;
   syncNavHeight();
   if (!applyOfferBanner._wired) {
-    window.addEventListener('resize', syncNavHeight, { passive: true });
+    window.addEventListener('resize', function(){ syncNavHeight(); buildOfferMarquee(); }, { passive: true });
     applyOfferBanner._wired = true;
   }
   const offer = siteProps[PROP.offers];
   if (offer && String(offer).trim()) {
-    const t = esc(String(offer).trim());
-    track.innerHTML = '<span>' + t + '</span><span>' + t + '</span>';
+    track.dataset.msg = String(offer).trim();
     banner.hidden = false;
+    buildOfferMarquee();
   } else {
+    track.dataset.msg = '';
     track.innerHTML = '';
     banner.hidden = true;
   }
