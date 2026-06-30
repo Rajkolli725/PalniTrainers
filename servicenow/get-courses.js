@@ -72,6 +72,7 @@
             usd:            gr.getValue('u_usd') || '',                // individual price in USD
             discount:       gr.getValue('u_discount') || '',          // discount % applied to the price
             learning_steps: gr.getValue('u_learning_steps') || '', // JSON object {heading: description} -> animated journey
+            int_mock:       gr.getValue('u_int_mock') || '',       // HTML field -> "Interview Preparation & Mock Practice" left column
             sys_id:         gr.getUniqueValue()        // page builds the image URL from this
         });
     }

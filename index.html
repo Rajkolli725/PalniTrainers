@@ -595,6 +595,16 @@
   .prep-figure { display: flex; justify-content: center; }
   .prep-figure svg { width: 100%; max-width: 520px; height: auto; display: block;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; }
+  /* Rich-text (HTML) content rendered from a ServiceNow HTML field, e.g. u_int_mock */
+  .cd-rte { color: var(--ink); line-height: 1.6; }
+  .cd-rte > :first-child { margin-top: 0; }
+  .cd-rte > :last-child { margin-bottom: 0; }
+  .cd-rte h1, .cd-rte h2, .cd-rte h3, .cd-rte h4 { color: var(--ink); margin: 18px 0 8px; line-height: 1.25; }
+  .cd-rte p { margin: 0 0 12px; color: var(--muted); }
+  .cd-rte ul, .cd-rte ol { margin: 0 0 12px; padding-left: 22px; }
+  .cd-rte li { margin-bottom: 8px; color: var(--muted); }
+  .cd-rte a { color: var(--accent); }
+  .cd-rte img { max-width: 100%; height: auto; border-radius: 10px; }
 
   /* ---- View head (Trainers / Reviews) ---- */
   .view-head { text-align: center; margin: 30px 0 26px; }
@@ -932,9 +942,8 @@
   .cur-wrap { display: grid; grid-template-columns: 29% 1fr; gap: 30px; align-items: stretch; }
   .cur-side { display: flex; flex-direction: column; min-width: 0; }
 
-  /* Left nav (sticky, independently scrollable) */
-  .cur-nav { position: sticky; top: 84px; max-height: calc(100vh - 110px); overflow-y: auto;
-    display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
+  /* Left nav — sits at the card's top-left and scrolls WITH the card (not pinned) */
+  .cur-nav { display: flex; flex-direction: column; gap: 8px; padding-right: 4px; }
   .cur-foot { margin-top: auto; padding-top: 18px; }   /* pushed to the bottom of the left column */
   .cur-dl-link { display: inline-flex; align-items: center; gap: 8px; padding: 10px 14px;
     color: #0066cc; font-weight: 700; font-size: .92rem; text-decoration: none;
@@ -2485,7 +2494,8 @@ function mapCourse(p){
     usd:            +(p.usd || p.u_usd) || 0,           // course price (USD)
     discount:       +(p.discount || p.u_discount) || 0, // discount %
     hours:          p.hours || p.u_hours || p.duration || '',
-    learningSteps:  p.learning_steps || p.u_learning_steps || ''   // JSON object of {heading: description}
+    learningSteps:  p.learning_steps || p.u_learning_steps || '',  // JSON object of {heading: description}
+    intMock:        p.int_mock || p.u_int_mock || ''               // HTML: Interview Prep & Mock Practice (left column)
   };
 }
 // Photo area: icon placeholder + (for real courses) the image streamed from
@@ -2971,16 +2981,8 @@ function renderCourseDetail(id){
     '</div></section>' +
     '<section class="cd-sec"><h2>Curriculum</h2><div id="curriculumMount" class="curriculum"><div class="cur-loading">Loading curriculum…</div></div></section>' +
     '<section class="cd-sec"><h2>Interview Preparation &amp; Mock Practice</h2>' +
-      '<p class="cd-desc">We don\'t stop at skills — we make you interview-ready. Every program includes guided mock interviews and hands-on practice with detailed, structured feedback, so you walk into real interviews with confidence.</p>' +
       '<div class="prep-wrap">' +
-        '<div class="prep-copy"><ul class="cd-ticks">' +
-          '<li>One-on-one mock interviews with experienced practitioners</li>' +
-          '<li>Role-specific technical Q&amp;A and live problem solving</li>' +
-          '<li>Hands-on projects that build a portfolio-ready showcase</li>' +
-          '<li>Regular assignments with feedback to reinforce every concept</li>' +
-          '<li>Resume and LinkedIn profile reviews</li>' +
-          '<li>Detailed scorecards and a personalised improvement plan</li>' +
-        '</ul></div>' +
+        '<div class="prep-copy cd-rte">' + (c.intMock || '<p class="hint">Interview preparation details coming soon.</p>') + '</div>' +
         '<div class="prep-figure"><svg viewBox="0 0 620 470" role="img" aria-label="Interview preparation map: mock interviews, technical Q and A, resume review, feedback and scoring, projects and assignments">' +
           '<style>.ph-line{stroke:var(--accent);stroke-width:1.5;stroke-opacity:.4}.ph-ring{fill:var(--accent-soft);opacity:.55}.ph-node{fill:var(--card);stroke:var(--accent);stroke-width:2}.ph-ico{font-size:22px}.ph-lbl{fill:var(--ink);font-size:14px;font-weight:600}.ph-hub{fill:#fff;font-size:13px;font-weight:700}</style>' +
           '<defs><linearGradient id="prepHubGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--accent)"/><stop offset="1" style="stop-color:var(--primary-bg)"/></linearGradient></defs>' +
