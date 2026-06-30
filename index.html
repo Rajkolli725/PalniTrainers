@@ -301,17 +301,16 @@
     .nav-links .btn, .nav-links .icon-toggle { width: 100%; }
   }
   /* ---- Announcement banner (flashing + scrolling, driven by the "offers" property) ---- */
-  /* Pinned just below the sticky nav (top offset = measured nav height). */
-  .offer-banner { position: sticky; top: var(--nav-h, 94px); z-index: 43; color: #fff; overflow: hidden;
+  /* Static, pinned, dismissible announcement bar (sits just below the sticky nav). */
+  .offer-banner { position: sticky; top: var(--nav-h, 94px); z-index: 43; color: #fff;
     box-shadow: 0 4px 14px rgba(0,0,0,.18); background: var(--accent); }
   .offer-banner[hidden] { display: none; }
-  .offer-marquee { overflow: hidden; white-space: nowrap; }
-  .offer-track { display: inline-block; white-space: nowrap; padding: 9px 0; font-weight: 700;
-    font-size: .95rem; letter-spacing: .015em; will-change: transform; animation: offerScroll 24s linear infinite; }
-  .offer-track span { display: inline-block; padding: 0 2.6rem; }
-  .offer-banner:hover .offer-track { animation-play-state: paused; }
-  @keyframes offerScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
-  @media (prefers-reduced-motion: reduce) { .offer-track { animation: none; } }
+  .offer-inner { position: relative; padding: 10px 46px; text-align: center; }
+  .offer-text { display: inline-block; font-weight: 700; font-size: .95rem; letter-spacing: .015em; }
+  .offer-close { position: absolute; top: 50%; right: 10px; transform: translateY(-50%);
+    width: 28px; height: 28px; border: none; border-radius: 50%; background: rgba(255,255,255,.22);
+    color: #fff; font-size: 1.25rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
+  .offer-close:hover { background: rgba(255,255,255,.42); }
   /* Services mega-panel (slides down under the nav) */
   .svc-ov { position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 44; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
   .svc-ov.open { opacity: 1; pointer-events: auto; }
@@ -1042,7 +1041,10 @@
 
 <!-- Announcement banner — shows on every page when the "offers" property is set (flashing + scrolling) -->
 <div id="offerBanner" class="offer-banner" role="status" aria-live="polite" hidden>
-  <div class="offer-marquee"><div class="offer-track" id="offerTrack"></div></div>
+  <div class="container offer-inner">
+    <span class="offer-text" id="offerTrack"></span>
+    <button class="offer-close" onclick="closeOfferBanner()" aria-label="Dismiss announcement" title="Dismiss">&times;</button>
+  </div>
 </div>
 
 <!-- Services mega-panel (opens from the Services nav link) -->
@@ -2672,31 +2674,19 @@ function applyProperties(){
   initReveal();   // re-observe updated stat counters so they animate when scrolled into view
 }
 
-/* Announcement banner — horizontally scrolling marquee shown just
-   below the nav (on every view) whenever the "offers" property is set. The text
-   is duplicated so the marquee loops seamlessly (-50% per cycle). */
+/* Announcement banner — a STATIC, pinned, dismissible bar shown just below the
+   nav (on every view) whenever the "offers" property is set. */
 // Pin the banner exactly below the nav: expose the nav's height as --nav-h.
 function syncNavHeight(){
   const nav = document.querySelector('.nav');
   if (nav) document.documentElement.style.setProperty('--nav-h', nav.offsetHeight + 'px');
 }
-// Build the marquee so it ALWAYS fills the full screen width and loops
-// seamlessly: repeat the message enough times to exceed the viewport, then
-// duplicate that run so the -50% scroll wraps with no jump or empty gap.
-function buildOfferMarquee(){
-  const track  = document.getElementById('offerTrack');
+// User dismissal — stays closed for the rest of the session.
+let offerDismissed = false;
+function closeOfferBanner(){
+  offerDismissed = true;
   const banner = document.getElementById('offerBanner');
-  if (!track || !banner || banner.hidden) return;
-  const raw = track.dataset.msg || '';
-  if (!raw) return;
-  const t = esc(raw);
-  track.innerHTML = '<span>' + t + '</span>';                  // measure one copy
-  const unitW = (track.firstElementChild && track.firstElementChild.offsetWidth) || 240;
-  const vw = window.innerWidth || 1280;
-  const copies = Math.max(2, Math.ceil(vw / unitW) + 1);       // enough to span the screen + 1
-  const run = ('<span>' + t + '</span>').repeat(copies);
-  track.innerHTML = run + run;                                 // two identical runs -> seamless 50% wrap
-  track.style.animationDuration = Math.max(16, Math.round((unitW * copies) / 55)) + 's';  // ~constant speed
+  if (banner) banner.hidden = true;
 }
 function applyOfferBanner(){
   const banner = document.getElementById('offerBanner');
@@ -2704,17 +2694,15 @@ function applyOfferBanner(){
   if (!banner || !track) return;
   syncNavHeight();
   if (!applyOfferBanner._wired) {
-    window.addEventListener('resize', function(){ syncNavHeight(); buildOfferMarquee(); }, { passive: true });
+    window.addEventListener('resize', syncNavHeight, { passive: true });
     applyOfferBanner._wired = true;
   }
   const offer = siteProps[PROP.offers];
-  if (offer && String(offer).trim()) {
-    track.dataset.msg = String(offer).trim();
+  if (offer && String(offer).trim() && !offerDismissed) {
+    track.textContent = String(offer).trim();
     banner.hidden = false;
-    buildOfferMarquee();
   } else {
-    track.dataset.msg = '';
-    track.innerHTML = '';
+    if (!offer || !String(offer).trim()) track.textContent = '';
     banner.hidden = true;
   }
 }
