@@ -506,22 +506,9 @@
   .stats-alumni { background: #fff; padding: 20px 0 22px; }
   .stats-alumni .al-name { color: var(--primary-bg); }
 
-  /* Enterprise / corporate training CTA band */
-  .ent-cta { background: var(--brand-grad); color: #fff; border-radius: var(--radius);
-    padding: 40px 44px; display: grid; grid-template-columns: 1.6fr auto; gap: 28px; align-items: center;
-    box-shadow: 0 24px 60px rgba(0,0,0,.25); }
+  /* Enterprise / corporate training section */
   .ent-eyebrow { display: inline-block; font-size: .72rem; font-weight: 800; letter-spacing: .14em;
-    text-transform: uppercase; color: rgba(255,255,255,.85); margin-bottom: 10px; }
-  .ent-cta h2 { color: #fff; margin: 0 0 10px; font-size: 1.9rem; line-height: 1.15; }
-  .ent-cta p { color: rgba(255,255,255,.92); margin: 0; font-size: 1.02rem; line-height: 1.55; max-width: 640px; }
-  .ent-actions { display: flex; justify-content: flex-end; }
-  .ent-actions .btn { background: #fff; color: var(--primary-hover); font-weight: 800; white-space: nowrap; }
-  .ent-actions .btn:hover { background: #eef1f6; }
-  @media (max-width: 760px) {
-    .ent-cta { grid-template-columns: 1fr; padding: 30px 24px; text-align: center; }
-    .ent-actions { justify-content: center; }
-    .ent-cta p { margin-inline: auto; }
-  }
+    text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
   .alumni-band { background: var(--hover); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .alumni-wrap { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 26px; padding: 16px 24px; }
   .alumni-text { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
@@ -1163,15 +1150,13 @@
   <!-- Enterprise / corporate training CTA -->
   <section class="section" id="enterprise">
     <div class="container">
-      <div class="ent-cta reveal">
-        <div class="ent-copy">
-          <span class="ent-eyebrow">For Enterprises</span>
-          <h2>Are you an enterprise looking to upskill your employees?</h2>
-          <p>Give your teams job-ready skills with custom private cohorts — built around your goals, tech stack and schedule across ServiceNow, Salesforce, Cloud, Data &amp; AI. Certification-focused, hands-on, and led by practitioners.</p>
-        </div>
-        <div class="ent-actions">
-          <button class="btn btn-lg" onclick="openLeadModal('','Enterprise Training (Home)')">Talk to Us About Team Training</button>
-        </div>
+      <div class="section-title reveal">
+        <span class="ent-eyebrow">For Enterprises</span>
+        <h2>Are you an enterprise looking to upskill your employees?</h2>
+        <p>Give your teams job-ready skills with custom private cohorts — built around your goals, tech stack and schedule across ServiceNow, Salesforce, Cloud, Data &amp; AI. Certification-focused, hands-on, and led by practitioners.</p>
+      </div>
+      <div style="text-align:center;margin-top:8px">
+        <button class="btn btn-accent btn-lg" onclick="openLeadModal('','Enterprise Training (Home)')">Talk to Us About Team Training</button>
       </div>
     </div>
   </section>
@@ -2812,7 +2797,7 @@ function courseGridCardHtml(c, i){
   const icon = COURSE_ICONS[i % COURSE_ICONS.length];
   const photo = coursePhoto(c, icon, i);
   const rate = c.rating ? '<span class="cg-rate">★ ' + c.rating.toFixed(1) + '</span>' : '';
-  return '<button class="cg-card" onclick="openCourseModal(\'' + esc(c.id) + '\')" title="View ' + esc(c.name) + '">' +
+  return '<button class="cg-card" onclick="openCourseDetail(\'' + esc(c.id) + '\')" title="View ' + esc(c.name) + '">' +
       '<div class="cg-photo">' + photo + rate + '</div>' +
       '<div class="cg-body">' +
         '<div class="cg-name">' + esc(c.name) + '</div>' +
