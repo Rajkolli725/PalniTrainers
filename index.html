@@ -803,9 +803,11 @@
   .cd-ticks li::before { content: "✓"; position: absolute; left: 0; color: #5aa2ff; font-weight: 800; }
   .cd-table { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   /* Home "Upcoming Cohort Batches" table has an extra Course column (6 cells). */
-  .cd-table.bt-home .cd-trow { grid-template-columns: 1.5fr 1fr 1fr 1.2fr .9fr auto; }
+  .cd-table.bt-home .cd-trow { grid-template-columns: 1.5fr 1fr 1fr 1.2fr .9fr 150px; }
   @media (max-width: 760px) { .cd-table.bt-home .cd-trow { grid-template-columns: 1fr 1fr; } }
-  .cd-trow { display: grid; grid-template-columns: 1fr 1.2fr 1.4fr 1fr auto; gap: 12px; align-items: center; padding: 14px 16px; border-top: 1px solid var(--line); font-size: .9rem; }
+  .cd-trow { display: grid; grid-template-columns: 1fr 1.2fr 1.4fr 1fr 150px; gap: 12px; align-items: center; padding: 14px 16px; border-top: 1px solid var(--line); font-size: .9rem; }
+  /* Let text cells shrink so the fr columns resolve identically on every row (header + data stay aligned). */
+  .cd-trow > span { min-width: 0; overflow-wrap: anywhere; }
   .cd-trow:first-child { border-top: none; }
   .cd-thead { background: var(--hover); font-weight: 700; text-transform: uppercase; font-size: .76rem; letter-spacing: .04em; color: var(--muted); }
   .cd-faq { border: 1px solid var(--line); border-radius: 12px; padding: 4px 16px; margin-bottom: 10px; background: var(--card); }
@@ -2504,6 +2506,7 @@ function mapCourse(p){
     hours:          p.hours || p.u_hours || p.duration || '',
     learningSteps:  p.learning_steps || p.u_learning_steps || '',  // JSON object of {heading: description}
     intMock:        p.int_mock || p.u_int_mock || '',              // HTML: Interview Prep & Mock Practice (left column)
+    project:        p.project || p.u_project || '',                // JSON object {heading: content} -> Projects cards
     // Boolean flags -> show/hide sections on the course detail page.
     // Default true so sections still show if the field isn't returned (e.g. demo data).
     mockApplicable:     boolFlag(p.mock_interview_applicable, true),   // u_mock_interview_applicable
@@ -2996,6 +2999,22 @@ function renderCourseBatches(courseSysId){
   sec.style.display = '';
 }
 
+/* Build "Projects You'll Build" cards from the u_project JSON object
+   {heading: content}. Each key -> card heading, value -> card body (plain text).
+   Empty/invalid -> a single "coming soon" placeholder card. */
+function projectCards(raw){
+  let obj = null;
+  if (raw && typeof raw === 'object') obj = raw;
+  else if (raw) { try { obj = JSON.parse(raw); } catch (e) { obj = null; } }
+  const keys = (obj && typeof obj === 'object') ? Object.keys(obj) : [];
+  if (!keys.length) {
+    return '<div class="course-card"><h3>Projects</h3><p class="hint">Projects will be announced soon.</p></div>';
+  }
+  return keys.map(function(k){
+    return '<div class="course-card"><h3>' + esc(k) + '</h3><p>' + esc(String(obj[k])) + '</p></div>';
+  }).join('');
+}
+
 function renderCourseDetail(id){
   const box = document.getElementById('courseDetailView');
   if (!box) return;
@@ -3037,9 +3056,7 @@ function renderCourseDetail(id){
     '<section class="cd-sec"><h2>Your Learning Journey</h2><div id="journeyMount" class="journey"></div></section>' +
     (c.projectsApplicable ?
     '<section class="cd-sec"><h2>Projects You\'ll Build</h2><div class="cards-grid">' +
-      '<div class="course-card"><h3>Project 1</h3><p>A real-world build to apply what you learn. <span class="hint">(Add real projects in ServiceNow.)</span></p></div>' +
-      '<div class="course-card"><h3>Project 2</h3><p>A portfolio-ready deliverable reviewed by mentors.</p></div>' +
-      '<div class="course-card"><h3>Project 3</h3><p>A capstone integrating the full course.</p></div>' +
+      projectCards(c.project) +
     '</div></section>' : '') +
     '<section class="cd-sec" id="courseBatchSec" style="display:none"><h2>Upcoming Cohort Batches</h2><div class="cd-table" id="courseBatchTable" data-course="' + esc(c.sysId || '') + '"></div></section>' +
     '<section class="cd-sec"><h2>Curriculum</h2><div id="curriculumMount" class="curriculum"><div class="cur-loading">Loading curriculum…</div></div></section>' +
