@@ -54,7 +54,8 @@
     var out = [];
     var gr = new GlideRecord(TABLE);
     gr.addQuery('u_active', true);          // only active course records
-    gr.orderBy('u_course_name');
+    gr.orderByDesc('u_order');              // highest u_order first (descending)
+    gr.orderBy('u_course_name');            // tiebreaker when u_order is equal/empty
     gr.query();
     while (gr.next()) {
         out.push({

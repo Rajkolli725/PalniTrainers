@@ -470,21 +470,21 @@
   .contact-map iframe { display: block; width: 100%; height: 240px; border: 0; }
 
   /* ---- Footer ---- */
-  .site-footer { background: #1b1012; color: #e9d9db; padding: 56px 0 26px; }
-  body.dark .site-footer { background: #0c0708; }
+  /* Footer matches the nav bar color (theme-aware, readable in light & dark). */
+  .site-footer { background: var(--nav-bg); color: var(--muted); padding: 56px 0 26px; border-top: 1px solid var(--nav-line); }
   .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 30px; }
   @media (max-width: 780px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 26px; } }
   @media (max-width: 460px) { .footer-grid { grid-template-columns: 1fr; } }
-  .site-footer h5 { font-size: .95rem; margin: 0 0 14px; color: #fff; }
-  .site-footer a { color: #cbb6b9; text-decoration: none; display: block; margin-bottom: 9px; font-size: .9rem; cursor: pointer; }
-  .site-footer a:hover { color: var(--gold); }
+  .site-footer h5 { font-size: .95rem; margin: 0 0 14px; color: var(--ink); }
+  .site-footer a { color: var(--muted); text-decoration: none; display: block; margin-bottom: 9px; font-size: .9rem; cursor: pointer; }
+  .site-footer a:hover { color: var(--accent); }
   .footer-logo { height: 40px; margin-bottom: 14px; background: #fff; padding: 6px 8px; border-radius: 8px; }
-  .footer-about { color: #c0aaad; font-size: .9rem; max-width: 280px; }
-  .footer-bottom { border-top: 1px solid rgba(255,255,255,.12); margin-top: 36px; padding-top: 18px; text-align: center; font-size: .83rem; color: #a98e92; }
+  .footer-about { color: var(--muted); font-size: .9rem; max-width: 280px; }
+  .footer-bottom { border-top: 1px solid var(--line); margin-top: 36px; padding-top: 18px; text-align: center; font-size: .83rem; color: var(--muted); }
   /* Footer social icons */
   .footer-social { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
   .footer-social a { display: grid; place-items: center; width: 40px; height: 40px; margin: 0; border-radius: 10px;
-    background: rgba(255,255,255,.08); color: #e9d9db; transition: background .15s ease, color .15s ease, transform .15s ease; }
+    background: var(--ghost-bg); color: var(--ink); transition: background .15s ease, color .15s ease, transform .15s ease; }
   .footer-social a:hover { background: var(--accent); color: #fff; transform: translateY(-2px); }
   .footer-social svg { width: 19px; height: 19px; fill: currentColor; }
   .footer-social .fs-udemy { font-weight: 800; font-size: .82rem; letter-spacing: .01em; }
@@ -1148,7 +1148,7 @@
   </section>
 
   <!-- Enterprise / corporate training CTA -->
-  <section class="section" id="enterprise">
+  <section class="section alt" id="enterprise">
     <div class="container">
       <div class="section-title reveal">
         <span class="ent-eyebrow">For Enterprises</span>
@@ -1162,7 +1162,7 @@
   </section>
 
   <!-- FAQ -->
-  <section class="section alt" id="home-faq">
+  <section class="section" id="home-faq">
     <div class="container">
       <div class="section-title reveal">
         <h2>Frequently Asked Questions</h2>
@@ -1180,7 +1180,7 @@
   </section>
 
   <!-- Contact -->
-  <section class="section" id="contact">
+  <section class="section alt" id="contact">
     <div class="container">
       <div class="contact-grid">
         <div class="reveal">
