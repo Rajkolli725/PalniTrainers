@@ -505,6 +505,23 @@
   /* White band for the scrolling logos; the stat numbers above keep the gradient. */
   .stats-alumni { background: #fff; padding: 20px 0 22px; }
   .stats-alumni .al-name { color: var(--primary-bg); }
+
+  /* Enterprise / corporate training CTA band */
+  .ent-cta { background: var(--brand-grad); color: #fff; border-radius: var(--radius);
+    padding: 40px 44px; display: grid; grid-template-columns: 1.6fr auto; gap: 28px; align-items: center;
+    box-shadow: 0 24px 60px rgba(0,0,0,.25); }
+  .ent-eyebrow { display: inline-block; font-size: .72rem; font-weight: 800; letter-spacing: .14em;
+    text-transform: uppercase; color: rgba(255,255,255,.85); margin-bottom: 10px; }
+  .ent-cta h2 { color: #fff; margin: 0 0 10px; font-size: 1.9rem; line-height: 1.15; }
+  .ent-cta p { color: rgba(255,255,255,.92); margin: 0; font-size: 1.02rem; line-height: 1.55; max-width: 640px; }
+  .ent-actions { display: flex; justify-content: flex-end; }
+  .ent-actions .btn { background: #fff; color: var(--primary-hover); font-weight: 800; white-space: nowrap; }
+  .ent-actions .btn:hover { background: #eef1f6; }
+  @media (max-width: 760px) {
+    .ent-cta { grid-template-columns: 1fr; padding: 30px 24px; text-align: center; }
+    .ent-actions { justify-content: center; }
+    .ent-cta p { margin-inline: auto; }
+  }
   .alumni-band { background: var(--hover); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .alumni-wrap { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 26px; padding: 16px 24px; }
   .alumni-text { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
@@ -1140,6 +1157,22 @@
       </div>
       <div class="tcards" id="homeTestimonials"></div>
       <div style="text-align:center;margin-top:34px"><button class="btn btn-accent btn-lg" onclick="goView('reviews')">Read All Reviews →</button></div>
+    </div>
+  </section>
+
+  <!-- Enterprise / corporate training CTA -->
+  <section class="section" id="enterprise">
+    <div class="container">
+      <div class="ent-cta reveal">
+        <div class="ent-copy">
+          <span class="ent-eyebrow">For Enterprises</span>
+          <h2>Are you an enterprise looking to upskill your employees?</h2>
+          <p>Give your teams job-ready skills with custom private cohorts — built around your goals, tech stack and schedule across ServiceNow, Salesforce, Cloud, Data &amp; AI. Certification-focused, hands-on, and led by practitioners.</p>
+        </div>
+        <div class="ent-actions">
+          <button class="btn btn-lg" onclick="openLeadModal('','Enterprise Training (Home)')">Talk to Us About Team Training</button>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -2470,8 +2503,18 @@ function mapCourse(p){
     discount:       +(p.discount || p.u_discount) || 0, // discount %
     hours:          p.hours || p.u_hours || p.duration || '',
     learningSteps:  p.learning_steps || p.u_learning_steps || '',  // JSON object of {heading: description}
-    intMock:        p.int_mock || p.u_int_mock || ''               // HTML: Interview Prep & Mock Practice (left column)
+    intMock:        p.int_mock || p.u_int_mock || '',              // HTML: Interview Prep & Mock Practice (left column)
+    // Boolean flags -> show/hide sections on the course detail page.
+    // Default true so sections still show if the field isn't returned (e.g. demo data).
+    mockApplicable:     boolFlag(p.mock_interview_applicable, true),   // u_mock_interview_applicable
+    projectsApplicable: boolFlag(p.projects_applicable, true)         // u_projects_applicable
   };
+}
+// Interpret a ServiceNow boolean field value ("1"/"0"/"true"/"false"). Missing -> default.
+function boolFlag(v, def){
+  if (v === undefined || v === null || v === '') return def;
+  const s = String(v).trim().toLowerCase();
+  return s === '1' || s === 'true' || s === 'yes';
 }
 // Photo area: icon placeholder + (for real courses) the image streamed from
 // ServiceNow. The image covers the icon on load; on error it's removed so the
@@ -2929,17 +2972,19 @@ function renderCourseDetail(id){
       '<div><h2>Trusted By</h2><p class="hint">Participants &amp; organizations trained so far:</p>' + (chipList(c.participants) || '<p class="hint">—</p>') + '</div>' +
     '</section>' +
     '<section class="cd-sec"><h2>Your Learning Journey</h2><div id="journeyMount" class="journey"></div></section>' +
+    (c.projectsApplicable ?
     '<section class="cd-sec"><h2>Projects You\'ll Build</h2><div class="cards-grid">' +
       '<div class="course-card"><h3>Project 1</h3><p>A real-world build to apply what you learn. <span class="hint">(Add real projects in ServiceNow.)</span></p></div>' +
       '<div class="course-card"><h3>Project 2</h3><p>A portfolio-ready deliverable reviewed by mentors.</p></div>' +
       '<div class="course-card"><h3>Project 3</h3><p>A capstone integrating the full course.</p></div>' +
-    '</div></section>' +
+    '</div></section>' : '') +
     '<section class="cd-sec"><h2>Upcoming Cohort Batches</h2><div class="cd-table">' +
       '<div class="cd-trow cd-thead"><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>' +
       '<div class="cd-trow"><span>Weekday</span><span>To be announced</span><span>Mon–Fri, evenings</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button></span></div>' +
       '<div class="cd-trow"><span>Weekend</span><span>To be announced</span><span>Sat–Sun</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button></span></div>' +
     '</div></section>' +
     '<section class="cd-sec"><h2>Curriculum</h2><div id="curriculumMount" class="curriculum"><div class="cur-loading">Loading curriculum…</div></div></section>' +
+    (c.mockApplicable ?
     '<section class="cd-sec"><h2>Interview Preparation &amp; Mock Practice</h2>' +
       '<div class="prep-wrap">' +
         '<div class="prep-copy cd-rte">' + (c.intMock || '<p class="hint">Interview preparation details coming soon.</p>') + '</div>' +
@@ -2959,7 +3004,7 @@ function renderCourseDetail(id){
           '<circle class="ph-node" cx="180" cy="305" r="26"/><text class="ph-ico" x="180" y="313" text-anchor="middle">🛠️</text><text class="ph-lbl" x="144" y="310" text-anchor="end">Projects</text>' +
           '<circle class="ph-node" cx="180" cy="155" r="26"/><text class="ph-ico" x="180" y="163" text-anchor="middle">📝</text><text class="ph-lbl" x="144" y="160" text-anchor="end">Assignments</text>' +
         '</svg></div>' +
-      '</div></section>' +
+      '</div></section>' : '') +
     '<section class="cd-sec"><h2>Training Options</h2>' +
       '<div class="pricing">' +
         '<div class="seg seg-cur" id="segCur"><span class="seg-thumb"></span>' +

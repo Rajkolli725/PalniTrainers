@@ -73,6 +73,8 @@
             discount:       gr.getValue('u_discount') || '',          // discount % applied to the price
             learning_steps: gr.getValue('u_learning_steps') || '', // JSON object {heading: description} -> animated journey
             int_mock:       gr.getValue('u_int_mock') || '',       // HTML field -> "Interview Preparation & Mock Practice" left column
+            mock_interview_applicable: gr.getValue('u_mock_interview_applicable'),  // true/false -> show/hide Interview Prep section
+            projects_applicable:       gr.getValue('u_projects_applicable'),        // true/false -> show/hide Projects section
             sys_id:         gr.getUniqueValue()        // page builds the image URL from this
         });
     }
