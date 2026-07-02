@@ -802,6 +802,9 @@
   .cd-ticks li { position: relative; padding-left: 26px; margin-bottom: 10px; color: var(--ink); }
   .cd-ticks li::before { content: "✓"; position: absolute; left: 0; color: #5aa2ff; font-weight: 800; }
   .cd-table { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+  /* Home "Upcoming Cohort Batches" table has an extra Course column (6 cells). */
+  .cd-table.bt-home .cd-trow { grid-template-columns: 1.5fr 1fr 1fr 1.2fr .9fr auto; }
+  @media (max-width: 760px) { .cd-table.bt-home .cd-trow { grid-template-columns: 1fr 1fr; } }
   .cd-trow { display: grid; grid-template-columns: 1fr 1.2fr 1.4fr 1fr auto; gap: 12px; align-items: center; padding: 14px 16px; border-top: 1px solid var(--line); font-size: .9rem; }
   .cd-trow:first-child { border-top: none; }
   .cd-thead { background: var(--hover); font-weight: 700; text-transform: uppercase; font-size: .76rem; letter-spacing: .04em; color: var(--muted); }
@@ -1161,8 +1164,19 @@
     </div>
   </section>
 
+  <!-- Upcoming Cohort Batches (auto-populated from ServiceNow; hidden when empty) -->
+  <section class="section" id="home-batches" style="display:none">
+    <div class="container">
+      <div class="section-title reveal">
+        <h2>Upcoming Cohort Batches</h2>
+        <p>Reserve your seat — new cohorts starting across our programs.</p>
+      </div>
+      <div class="cd-table bt-home" id="homeBatchTable"></div>
+    </div>
+  </section>
+
   <!-- FAQ -->
-  <section class="section" id="home-faq">
+  <section class="section alt" id="home-faq">
     <div class="container">
       <div class="section-title reveal">
         <h2>Frequently Asked Questions</h2>
@@ -1180,7 +1194,7 @@
   </section>
 
   <!-- Contact -->
-  <section class="section alt" id="contact">
+  <section class="section" id="contact">
     <div class="container">
       <div class="contact-grid">
         <div class="reveal">
@@ -1523,6 +1537,7 @@ const COURSES_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/ge
 const COURSE_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_image/';          // GET /{sys_id} -> course image (binary)
 const CURRICULUM_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_curriculum';       // GET ?course=<sys_id> -> { result: [ modules ] }
 const FAQS_GET_API       = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_faqs';             // GET -> { result: [ { question, answer, associated_to } ] }
+const COHORTS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_cohort_batches';   // GET -> { result: [ {course, course_id, batch, starts, schedule, mode} ] }
 const CURRICULUM_FILE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_curriculum/';  // GET /{sys_id} -> u_course_curriculum file (download)
 const PLACEMENTS_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_placements';       // GET -> { result: [ { sys_id, name, profile_picture } ] }
 const PLACEMENT_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/placement_image/';    // GET /{sys_id} -> company logo (binary)
@@ -2918,6 +2933,69 @@ function renderCourseFaqs(courseSysId){
 
 /* Starter dedicated course page (#course-<id>). Data-driven where available;
    placeholders for fees / batches / projects / FAQs to refine later. */
+/* ============================================================
+   Upcoming Cohort Batches — from x_palni_servicen_1_upcoming_cohort_batches.
+   One fetch serves both: the HOME table (all rows) and each COURSE page's
+   table (rows filtered by course sys_id). Rows come soonest-first from the
+   server. Each section hides itself when it has no rows.
+   ============================================================ */
+let cohorts = null;   // null = not loaded yet; array once fetched
+async function loadCohorts(){
+  try {
+    const res = await snFetch(COHORTS_GET_API);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    cohorts = (json.result || []).filter(function(b){ return b && (b.batch || b.starts || b.schedule || b.mode); });
+  } catch (e) {
+    console.warn('Cohort batches: none loaded —', e.message);
+    cohorts = [];
+  }
+  renderHomeBatches();
+  const cm = document.getElementById('courseBatchTable');
+  if (cm) renderCourseBatches(cm.dataset.course || '');
+}
+// "2026-07-20" -> "Jul 20, 2026"
+function fmtBatchDate(s){
+  const m = String(s || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return s ? esc(s) : 'TBA';
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  return months[(+m[2]) - 1] + ' ' + (+m[3]) + ', ' + m[1];
+}
+function batchNotifyBtn(courseName){
+  const sn = esc(String(courseName || '').replace(/'/g, ''));
+  return '<button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button>';
+}
+function batchRow(b, withCourse){
+  return '<div class="cd-trow">' +
+    (withCourse ? '<span>' + esc(b.course || '') + '</span>' : '') +
+    '<span>' + esc(b.batch || '') + '</span>' +
+    '<span>' + fmtBatchDate(b.starts) + '</span>' +
+    '<span>' + esc(b.schedule || '') + '</span>' +
+    '<span>' + esc(b.mode || '') + '</span>' +
+    '<span>' + batchNotifyBtn(b.course) + '</span>' +
+  '</div>';
+}
+function renderHomeBatches(){
+  const sec = document.getElementById('home-batches');
+  const mount = document.getElementById('homeBatchTable');
+  if (!sec || !mount) return;
+  if (!cohorts || !cohorts.length) { sec.style.display = 'none'; return; }
+  const head = '<div class="cd-trow cd-thead"><span>Course</span><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>';
+  mount.innerHTML = head + cohorts.map(function(b){ return batchRow(b, true); }).join('');
+  sec.style.display = '';
+}
+function renderCourseBatches(courseSysId){
+  const sec = document.getElementById('courseBatchSec');
+  const mount = document.getElementById('courseBatchTable');
+  if (!sec || !mount) return;
+  if (!cohorts) { sec.style.display = 'none'; return; }        // not loaded yet
+  const list = cohorts.filter(function(b){ return b.course_id === courseSysId; });
+  if (!list.length) { sec.style.display = 'none'; return; }
+  const head = '<div class="cd-trow cd-thead"><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>';
+  mount.innerHTML = head + list.map(function(b){ return batchRow(b, false); }).join('');
+  sec.style.display = '';
+}
+
 function renderCourseDetail(id){
   const box = document.getElementById('courseDetailView');
   if (!box) return;
@@ -2963,11 +3041,7 @@ function renderCourseDetail(id){
       '<div class="course-card"><h3>Project 2</h3><p>A portfolio-ready deliverable reviewed by mentors.</p></div>' +
       '<div class="course-card"><h3>Project 3</h3><p>A capstone integrating the full course.</p></div>' +
     '</div></section>' : '') +
-    '<section class="cd-sec"><h2>Upcoming Cohort Batches</h2><div class="cd-table">' +
-      '<div class="cd-trow cd-thead"><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>' +
-      '<div class="cd-trow"><span>Weekday</span><span>To be announced</span><span>Mon–Fri, evenings</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button></span></div>' +
-      '<div class="cd-trow"><span>Weekend</span><span>To be announced</span><span>Sat–Sun</span><span>Online (Live)</span><span><button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button></span></div>' +
-    '</div></section>' +
+    '<section class="cd-sec" id="courseBatchSec" style="display:none"><h2>Upcoming Cohort Batches</h2><div class="cd-table" id="courseBatchTable" data-course="' + esc(c.sysId || '') + '"></div></section>' +
     '<section class="cd-sec"><h2>Curriculum</h2><div id="curriculumMount" class="curriculum"><div class="cur-loading">Loading curriculum…</div></div></section>' +
     (c.mockApplicable ?
     '<section class="cd-sec"><h2>Interview Preparation &amp; Mock Practice</h2>' +
@@ -3015,6 +3089,7 @@ function renderCourseDetail(id){
   loadCurriculum(c);   // fetch + render the curriculum section (async)
   renderJourney(c);    // build + animate the data-driven learning journey
   renderCourseFaqs(c.sysId || '');   // global + this course's FAQs (from the table)
+  renderCourseBatches(c.sysId || '');   // this course's upcoming cohort batches (from the table)
 }
 
 /* ============================================================
@@ -3594,6 +3669,7 @@ loadMembers();           // fetch trainers (re-renders trainers view + home prev
 loadHomeTestimonials();  // fetch top reviews for the home testimonials strip
 loadPlacements();        // fetch alumni placement logos -> fill the marquee bands
 loadFaqs();              // fetch FAQs -> home (global) + course pages (global + course-specific)
+loadCohorts();           // fetch upcoming cohort batches -> home table + course-page tables
 initReveal();            // scroll-reveal + animated counters
 window.addEventListener('hashchange', route);
 // Subtle shadow on the translucent nav once the page is scrolled
