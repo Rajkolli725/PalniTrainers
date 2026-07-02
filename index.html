@@ -2506,7 +2506,7 @@ function mapCourse(p){
     hours:          p.hours || p.u_hours || p.duration || '',
     learningSteps:  p.learning_steps || p.u_learning_steps || '',  // JSON object of {heading: description}
     intMock:        p.int_mock || p.u_int_mock || '',              // HTML: Interview Prep & Mock Practice (left column)
-    project:        p.project || p.u_project || '',                // JSON object {heading: content} -> Projects cards
+    project:        p.project || p.u_projects || '',               // JSON object {heading: content} -> Projects cards
     // Boolean flags -> show/hide sections on the course detail page.
     // Default true so sections still show if the field isn't returned (e.g. demo data).
     mockApplicable:     boolFlag(p.mock_interview_applicable, true),   // u_mock_interview_applicable
