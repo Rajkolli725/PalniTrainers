@@ -336,6 +336,9 @@
   .svc-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
   .svc-pills span { background: #ffe9d9; color: #b4491f; font-size: .78rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
   .svc-actions { margin-top: auto; text-align: center; }
+  /* Cohort table: course name as a link to its course page */
+  .cohort-course-link { color: var(--accent); font-weight: 600; text-decoration: underline; cursor: pointer; }
+  .cohort-course-link:hover { color: var(--primary-bg); }
 
   /* ---- Buttons (extends existing .btn) ---- */
   .btn-gold { background: var(--accent); color: #fff; }
@@ -2978,8 +2981,11 @@ function batchNotifyBtn(courseName){
   return '<button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button>';
 }
 function batchRow(b, withCourse){
+  var courseCell = b.course_id
+    ? '<a class="cohort-course-link" onclick="openCourseDetail(\'' + esc(b.course_id) + '\')">' + esc(b.course || '') + '</a>'
+    : esc(b.course || '');
   return '<div class="cd-trow">' +
-    (withCourse ? '<span>' + esc(b.course || '') + '</span>' : '') +
+    (withCourse ? '<span>' + courseCell + '</span>' : '') +
     '<span>' + esc(b.batch || '') + '</span>' +
     '<span>' + fmtBatchDate(b.starts) + '</span>' +
     '<span>' + esc(b.schedule || '') + '</span>' +
