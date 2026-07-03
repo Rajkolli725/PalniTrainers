@@ -506,9 +506,12 @@
   .stats-alumni { background: #fff; padding: 20px 0 22px; }
   .stats-alumni .al-name { color: var(--primary-bg); }
 
-  /* Enterprise / corporate training section */
-  .ent-eyebrow { display: inline-block; font-size: .72rem; font-weight: 800; letter-spacing: .14em;
-    text-transform: uppercase; color: var(--accent); margin-bottom: 8px; }
+  /* Enterprise / corporate training section — body from the u_enterprise HTML field */
+  .ent-body { color: var(--muted); font-size: 1.05rem; line-height: 1.6; max-width: 720px; margin: 0 auto; }
+  .ent-body > :first-child { margin-top: 0; } .ent-body > :last-child { margin-bottom: 0; }
+  .ent-body p { margin: 0 0 10px; }
+  .ent-body ul, .ent-body ol { text-align: left; display: inline-block; margin: 6px 0; }
+  .ent-body a { color: var(--accent); }
   .alumni-band { background: var(--hover); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   .alumni-wrap { display: grid; grid-template-columns: auto 1fr; align-items: center; gap: 26px; padding: 16px 24px; }
   .alumni-text { display: flex; flex-direction: column; gap: 2px; white-space: nowrap; }
@@ -1156,9 +1159,8 @@
   <section class="section alt" id="enterprise">
     <div class="container">
       <div class="section-title reveal">
-        <span class="ent-eyebrow">For Enterprises</span>
-        <h2>Are you an enterprise looking to upskill your employees?</h2>
-        <p>Give your teams job-ready skills with custom private cohorts — built around your goals, tech stack and schedule across ServiceNow, Salesforce, Cloud, Data &amp; AI. Certification-focused, hands-on, and led by practitioners.</p>
+        <h2 id="enterpriseHeading">Are you an enterprise looking to upskill your employees?</h2>
+        <div id="enterpriseBody" class="ent-body">Give your teams job-ready skills with custom private cohorts — built around your goals, tech stack and schedule across ServiceNow, Salesforce, Cloud, Data &amp; AI. Certification-focused, hands-on, and led by practitioners.</div>
       </div>
       <div style="text-align:center;margin-top:8px">
         <button class="btn btn-accent btn-lg" onclick="openLeadModal('','Enterprise Training (Home)')">Talk to Us About Team Training</button>
@@ -1540,6 +1542,7 @@ const COURSE_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/co
 const CURRICULUM_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_curriculum';       // GET ?course=<sys_id> -> { result: [ modules ] }
 const FAQS_GET_API       = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_faqs';             // GET -> { result: [ { question, answer, associated_to } ] }
 const COHORTS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_cohort_batches';   // GET -> { result: [ {course, course_id, batch, starts, schedule, mode} ] }
+const PAGECFG_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_page_config';      // GET -> { result: { enterprise } } from x_palni_servicen_1_page_configurations
 const CURRICULUM_FILE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_curriculum/';  // GET /{sys_id} -> u_course_curriculum file (download)
 const PLACEMENTS_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_placements';       // GET -> { result: [ { sys_id, name, profile_picture } ] }
 const PLACEMENT_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/placement_image/';    // GET /{sys_id} -> company logo (binary)
@@ -2580,6 +2583,7 @@ const PROP = {
   supportSub:         'x_palni_servicen_1.support_subheading',
   trainersPageHeading:'x_palni_servicen_1.trainers_main_heading',
   trainersPageSub:    'x_palni_servicen_1.trainers_subheading',
+  enterpriseHeading:  'x_palni_servicen_1.enterprise_section_heading',
   // Theme colors
   colorAccent:    'x_palni_servicen_1.color_accent',     // both modes
   colorPrimary:   'x_palni_servicen_1.color_primary',    // both modes
@@ -2675,6 +2679,7 @@ function applyProperties(){
   setText('supportSubheading',         siteProps[PROP.supportSub]);
   setText('trainersPageHeading',       siteProps[PROP.trainersPageHeading]);
   setText('trainersPageSubheading',    siteProps[PROP.trainersPageSub]);
+  setText('enterpriseHeading',         siteProps[PROP.enterpriseHeading]);
 
   // Hero image + layout:
   //   hero_image_url -> the image shown in the hero (falls back to PROMO_IMAGE_URL).
@@ -3687,6 +3692,21 @@ loadHomeTestimonials();  // fetch top reviews for the home testimonials strip
 loadPlacements();        // fetch alumni placement logos -> fill the marquee bands
 loadFaqs();              // fetch FAQs -> home (global) + course pages (global + course-specific)
 loadCohorts();           // fetch upcoming cohort batches -> home table + course-page tables
+loadPageConfig();        // fetch page configuration -> Enterprise section body (u_enterprise HTML)
+
+/* ---- Page configuration (x_palni_servicen_1_page_configurations) ----
+   Currently supplies the Enterprise section body from the u_enterprise HTML field. */
+async function loadPageConfig(){
+  try {
+    const res = await snFetch(PAGECFG_GET_API);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const cfg = (await res.json()).result || {};
+    const el = document.getElementById('enterpriseBody');
+    if (el && cfg.enterprise && String(cfg.enterprise).trim()) el.innerHTML = cfg.enterprise;
+  } catch (e) {
+    console.warn('Page config: using page defaults —', e.message);
+  }
+}
 initReveal();            // scroll-reveal + animated counters
 window.addEventListener('hashchange', route);
 // Subtle shadow on the translucent nav once the page is scrolled
