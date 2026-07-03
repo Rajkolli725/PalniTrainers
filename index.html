@@ -1136,6 +1136,7 @@
     <div class="container">
       <div class="section-title reveal">
         <h2 id="coursesHeading">Career-Focused Tech Courses</h2>
+        <p id="coursesSubheading">Hands-on, certification-focused programs across the most in-demand platforms.</p>
       </div>
       <div class="carousel per3" data-auto="4000">
         <button class="carousel-btn prev" aria-label="Previous courses">&#8249;</button>
@@ -2103,7 +2104,7 @@ function fillCourseSelects(){
 /* ---- Nav helpers ---- */
 function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
 function closeNav(){ const n = document.getElementById('navLinks'); if (n) n.classList.remove('open'); }
-function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0 || h.indexOf('#faq') === 0 || h.indexOf('#privacy') === 0 || h.indexOf('#terms') === 0); }
+function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0 || h.indexOf('#faq') === 0 || h.indexOf('#privacy') === 0 || h.indexOf('#terms') === 0 || h.indexOf('#cohorts') === 0); }
 function scrollToId(id){ const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 function goSection(id){ closeNav(); toggleServicesPanel(false); if (!onHome()) { location.hash = ''; setTimeout(function(){ scrollToId(id); }, 90); } else { scrollToId(id); } }
 function goHome(){ closeNav(); if (!onHome()) { location.hash = ''; } else { route(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
@@ -2586,7 +2587,7 @@ function participantStat(val){
   if (!val) return '';
   return '<div class="tr-stats"><div class="stat"><span>👥 Participants Trained</span><span class="v">' + esc(val) + '</span></div></div>';
 }
-function courseById(id){ return courses.filter(function(c){ return c.id === id; })[0]; }
+function courseById(id){ return courses.filter(function(c){ return c.id === id || c.sysId === id; })[0]; }
 
 /* ============================================================
    Site properties (sys_properties, scope "ServiceNow Team Profiles")
