@@ -1079,7 +1079,7 @@
 <div id="servicesPanel" class="svc-panel" role="dialog" aria-label="Our services">
   <div class="svc-panel-inner container">
     <div class="svc-panel-head">
-      <div><h3>End-to-End IT Services</h3><p class="hint" style="margin:4px 0 0">From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p></div>
+      <div><h3 id="servicesHeading">End-to-End IT Services</h3><p class="hint" style="margin:4px 0 0">From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p></div>
       <button class="svc-close" onclick="toggleServicesPanel(false)" aria-label="Close services">&times;</button>
     </div>
     <div class="cards-grid" id="servicesPanelGrid"></div>
@@ -1285,7 +1285,7 @@
     <div class="about-hero">
       <div class="about-hero-copy">
         <h3 class="about-eyebrow">About</h3>
-        <h1>VTech Infotech</h1>
+        <h1 id="aboutHeading">VTech Infotech</h1>
         <p>We're a full-spectrum IT services company — turning ambition into job-ready skills and technology into measurable business outcomes through expert training, consulting, and staffing.</p>
       </div>
       <div class="about-hero-media">
@@ -1959,7 +1959,7 @@ function showAllReviews(){
   }
 
   const html =
-    '<div class="view-head"><h1>' + esc(siteProps[PROP.reviewsHeading] || 'Reviews & Feedback') + '</h1><p>' + esc(siteProps[PROP.reviewsSub] || 'Real feedback from our trainees across every program.') + '</p></div>' +
+    '<div class="view-head"><h1>' + esc(siteProps[PROP.feedbackHeading] || siteProps[PROP.reviewsHeading] || 'Reviews & Feedback') + '</h1><p>' + esc(siteProps[PROP.reviewsSub] || 'Real feedback from our trainees across every program.') + '</p></div>' +
     '<div class="reviews-head">' +
       '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Home</a>' +
       '<div class="reviews-actions">' +
@@ -2593,6 +2593,8 @@ const PROP = {
   trainersPageHeading:'x_palni_servicen_1.trainers_main_heading',
   trainersPageSub:    'x_palni_servicen_1.trainers_subheading',
   enterpriseHeading:  'x_palni_servicen_1.enterprise_section_heading',
+  servicesHeading:    'x_palni_servicen_1.services_heading',
+  aboutHeading:       'x_palni_servicen_1.about_us_heading',
   // Theme colors
   colorAccent:    'x_palni_servicen_1.color_accent',     // both modes
   colorPrimary:   'x_palni_servicen_1.color_primary',    // both modes
@@ -2689,6 +2691,8 @@ function applyProperties(){
   setText('trainersPageHeading',       siteProps[PROP.trainersPageHeading]);
   setText('trainersPageSubheading',    siteProps[PROP.trainersPageSub]);
   setText('enterpriseHeading',         siteProps[PROP.enterpriseHeading]);
+  setText('servicesHeading',           siteProps[PROP.servicesHeading]);
+  setText('aboutHeading',              siteProps[PROP.aboutHeading]);
 
   // Hero: always an image, always style 2 (image beside the text). The image URL
   // comes from the hero_video_url property (reused as the image URL); falls back
