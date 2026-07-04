@@ -27,6 +27,8 @@
  *     faqSubtext            <- u_faq_subtext                (HTML — FAQ section + FAQ page subtext)
  *     contactSubtext        <- u_support_section_subtext    (HTML — contact section subtext)
  *     aboutUs               <- u_about_us                   (HTML — About page "Who We Are" body)
+ *     privacyPolicy         <- u_privacy_policy             (HTML — Privacy Policy page body)
+ *     termsConditions       <- u_terms_and_conditions       (HTML — Terms & Conditions page body)
  *
  * DEPLOYED AS:
  *   Scripted REST API : Team Profiles  (x_palni_servicen_1 scope)
@@ -64,7 +66,9 @@
         cohortBatchesSubtext: '',
         faqSubtext: '',
         contactSubtext: '',
-        aboutUs: ''
+        aboutUs: '',
+        privacyPolicy: '',
+        termsConditions: ''
     };
 
     var gr = new GlideRecord(TABLE);
@@ -87,6 +91,8 @@
         cfg.faqSubtext            = gr.getValue('u_faq_subtext') || '';
         cfg.contactSubtext        = gr.getValue('u_support_section_subtext') || '';
         cfg.aboutUs               = gr.getValue('u_about_us') || '';
+        cfg.privacyPolicy         = gr.getValue('u_privacy_policy') || '';
+        cfg.termsConditions       = gr.getValue('u_terms_and_conditions') || '';
     }
 
     response.setStatus(200);

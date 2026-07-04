@@ -28,7 +28,7 @@
     --primary-bg: #1e3a5f;    /* deep blue */
     --primary-hover: #15294a;
     --brand-grad: linear-gradient(135deg, #18305a 0%, #1e3a5f 52%, #e8541e 165%);
-    --nav-bg: rgba(245,247,250,.85);
+    --nav-bg: #e8f1fb;   /* nav + footer background (both modes); overridable via color_nav_footer property */
     --nav-line: #e4e8ef;
     --radius: 16px;
     --shadow: 0 1px 3px rgba(20,28,55,.08), 0 10px 30px rgba(20,28,55,.07);
@@ -52,7 +52,7 @@
     --primary-bg: #2f4a6b;
     --primary-hover: #1e3a5f;
     --brand-grad: linear-gradient(135deg, #0e1a2e 0%, #1e3a5f 55%, #c2451a 160%);
-    --nav-bg: rgba(16,28,50,.85);
+    --nav-bg: #e8f1fb;   /* same pale blue in dark mode (fixed by design; overridable via color_nav_footer) */
     --nav-line: rgba(255,255,255,.09);
     --shadow: 0 1px 3px rgba(0,0,0,.5), 0 10px 30px rgba(0,0,0,.45);
   }
@@ -282,7 +282,7 @@
 
   /* ---- Top navigation (blended translucent bar; logo visible in both themes) ---- */
   /* Nav bar: fixed pale-blue in BOTH light & dark so the logo stays visible */
-  .nav { position: sticky; top: 0; z-index: 50; background: #e8f1fb;
+  .nav { position: sticky; top: 0; z-index: 50; background: var(--nav-bg);
          backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
          border-bottom: 1px solid #cfe0f2; transition: box-shadow .25s ease; }
   .nav.scrolled { box-shadow: 0 6px 24px rgba(0,0,0,.18); }
@@ -296,7 +296,7 @@
   .nav-demo { padding: 9px 16px; font-size: .9rem; margin-left: 6px; white-space: nowrap; }
   @media (max-width: 880px) {
     .nav-toggle { display: grid; place-items: center; margin-left: auto; }
-    .nav-links { position: absolute; top: 64px; left: 0; right: 0; background: #e8f1fb; border-bottom: 1px solid #cfe0f2;
+    .nav-links { position: absolute; top: 64px; left: 0; right: 0; background: var(--nav-bg); border-bottom: 1px solid #cfe0f2;
                  flex-direction: column; align-items: stretch; gap: 2px; padding: 12px 16px; margin-left: 0; display: none; box-shadow: var(--shadow); }
     .nav-links.open { display: flex; }
     .navlink { padding: 13px 12px; }
@@ -488,7 +488,7 @@
   /* ---- Footer ---- */
   /* Footer matches the nav bar color (theme-aware, readable in light & dark). */
   /* Footer: SAME fixed pale-blue as the nav, identical in light & dark */
-  .site-footer { background: #e8f1fb; color: #45617e; padding: 56px 0 26px; border-top: 1px solid #cfe0f2; }
+  .site-footer { background: var(--nav-bg); color: #45617e; padding: 56px 0 26px; border-top: 1px solid #cfe0f2; }
   .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 30px; }
   @media (max-width: 780px) { .footer-grid { grid-template-columns: 1fr 1fr; gap: 26px; } }
   @media (max-width: 460px) { .footer-grid { grid-template-columns: 1fr; } }
@@ -608,6 +608,14 @@
   @media (max-width: 440px) { .plan-foot { flex-direction: column; align-items: stretch; } .plan-cta { width: 100%; } }
   /* Legal / FAQ page niceties */
   .legal-meta { color: var(--muted); font-size: .85rem; margin: 0 0 26px; }
+  /* Styling for legal page content injected from ServiceNow HTML fields */
+  .legal-rte h1 { font-size: 2rem; margin: 0 0 6px; color: var(--ink); }
+  .legal-rte h2 { font-size: 1.25rem; margin: 22px 0 8px; color: var(--ink); }
+  .legal-rte h3 { font-size: 1.05rem; margin: 16px 0 6px; color: var(--ink); }
+  .legal-rte p, .legal-rte li { color: var(--ink); line-height: 1.7; }
+  .legal-rte ul, .legal-rte ol { padding-left: 22px; margin: 8px 0; }
+  .legal-rte section { display: block; margin: 0 0 18px; }
+  .legal-rte a { color: var(--accent); }
   .legal-sec h2 { font-size: 1.25rem; }
   .legal-sec p, .legal-sec li { color: var(--ink); line-height: 1.7; }
   /* About page */
@@ -1374,6 +1382,7 @@
   <!-- ===== Privacy Policy ===== -->
   <div id="privacyView" style="display:none">
     <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
+    <div id="privacyBody" class="legal-rte">
     <div class="view-head">
       <h1>Privacy Policy</h1>
       <p>How VTech Infotech LLC collects, uses and protects your information.</p>
@@ -1389,11 +1398,13 @@
     <section class="cd-sec legal-sec"><h2>8. Your Rights</h2><p>Depending on your location, you may have the right to access, correct, or delete your personal information, or to object to certain processing. To exercise these rights, contact us using the details below.</p></section>
     <section class="cd-sec legal-sec"><h2>9. Changes to This Policy</h2><p>We may update this Privacy Policy from time to time. Material changes will be reflected by the “Last updated” date above.</p></section>
     <section class="cd-sec legal-sec"><h2>10. Contact Us</h2><p>Questions about this policy? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link js-support-phone" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
+    </div>
   </div>
 
   <!-- ===== Terms & Conditions ===== -->
   <div id="termsView" style="display:none">
     <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
+    <div id="termsBody" class="legal-rte">
     <div class="view-head">
       <h1>Terms &amp; Conditions</h1>
       <p>The terms that govern your use of VTech Infotech LLC’s website and services.</p>
@@ -1411,6 +1422,7 @@
     <section class="cd-sec legal-sec"><h2>10. Changes to These Terms</h2><p>We may update these Terms from time to time. Continued use of the site after changes constitutes acceptance of the revised Terms.</p></section>
     <section class="cd-sec legal-sec"><h2>11. Governing Law</h2><p>These Terms are governed by the laws of the State of Texas, USA, without regard to its conflict-of-law principles.</p></section>
     <section class="cd-sec legal-sec"><h2>12. Contact Us</h2><p>Questions about these Terms? Email <a class="link" href="mailto:support@vtechinfotech.com">support@vtechinfotech.com</a> or call <a class="link js-support-phone" href="tel:+12145010690">+1 (214) 501-0690</a>.</p></section>
+    </div>
   </div>
 
   <!-- ===== Upcoming Cohort Batches (dedicated page, populated by renderCohortsPage) ===== -->
@@ -2654,7 +2666,8 @@ const PROP = {
   colorBgDark:    'x_palni_servicen_1.color_bg_dark',
   colorCardDark:  'x_palni_servicen_1.color_card_dark',
   colorNavDark:   'x_palni_servicen_1.color_nav_dark',
-  colorTextDark:  'x_palni_servicen_1.color_text_dark'
+  colorTextDark:  'x_palni_servicen_1.color_text_dark',
+  colorNavFooter: 'x_palni_servicen_1.color_nav_footer'   // nav + footer background (both modes)
 };
 
 async function loadProperties(){
@@ -2827,8 +2840,9 @@ function applyColorProps(){
   if (v('colorBgDark'))   dark.push('--bg:' + v('colorBgDark'));
   if (v('colorCardDark')) dark.push('--card:' + v('colorCardDark'));
   if (v('colorTextDark')) dark.push('--ink:' + v('colorTextDark'));
-  // Note: the nav bar & footer are a FIXED pale blue in both themes (hard-coded
-  // in CSS), so color_nav_light / color_nav_dark are no longer used.
+  // Nav bar + footer share one background in BOTH modes, driven by color_nav_footer
+  // (defaults to the pale blue --nav-bg in CSS when the property is unset).
+  if (v('colorNavFooter')) { root.push('--nav-bg:' + v('colorNavFooter')); dark.push('--nav-bg:' + v('colorNavFooter')); }
   let css = '';
   if (root.length) css += ':root{' + root.join(';') + '}';
   if (dark.length) css += 'body.dark{' + dark.join(';') + '}';
@@ -3901,6 +3915,11 @@ function applyPageConfig(){
   setRich('faqPageSubheading',         pc.faqSubtext);        // FAQ page subtext (same value)
   setRich('supportSubheading',         pc.contactSubtext);    // contact section subtext
   setRich('aboutWhoWeAre',             pc.aboutUs);           // About page "Who We Are" body
+  // Legal pages — the full HTML field replaces the default body when provided
+  const pb = document.getElementById('privacyBody');
+  if (pb && pc.privacyPolicy && String(pc.privacyPolicy).trim()) pb.innerHTML = pc.privacyPolicy;
+  const tb = document.getElementById('termsBody');
+  if (tb && pc.termsConditions && String(pc.termsConditions).trim()) tb.innerHTML = pc.termsConditions;
   // Enterprise section body
   if (pc.enterprise && String(pc.enterprise).trim()) {
     const el = document.getElementById('enterpriseBody');
