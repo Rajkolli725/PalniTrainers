@@ -22,7 +22,8 @@
  * REST API (allows the GitHub Pages domain, GET + POST).
  *
  * TABLE  : x_palni_servicen_1_placements
- * FIELDS : name (company), profile_picture (image — stored as an attachment)
+ * FIELDS : name (company), profile_picture (image — stored as an attachment),
+ *          u_active (only active=true records are returned)
  * ===========================================================================*/
 (function process(/*RESTAPIRequest*/ request, /*RESTAPIResponse*/ response) {
 
@@ -33,6 +34,9 @@
     var NAME_FIELDS = ['name', 'u_name', 'u_company', 'u_company_name', 'company', 'short_description', 'u_short_description'];
 
     var gr = new GlideRecord(TABLE);
+    // Only active company logos (guarded so it won't error if the field is absent).
+    if (gr.isValidField('u_active')) gr.addQuery('u_active', true);
+    else if (gr.isValidField('active')) gr.addQuery('active', true);
     gr.query();
     while (gr.next()) {
         out.push({
