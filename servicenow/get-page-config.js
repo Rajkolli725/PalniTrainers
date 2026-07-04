@@ -22,6 +22,10 @@
  *     trainersSubtext <- u_trainers_subtext                 (HTML — trainers page + home preview subtext)
  *     coursesSubtext  <- u_courses_subtext                  (HTML — courses page + home preview subtext)
  *     servicesSubtext <- u_services_subtext                 (HTML — services mega-menu subtext)
+ *     alumniFeedbackSubtext <- u_alumni_feedback_subtext    (HTML — reviews section + reviews page subtext)
+ *     cohortBatchesSubtext  <- u_cohort_batches_subtext     (HTML — cohort batches section + cohorts page subtext)
+ *     faqSubtext            <- u_faq_subtext                (HTML — FAQ section + FAQ page subtext)
+ *     contactSubtext        <- u_support_section_subtext    (HTML — contact section subtext)
  *
  * DEPLOYED AS:
  *   Scripted REST API : Team Profiles  (x_palni_servicen_1 scope)
@@ -54,7 +58,11 @@
         rating: '',
         trainersSubtext: '',
         coursesSubtext: '',
-        servicesSubtext: ''
+        servicesSubtext: '',
+        alumniFeedbackSubtext: '',
+        cohortBatchesSubtext: '',
+        faqSubtext: '',
+        contactSubtext: ''
     };
 
     var gr = new GlideRecord(TABLE);
@@ -72,6 +80,10 @@
         cfg.trainersSubtext = gr.getValue('u_trainers_subtext') || '';
         cfg.coursesSubtext  = gr.getValue('u_courses_subtext') || '';
         cfg.servicesSubtext = gr.getValue('u_services_subtext') || '';
+        cfg.alumniFeedbackSubtext = gr.getValue('u_alumni_feedback_subtext') || '';
+        cfg.cohortBatchesSubtext  = gr.getValue('u_cohort_batches_subtext') || '';
+        cfg.faqSubtext            = gr.getValue('u_faq_subtext') || '';
+        cfg.contactSubtext        = gr.getValue('u_support_section_subtext') || '';
     }
 
     response.setStatus(200);

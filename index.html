@@ -517,11 +517,13 @@
   @media (max-width: 600px) { .wa-bubble { right: 16px; bottom: 16px; width: 52px; height: 52px; } .wa-bubble svg { width: 30px; height: 30px; } }
 
   /* ---- Alumni placements band (left text + right scrolling logos) ---- */
-  /* Scrolling company logos merged INTO the stats band — full-width edge-to-edge
-     strip on the gradient, sitting directly under the stat numbers. */
-  /* White band for the scrolling logos; the stat numbers above keep the gradient. */
-  .stats-alumni { background: #fff; padding: 20px 0 22px; }
-  .stats-alumni .al-name { color: var(--primary-bg); }
+  /* Scrolling company logos integrated directly ONTO the stats-band gradient
+     (no separate white strip). Logos are normalised to one height and rendered
+     white in both themes so they read cleanly on the dark gradient. */
+  .stats-alumni { background: transparent; padding: 6px 0 22px; }
+  .stats-alumni .al-img { height: 38px; max-width: 150px; filter: brightness(0) invert(1); opacity: .9; }
+  .stats-alumni .al-img:hover { opacity: 1; }
+  .stats-alumni .al-name { color: #fff; }
 
   /* Enterprise / corporate training section — body from the u_enterprise HTML field */
   .ent-body { color: var(--muted); font-size: 1.05rem; line-height: 1.6; max-width: 720px; margin: 0 auto; }
@@ -1192,8 +1194,8 @@
   <section class="section" id="home-batches" style="display:none">
     <div class="container">
       <div class="section-title reveal">
-        <h2>Upcoming Cohort Batches</h2>
-        <p>Reserve your seat — new cohorts starting across our programs.</p>
+        <h2 id="batchesHeading">Upcoming Cohort Batches</h2>
+        <p id="batchesSubheading">Reserve your seat — new cohorts starting across our programs.</p>
       </div>
       <div class="cd-table bt-home" id="homeBatchTable"></div>
     </div>
@@ -1203,8 +1205,8 @@
   <section class="section alt" id="home-faq">
     <div class="container">
       <div class="section-title reveal">
-        <h2>Frequently Asked Questions</h2>
-        <p>Quick answers about our training, consulting and staffing.</p>
+        <h2 id="faqHeading">Frequently Asked Questions</h2>
+        <p id="faqSubheading">Quick answers about our training, consulting and staffing.</p>
       </div>
       <div id="homeFaqList" style="max-width:820px;margin:0 auto">
         <details class="cd-faq"><summary>What does VTech Infotech do?</summary><p>VTech Infotech is a full-spectrum IT services company offering expert-led training, IT consulting, and staffing across ServiceNow, Salesforce, Cloud, Data and AI.</p></details>
@@ -1341,8 +1343,8 @@
   <div id="faqView" style="display:none">
     <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
     <div class="view-head">
-      <h1>Frequently Asked Questions</h1>
-      <p>Answers to common questions about our training, consulting and staffing services.</p>
+      <h1 id="faqPageHeading">Frequently Asked Questions</h1>
+      <p id="faqPageSubheading">Answers to common questions about our training, consulting and staffing services.</p>
     </div>
     <div class="toolbar" style="max-width:820px;margin:0 auto 18px">
       <div class="search">
@@ -1408,8 +1410,8 @@
   <div id="cohortsView" style="display:none">
     <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
     <div class="view-head">
-      <h1>Upcoming Cohort Batches</h1>
-      <p>Reserve your seat — browse every upcoming cohort across our programs.</p>
+      <h1 id="cohortsPageHeading">Upcoming Cohort Batches</h1>
+      <p id="cohortsPageSubheading">Reserve your seat — browse every upcoming cohort across our programs.</p>
     </div>
     <div class="toolbar" style="max-width:1040px;margin:0 auto 18px">
       <div class="search">
@@ -1988,7 +1990,7 @@ function showAllReviews(){
   }
 
   const html =
-    '<div class="view-head"><h1>' + esc(siteProps[PROP.feedbackHeading] || siteProps[PROP.reviewsHeading] || 'Reviews & Feedback') + '</h1><p>' + esc(siteProps[PROP.reviewsSub] || 'Real feedback from our trainees across every program.') + '</p></div>' +
+    '<div class="view-head"><h1>' + esc(siteProps[PROP.feedbackHeading] || siteProps[PROP.reviewsHeading] || 'Reviews & Feedback') + '</h1><p>' + esc(stripHtml(pageCfg.alumniFeedbackSubtext) || siteProps[PROP.reviewsSub] || 'Real feedback from our trainees across every program.') + '</p></div>' +
     '<div class="reviews-head">' +
       '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Home</a>' +
       '<div class="reviews-actions">' +
@@ -2625,6 +2627,8 @@ const PROP = {
   enterpriseHeading:  'x_palni_servicen_1.enterprise_section_heading',
   servicesHeading:    'x_palni_servicen_1.services_heading',
   aboutHeading:       'x_palni_servicen_1.about_us_heading',
+  batchesHeading:     'x_palni_servicen_1.home_batches_section_heading',   // home batches + cohorts page heading
+  faqHeading:         'x_palni_servicen_1.faq_heading',                    // home FAQ + FAQ page heading
   // Theme colors
   colorAccent:    'x_palni_servicen_1.color_accent',     // both modes
   colorPrimary:   'x_palni_servicen_1.color_primary',    // both modes
@@ -2672,6 +2676,8 @@ function setRich(id, html){
   if (!el || !html || !String(html).trim()) return;
   el.innerHTML = String(html).replace(/<\/?p[^>]*>/gi, ' ').replace(/\s+/g, ' ').trim();
 }
+// Strip all tags from a ServiceNow HTML field -> plain text (for string-built views).
+function stripHtml(html){ return String(html == null ? '' : html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
 
 // Apply property values to the page (each falls back to the hard-coded default).
 function applyProperties(){
@@ -2724,6 +2730,12 @@ function applyProperties(){
   setText('enterpriseHeading',         siteProps[PROP.enterpriseHeading]);
   setText('servicesHeading',           siteProps[PROP.servicesHeading]);
   setText('aboutHeading',              siteProps[PROP.aboutHeading]);
+  // Cohort batches heading — same property drives the home section + the dedicated #cohorts page
+  setText('batchesHeading',            siteProps[PROP.batchesHeading]);
+  setText('cohortsPageHeading',        siteProps[PROP.batchesHeading]);
+  // FAQ heading — same property drives the home section + the dedicated #faq page
+  setText('faqHeading',                siteProps[PROP.faqHeading]);
+  setText('faqPageHeading',            siteProps[PROP.faqHeading]);
   applyPageConfig();   // re-apply table-driven content (stats, subtexts) in case props loaded after it
 
   // Hero: always an image, always style 2 (image beside the text). The image URL
@@ -3811,6 +3823,12 @@ function applyPageConfig(){
   setRich('coursesSubheading',         pc.coursesSubtext);    // home courses preview subtext
   setRich('coursesPageSubheading',     pc.coursesSubtext);    // courses page subheading (same value)
   setRich('servicesSubtext',           pc.servicesSubtext);   // services mega-menu subtext
+  setRich('feedbackSubheading',        pc.alumniFeedbackSubtext);  // home reviews subtext (reviews page set in showAllReviews)
+  setRich('batchesSubheading',         pc.cohortBatchesSubtext);   // home cohort batches subtext
+  setRich('cohortsPageSubheading',     pc.cohortBatchesSubtext);   // cohorts page subtext (same value)
+  setRich('faqSubheading',             pc.faqSubtext);        // home FAQ subtext
+  setRich('faqPageSubheading',         pc.faqSubtext);        // FAQ page subtext (same value)
+  setRich('supportSubheading',         pc.contactSubtext);    // contact section subtext
   // Enterprise section body
   if (pc.enterprise && String(pc.enterprise).trim()) {
     const el = document.getElementById('enterpriseBody');
