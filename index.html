@@ -3137,10 +3137,6 @@ function renderCourseDetail(id){
         '</div>' +
       '</div>' +
     '</div>' +
-    '<div class="alumni-band" style="margin:0 0 30px"><div class="alumni-wrap">' +
-      '<div class="alumni-text"><span class="al-eyebrow">Alumni Network</span><span class="al-verified">Where our ' + esc(c.name) + ' alumni work</span></div>' +
-      '<div class="alumni-marquee" aria-label="Companies where our alumni work"><div class="alumni-track"></div></div>' +
-    '</div></div>' +
     '<section class="cd-sec"><h2>Course Overview</h2><p class="cd-desc">' + (esc(c.description) || esc(c.about) || 'Overview coming soon.') + '</p></section>' +
     '<section class="cd-sec cd-2col">' +
       '<div><h2>Course Features</h2>' + featList + '</div>' +
@@ -3198,7 +3194,6 @@ function renderCourseDetail(id){
 
   window.scrollTo(0, 0);
   initReveal();
-  fillAlumniBands();   // populate this page's alumni logo marquee
   initPricing(c);      // wire the currency toggle + render Individual/Corporate cards
   loadCurriculum(c);   // fetch + render the curriculum section (async)
   renderJourney(c);    // build + animate the data-driven learning journey
