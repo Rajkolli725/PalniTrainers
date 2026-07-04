@@ -618,9 +618,12 @@
   .about-hero .container { padding-top: 46px; padding-bottom: 52px; text-align: left; }
   .about-hero .about-back { display: inline-flex; color: #ffd9c7; margin: 0 0 16px; }
   .about-hero .about-back:hover { color: #fff; }
+  .about-hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
   .about-hero .about-eyebrow { color: rgba(255,255,255,.88); font-size: .95rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; margin: 0 0 6px; }
   .about-hero h1 { color: #fff; font-size: clamp(1.9rem, 4vw, 2.8rem); margin: 0 0 12px; }
-  .about-hero p { color: rgba(255,255,255,.92); margin: 0; font-size: 1.08rem; line-height: 1.6; max-width: 820px; }
+  .about-hero p { color: rgba(255,255,255,.92); margin: 0; font-size: 1.08rem; line-height: 1.6; }
+  .about-hero-media img { width: 100%; height: 100%; max-height: 320px; object-fit: cover; border-radius: 16px; display: block; box-shadow: 0 18px 40px rgba(0,0,0,.32); }
+  @media (max-width: 820px) { .about-hero-grid { grid-template-columns: 1fr; gap: 22px; } .about-hero-media img { max-height: 240px; } }
   @media (max-width: 760px) { .about-hero .container { padding-top: 34px; padding-bottom: 40px; } }
   .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 0 0 42px; }
   @media (max-width: 640px) { .about-stats { grid-template-columns: 1fr 1fr; } }
@@ -1307,9 +1310,16 @@
     <section class="about-hero">
       <div class="container">
         <a class="back-link about-back" href="#" onclick="goHome();return false">&larr; Back to Home</a>
-        <h3 class="about-eyebrow">About</h3>
-        <h1 id="aboutHeading">VTech Infotech</h1>
-        <p>We're a full-spectrum IT services company — turning ambition into job-ready skills and technology into measurable business outcomes through expert training, consulting, and staffing.</p>
+        <div class="about-hero-grid">
+          <div class="about-hero-copy">
+            <h3 class="about-eyebrow">About</h3>
+            <h1 id="aboutHeading">VTech Infotech</h1>
+            <p>We're a full-spectrum IT services company — turning ambition into job-ready skills and technology into measurable business outcomes through expert training, consulting, and staffing.</p>
+          </div>
+          <div class="about-hero-media">
+            <img src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80" alt="Instructor leading an IT training session" loading="lazy">
+          </div>
+        </div>
       </div>
     </section>
     <section class="cd-sec">
