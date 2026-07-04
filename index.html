@@ -3519,6 +3519,60 @@ function fillAlumniBands(){
   const logos = list.map(alumniLogo).join('');
   // Duplicate the set so the marquee loops seamlessly.
   document.querySelectorAll('.alumni-track').forEach(function(t){ t.innerHTML = logos + logos; });
+  trimAlumniLogos();   // crop each logo's transparent padding so all render at the same visible height
+}
+
+/* Logo files are uploaded with wildly different canvases/whitespace (some are
+   square with the mark floating in padding), so at a fixed CSS height their
+   VISIBLE marks look different sizes. This trims each logo to its opaque
+   bounding box (per unique URL, cached) so every mark fills the row height.
+   Fully safe: any image that can't be read (CORS-tainted, load error, or has
+   no meaningful padding) is left exactly as-is. */
+const _logoTrimCache = {};   // url -> trimmed dataURL, or null = leave original
+function trimAlumniLogos(){
+  const byUrl = {};
+  document.querySelectorAll('.stats-alumni .al-img').forEach(function(im){
+    const u = im.getAttribute('src');
+    if (!u || u.indexOf('data:') === 0) return;
+    (byUrl[u] = byUrl[u] || []).push(im);
+  });
+  Object.keys(byUrl).forEach(function(u){
+    if (_logoTrimCache[u] !== undefined) {
+      if (_logoTrimCache[u]) byUrl[u].forEach(function(im){ im.src = _logoTrimCache[u]; });
+      return;
+    }
+    const probe = new Image();
+    probe.crossOrigin = 'anonymous';
+    probe.onload = function(){
+      try {
+        const cw = probe.naturalWidth, ch = probe.naturalHeight;
+        if (!cw || !ch) { _logoTrimCache[u] = null; return; }
+        const cv = document.createElement('canvas'); cv.width = cw; cv.height = ch;
+        const cx = cv.getContext('2d'); cx.drawImage(probe, 0, 0);
+        const px = cx.getImageData(0, 0, cw, ch).data;
+        let top = ch, left = cw, right = -1, bottom = -1;
+        for (let y = 0; y < ch; y++) {
+          const row = y * cw;
+          for (let x = 0; x < cw; x++) {
+            if (px[(row + x) * 4 + 3] > 16) {
+              if (x < left) left = x; if (x > right) right = x;
+              if (y < top) top = y; if (y > bottom) bottom = y;
+            }
+          }
+        }
+        if (right < 0 || bottom < 0) { _logoTrimCache[u] = null; return; }       // fully transparent
+        const w = right - left + 1, h = bottom - top + 1;
+        if (w >= cw - 2 && h >= ch - 2) { _logoTrimCache[u] = null; return; }     // already tight
+        const out = document.createElement('canvas'); out.width = w; out.height = h;
+        out.getContext('2d').drawImage(cv, left, top, w, h, 0, 0, w, h);
+        const d = out.toDataURL('image/png');
+        _logoTrimCache[u] = d;
+        byUrl[u].forEach(function(im){ im.src = d; });
+      } catch (e) { _logoTrimCache[u] = null; }   // tainted canvas -> keep original
+    };
+    probe.onerror = function(){ _logoTrimCache[u] = null; };
+    probe.src = u;
+  });
 }
 async function loadPlacements(){
   try {
