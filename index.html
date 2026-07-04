@@ -615,7 +615,9 @@
   .about-hero { background: var(--brand-grad); color: #fff; position: relative;
     left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw;
     margin-top: -24px; margin-bottom: 34px; overflow: hidden; }
-  .about-hero .container { padding-top: 46px; padding-bottom: 52px; text-align: left; }
+  /* Match the About page body width (.wrap: max-width 1000px, 16px side padding)
+     so the hero's content edges line up with the sections below it. */
+  .about-hero .container { max-width: 1000px; padding: 46px 16px 52px; text-align: left; }
   .about-hero .about-back { display: inline-flex; color: #ffd9c7; margin: 0 0 16px; }
   .about-hero .about-back:hover { color: #fff; }
   .about-hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
