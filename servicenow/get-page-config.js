@@ -29,6 +29,15 @@
  *     aboutUs               <- u_about_us                   (HTML — About page "Who We Are" body)
  *     privacyPolicy         <- u_privacy_policy             (HTML — Privacy Policy page body)
  *     termsConditions       <- u_terms_and_conditions       (HTML — Terms & Conditions page body)
+ *     coursesHeading        <- u_courses_heading            (Courses section + Courses page heading)
+ *     trainersHeading       <- u_trainers_heading           (Trainers preview + Trainers page heading)
+ *     feedbackHeading       <- u_feedback_heading           (Reviews section + Reviews page heading)
+ *     servicesHeading       <- u_services_heading           (Services mega-menu heading)
+ *     aboutHeading          <- u_about_us_heading           (About page heading)
+ *     enterpriseHeading     <- u_enterprise_heading         (Enterprise section heading)
+ *     supportHeading        <- u_support_section_heading    (Contact section heading)
+ *     batchesHeading        <- u_cohort_batches_heading     (Cohort batches section + page heading)
+ *     faqHeading            <- u_faq_heading                (FAQ section + FAQ page heading)
  *
  * DEPLOYED AS:
  *   Scripted REST API : Team Profiles  (x_palni_servicen_1 scope)
@@ -68,7 +77,16 @@
         contactSubtext: '',
         aboutUs: '',
         privacyPolicy: '',
-        termsConditions: ''
+        termsConditions: '',
+        coursesHeading: '',
+        trainersHeading: '',
+        feedbackHeading: '',
+        servicesHeading: '',
+        aboutHeading: '',
+        enterpriseHeading: '',
+        supportHeading: '',
+        batchesHeading: '',
+        faqHeading: ''
     };
 
     var gr = new GlideRecord(TABLE);
@@ -93,6 +111,15 @@
         cfg.aboutUs               = gr.getValue('u_about_us') || '';
         cfg.privacyPolicy         = gr.getValue('u_privacy_policy') || '';
         cfg.termsConditions       = gr.getValue('u_terms_and_conditions') || '';
+        cfg.coursesHeading        = gr.getValue('u_courses_heading') || '';
+        cfg.trainersHeading       = gr.getValue('u_trainers_heading') || '';
+        cfg.feedbackHeading       = gr.getValue('u_feedback_heading') || '';
+        cfg.servicesHeading       = gr.getValue('u_services_heading') || '';
+        cfg.aboutHeading          = gr.getValue('u_about_us_heading') || '';
+        cfg.enterpriseHeading     = gr.getValue('u_enterprise_heading') || '';
+        cfg.supportHeading        = gr.getValue('u_support_section_heading') || '';
+        cfg.batchesHeading        = gr.getValue('u_cohort_batches_heading') || '';
+        cfg.faqHeading            = gr.getValue('u_faq_heading') || '';
     }
 
     response.setStatus(200);

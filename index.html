@@ -955,8 +955,8 @@
   .tr-modal { position: relative; background: var(--card); border: 1px solid var(--line); border-radius: 18px; width: 100%;
     max-width: 880px; padding: 28px; box-shadow: 0 30px 70px rgba(0,0,0,.45); margin: auto; }
   .tr-body { display: grid; grid-template-columns: 1.1fr 1fr; gap: 30px; align-items: stretch; }
-  .tr-foot { text-align: right; margin-top: 14px; }
-  .tr-foot .reviews-link { font-size: .95rem; }
+  .trainers-reviews-cta { text-align: right; margin-top: 20px; }
+  .trainers-reviews-cta .reviews-link { font-size: .95rem; }
   .tr-col { display: flex; flex-direction: column; }
   .tr-col .tr-bio { flex: 1 1 auto; }                          /* bio grows so rating + icons drop to the bottom */
   .tr-col .rating-row { margin: 0 0 12px; }                    /* rating sits just above the icons */
@@ -1297,6 +1297,7 @@
     </div>
 
     <div class="speaker-grid" id="list"></div>
+    <div class="trainers-reviews-cta"><a class="reviews-link" href="#reviews" onclick="goView('reviews');return false">View all reviews &rarr;</a></div>
   </div>
 
   <!-- ===== Reviews & Feedback view (populated by showAllReviews) ===== -->
@@ -1806,7 +1807,6 @@ function openTrainer(id){
           <div class="field"><h4>🛠 Skills</h4><div class="chips">${skillChips}</div></div>
         </div>
       </div>
-      <div class="tr-foot"><a class="reviews-link" href="#reviews" onclick="closeTrainer()">View all reviews &rarr;</a></div>
     </div>`;
   ov.style.display = 'flex';
 }
@@ -2017,7 +2017,7 @@ function showAllReviews(){
   }
 
   const html =
-    '<div class="view-head"><h1>' + esc(siteProps[PROP.feedbackHeading] || siteProps[PROP.reviewsHeading] || 'Reviews & Feedback') + '</h1><p>' + esc(stripHtml(pageCfg.alumniFeedbackSubtext) || siteProps[PROP.reviewsSub] || 'Real feedback from our trainees across every program.') + '</p></div>' +
+    '<div class="view-head"><h1>' + esc(pageCfg.feedbackHeading || siteProps[PROP.reviewsHeading] || 'Reviews & Feedback') + '</h1><p>' + esc(stripHtml(pageCfg.alumniFeedbackSubtext) || siteProps[PROP.reviewsSub] || 'Real feedback from our trainees across every program.') + '</p></div>' +
     '<div class="reviews-head">' +
       '<a href="#" class="back-link" onclick="backToTrainers(event)">&larr; Back to Home</a>' +
       '<div class="reviews-actions">' +
@@ -2639,23 +2639,15 @@ const PROP = {
   // Headings & subheadings (each falls back to the hard-coded page text)
   heroHeading:        'x_palni_servicen_1.hero_heading',
   heroSubtext:        'x_palni_servicen_1.hero_subtext',
-  courseHeading:      'x_palni_servicen_1.home_course_main_heading',
   courseSub:          'x_palni_servicen_1.home_course_subheading',
-  trainersHomeHeading:'x_palni_servicen_1.home_trainers_main_heading',
   trainersHomeSub:    'x_palni_servicen_1.home_trainers_subheading',
-  feedbackHeading:    'x_palni_servicen_1.home_feedback_main_heading',
   feedbackSub:        'x_palni_servicen_1.home_feedback_subheading',
   reviewsHeading:     'x_palni_servicen_1.reviews_and_feedback_heading',
   reviewsSub:         'x_palni_servicen_1.reviews_and_feedback_subheading',
-  supportHeading:     'x_palni_servicen_1.support_main_heading',
   supportSub:         'x_palni_servicen_1.support_subheading',
-  trainersPageHeading:'x_palni_servicen_1.trainers_main_heading',
   trainersPageSub:    'x_palni_servicen_1.trainers_subheading',
-  enterpriseHeading:  'x_palni_servicen_1.enterprise_section_heading',
-  servicesHeading:    'x_palni_servicen_1.services_heading',
-  aboutHeading:       'x_palni_servicen_1.about_us_heading',
-  batchesHeading:     'x_palni_servicen_1.home_batches_section_heading',   // home batches + cohorts page heading
-  faqHeading:         'x_palni_servicen_1.faq_heading',                    // home FAQ + FAQ page heading
+  // NOTE: section headings (courses/trainers/feedback/services/about/enterprise/
+  // support/batches/faq) moved to the page-config table — see applyPageConfig().
   // Theme colors
   colorAccent:    'x_palni_servicen_1.color_accent',     // both modes
   colorPrimary:   'x_palni_servicen_1.color_primary',    // both modes
@@ -2752,26 +2744,12 @@ function applyProperties(){
 
   // Hero heading — wrap the configured highlight phrase in the orange .hl span.
   applyHeroHeading();
-  // Hero subtext now comes from the page-config table (u_hero_section_subtext).
-  setText('coursesHeading',            siteProps[PROP.courseHeading]);
-  setText('coursesPageHeading',        siteProps[PROP.courseHeading]);   // Courses page reuses the Courses section heading
+  // NOTE: section headings (courses, trainers, feedback, services, about, enterprise,
+  // support, batches, faq) now come from the page-configurations table — see applyPageConfig().
   setText('coursesSubheading',         siteProps[PROP.courseSub]);
-  setText('trainersPreviewHeading',    siteProps[PROP.trainersHomeHeading]);
-  setText('trainersPageHeading',       siteProps[PROP.trainersHomeHeading]);  // Trainers page reuses the home instructors heading
-  setText('feedbackHeading',           siteProps[PROP.feedbackHeading]);
   setText('feedbackSubheading',        siteProps[PROP.feedbackSub]);
-  setText('supportHeading',            siteProps[PROP.supportHeading]);
   setText('supportSubheading',         siteProps[PROP.supportSub]);
-  setText('enterpriseHeading',         siteProps[PROP.enterpriseHeading]);
-  setText('servicesHeading',           siteProps[PROP.servicesHeading]);
-  setText('aboutHeading',              siteProps[PROP.aboutHeading]);
-  // Cohort batches heading — same property drives the home section + the dedicated #cohorts page
-  setText('batchesHeading',            siteProps[PROP.batchesHeading]);
-  setText('cohortsPageHeading',        siteProps[PROP.batchesHeading]);
-  // FAQ heading — same property drives the home section + the dedicated #faq page
-  setText('faqHeading',                siteProps[PROP.faqHeading]);
-  setText('faqPageHeading',            siteProps[PROP.faqHeading]);
-  applyPageConfig();   // re-apply table-driven content (stats, subtexts) in case props loaded after it
+  applyPageConfig();   // re-apply table-driven content (headings, stats, subtexts) in case props loaded after it
 
   // Hero: always an image, always style 2 (image beside the text). The image URL
   // comes from the hero_video_url property (reused as the image URL); falls back
@@ -3895,6 +3873,20 @@ async function loadPageConfig(){
 // applyProperties), so whichever of the two feeds finishes last stays consistent.
 function applyPageConfig(){
   const pc = pageCfg || {};
+  // Section headings (moved from System Properties to the page-config table)
+  setText('coursesHeading',            pc.coursesHeading);
+  setText('coursesPageHeading',        pc.coursesHeading);   // Courses page reuses the section heading
+  setText('trainersPreviewHeading',    pc.trainersHeading);
+  setText('trainersPageHeading',       pc.trainersHeading);  // Trainers page reuses the home heading
+  setText('feedbackHeading',           pc.feedbackHeading);  // Reviews page heading is set in showAllReviews
+  setText('servicesHeading',           pc.servicesHeading);
+  setText('aboutHeading',              pc.aboutHeading);
+  setText('enterpriseHeading',         pc.enterpriseHeading);
+  setText('supportHeading',            pc.supportHeading);
+  setText('batchesHeading',            pc.batchesHeading);
+  setText('cohortsPageHeading',        pc.batchesHeading);   // Cohorts page reuses the section heading
+  setText('faqHeading',                pc.faqHeading);
+  setText('faqPageHeading',            pc.faqHeading);        // FAQ page reuses the section heading
   // Hero trust line + the four stat counters (from the table, not properties)
   if (pc.pros) { const h = document.getElementById('heroPros'); if (h) h.textContent = pc.pros; }
   setStatFromProp('statPros',     pc.pros);
