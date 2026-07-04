@@ -1834,19 +1834,12 @@ let snReviews = [];          // reviews loaded from ServiceNow
 let reviewsState = 'idle';   // idle | loading | ready | error
 let reviewsError = '';
 let reviewSort = 'recent';   // default: most recently posted first
-const REVIEWS_INITIAL = 5;    // first page size
-const REVIEWS_STEP = 20;      // page size for every page after the first
-let reviewStart = 0;          // index of the first review on the current page
-let reviewWindow = REVIEWS_INITIAL;   // current page size (5 first, then 20)
+const REVIEWS_INITIAL = 10;   // reviews shown on first load
+const REVIEWS_STEP = 10;      // reviews added per "Load More" click
+let reviewStart = 0;
+let reviewWindow = REVIEWS_INITIAL;
 function resetReviewPaging(){ reviewStart = 0; reviewWindow = REVIEWS_INITIAL; }
-// Next page: advance past the current window, then use the 20-size window.
-function loadMoreReviews(){ reviewStart += reviewWindow; reviewWindow = REVIEWS_STEP; showAllReviews(); }
-// Previous page: step back to the prior window (back to the first 5 when at the top).
-function previousReviews(){
-  if (reviewStart <= REVIEWS_INITIAL) { reviewStart = 0; reviewWindow = REVIEWS_INITIAL; }
-  else { reviewStart -= REVIEWS_STEP; reviewWindow = REVIEWS_STEP; }
-  showAllReviews();
-}
+function loadMoreReviews(){ reviewWindow += REVIEWS_STEP; showAllReviews(); }
 
 function avgScore(scores){
   const vals = REVIEW_PARAMS.map(p => +scores[p[0]] || 0);
@@ -1994,25 +1987,16 @@ function showAllReviews(){
     if (reviewSort === 'recent') list.sort(function(a,b){ return (b.postedTs || 0) - (a.postedTs || 0); });
     else list.sort(function(a,b){ return sortValue(b) - sortValue(a); });
     const total = list.length;
-    // Guard against an out-of-range page (e.g. after the list changed).
-    if (reviewStart >= total) resetReviewPaging();
-    const start = reviewStart;
-    const end = Math.min(start + reviewWindow, total);
-    const shown = list.slice(start, end);   // only this page — previous reviews are hidden
+    const shown = list.slice(0, reviewWindow);
     const cards = shown.length
       ? shown.map(reviewCard).join('')
       : '<div class="empty">No reviews yet. Be the first to submit one.</div>';
-    const hasPrev = start > 0;
-    const hasNext = end < total;
-    let nav = '';
-    if (total > REVIEWS_INITIAL) {
-      nav =
-        '<div style="display:flex;justify-content:center;gap:12px;flex-wrap:wrap;margin-top:26px">' +
-          (hasPrev ? '<button class="btn btn-ghost btn-lg" onclick="previousReviews()">&larr; Previous</button>' : '') +
-          (hasNext ? '<button class="btn btn-primary btn-lg" onclick="loadMoreReviews()">Load More (' + (total - end) + ' more)</button>' : '') +
-        '</div>' +
-        '<div class="hint" style="text-align:center;margin-top:10px">Showing ' + (start + 1) + '–' + end + ' of ' + total + ' reviews</div>';
-    }
+    const hasNext = reviewWindow < total;
+    const nav = hasNext
+      ? '<div style="display:flex;justify-content:center;margin-top:26px">' +
+          '<button class="btn btn-primary btn-lg" onclick="loadMoreReviews()">Load More</button>' +
+        '</div>'
+      : '';
     body = '<div class="review-cards">' + cards + '</div>' + nav;
   }
 
