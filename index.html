@@ -521,7 +521,10 @@
      (no separate white strip). Logos are normalised to one height and rendered
      white in both themes so they read cleanly on the dark gradient. */
   .stats-alumni { background: transparent; padding: 6px 0 22px; }
-  .stats-alumni .al-img { height: 38px; max-width: 150px; filter: brightness(0) invert(1); opacity: .9; }
+  /* Fixed height + width:auto + no max-width => every logo is the SAME height with
+     its aspect ratio preserved (a width cap would shrink wide logos and make their
+     heights uneven). */
+  .stats-alumni .al-img { height: 46px; width: auto; max-width: none; object-fit: contain; filter: brightness(0) invert(1); opacity: .9; }
   .stats-alumni .al-img:hover { opacity: 1; }
   .stats-alumni .al-name { color: #fff; }
 
