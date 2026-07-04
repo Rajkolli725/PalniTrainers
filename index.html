@@ -1326,11 +1326,7 @@
     </section>
     <section class="cd-sec">
       <h2>Who We Are</h2>
-      <p class="cd-desc">VTech Infotech LLC is a full-spectrum IT services company. We help individuals and organizations turn technology into a competitive advantage — through hands-on, certification-focused training, the delivery of real technology projects, and the placement of vetted IT talent. Our trainers and consultants bring deep, real-world enterprise experience across ServiceNow, Salesforce, Cloud, Data and AI.</p>
-    </section>
-    <section class="cd-sec cd-2col">
-      <div><h2>Our Mission</h2><p class="cd-desc">To make in-demand technology skills accessible and practical — so every learner leaves job-ready, and every client gets dependable, real-world delivery.</p></div>
-      <div><h2>Our Vision</h2><p class="cd-desc">To be the trusted technology partner that bridges talent and opportunity — building careers and powering enterprise success across the platforms that shape tomorrow.</p></div>
+      <p class="cd-desc" id="aboutWhoWeAre">VTech Infotech LLC is a full-spectrum IT services company. We help individuals and organizations turn technology into a competitive advantage — through hands-on, certification-focused training, the delivery of real technology projects, and the placement of vetted IT talent. Our trainers and consultants bring deep, real-world enterprise experience across ServiceNow, Salesforce, Cloud, Data and AI.</p>
     </section>
     <section class="cd-sec">
       <h2>Our Values</h2>
@@ -1342,18 +1338,6 @@
         <div class="feat"><div class="fic">💡</div><div><h4>Mentorship</h4><p>Career support, resume reviews and interview prep — not just course completion.</p></div></div>
         <div class="feat"><div class="fic">⭐</div><div><h4>Excellence</h4><p>Enterprise-grade quality across training, consulting and staffing engagements.</p></div></div>
       </div>
-    </section>
-    <section class="cd-sec cd-2col">
-      <div><h2>Why Choose VTech</h2><ul class="cd-ticks">
-        <li>Live, instructor-led learning with real labs and projects</li>
-        <li>Mentorship and career support, not just slides</li>
-        <li>Consultants who have actually shipped enterprise solutions</li>
-      </ul></div>
-      <div><h2>How We Help</h2><ul class="cd-ticks">
-        <li>Certification-focused curriculum and exam preparation</li>
-        <li>Flexible weekday, weekend and corporate cohorts</li>
-        <li>Vetted talent placement for contract, C2H and full-time roles</li>
-      </ul></div>
     </section>
     <section class="cd-sec cd-cta">
       <h2>Let's Build Your Future</h2>
@@ -3916,6 +3900,7 @@ function applyPageConfig(){
   setRich('faqSubheading',             pc.faqSubtext);        // home FAQ subtext
   setRich('faqPageSubheading',         pc.faqSubtext);        // FAQ page subtext (same value)
   setRich('supportSubheading',         pc.contactSubtext);    // contact section subtext
+  setRich('aboutWhoWeAre',             pc.aboutUs);           // About page "Who We Are" body
   // Enterprise section body
   if (pc.enterprise && String(pc.enterprise).trim()) {
     const el = document.getElementById('enterpriseBody');

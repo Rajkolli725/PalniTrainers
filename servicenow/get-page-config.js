@@ -26,6 +26,7 @@
  *     cohortBatchesSubtext  <- u_cohort_batches_subtext     (HTML — cohort batches section + cohorts page subtext)
  *     faqSubtext            <- u_faq_subtext                (HTML — FAQ section + FAQ page subtext)
  *     contactSubtext        <- u_support_section_subtext    (HTML — contact section subtext)
+ *     aboutUs               <- u_about_us                   (HTML — About page "Who We Are" body)
  *
  * DEPLOYED AS:
  *   Scripted REST API : Team Profiles  (x_palni_servicen_1 scope)
@@ -62,7 +63,8 @@
         alumniFeedbackSubtext: '',
         cohortBatchesSubtext: '',
         faqSubtext: '',
-        contactSubtext: ''
+        contactSubtext: '',
+        aboutUs: ''
     };
 
     var gr = new GlideRecord(TABLE);
@@ -84,6 +86,7 @@
         cfg.cohortBatchesSubtext  = gr.getValue('u_cohort_batches_subtext') || '';
         cfg.faqSubtext            = gr.getValue('u_faq_subtext') || '';
         cfg.contactSubtext        = gr.getValue('u_support_section_subtext') || '';
+        cfg.aboutUs               = gr.getValue('u_about_us') || '';
     }
 
     response.setStatus(200);
