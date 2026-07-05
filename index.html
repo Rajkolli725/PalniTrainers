@@ -3155,10 +3155,10 @@ function renderCourseDetail(id){
     '<section class="cd-sec cd-2col">' +
       '<div><h2>Course Features</h2>' + featList + '</div>' +
       '<div>' +
-        '<h2>Who Should Take This</h2>' +
+        '<h2>Pre-requisites</h2>' +
         (chipList(c.prerequisites, true) || '<p class="hint" style="font-size:.93rem;line-height:1.65">There are no pre-requisites for this course — it\'s perfect for anyone looking to start their career in IT, switch from a non-tech background, or explore a new technology domain.</p>') +
         (c.certifications
-          ? '<div style="margin-top:28px"><h2>Certification Details</h2>' + chipList(c.certifications, true) + '</div>'
+          ? '<div style="margin-top:28px"><h2>Certifications</h2>' + chipList(c.certifications, true) + '</div>'
           : '') +
       '</div>' +
     '</section>' +
