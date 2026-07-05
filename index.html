@@ -1123,7 +1123,7 @@
 
   <!-- Hero -->
   <section class="hero" id="home">
-    <div class="container hero-wrap">
+    <div class="container hero-wrap hs2">
       <div class="hero-top">
         <div class="hero-left">
           <h1 id="heroHeading">Your Partner for <span class="hl">Expert Training</span>,<br>IT Consulting &amp; Staffing</h1>
@@ -2739,8 +2739,6 @@ function applyProperties(){
   // comes from the hero_video_url property (reused as the image URL); falls back
   // to PROMO_IMAGE_URL. No video, no style toggle.
   renderPromoMedia(siteProps[PROP.heroImageUrl] || PROMO_IMAGE_URL);
-  const heroWrap = document.querySelector('.hero-wrap');
-  if (heroWrap) heroWrap.classList.add('hs2');
 
   applyColorProps();   // theme colors from ServiceNow (light + dark)
   applyOfferBanner();  // scrolling announcement banner (only if the offers property is set)
@@ -3130,8 +3128,7 @@ function renderCourseDetail(id){
         '<div class="cd-meta">' + rate + (c.duration ? '<span class="cd-dur">⏱ ' + esc(c.duration) + '</span>' : '') + '</div>' +
         '<p>' + (esc(c.about) || '') + '</p>' +
         '<div class="hero-cta">' +
-          '<button class="btn btn-primary btn-lg" onclick="openLeadModal(\'' + sn + '\',\'Enroll Now – ' + sn + '\')">Enroll Now</button>' +
-          '<button class="btn btn-ghost btn-lg" onclick="openLeadModal(\'' + sn + '\',\'Book Free Demo – ' + sn + '\')">Book Free Demo</button>' +
+          '<button class="btn btn-lg" style="background:#e8541e;color:#fff;border-color:#e8541e;" onclick="openLeadModal(\'' + sn + '\',\'Book Free Demo – ' + sn + '\')">Book Free Demo</button>' +
         '</div>' +
       '</div>' +
     '</div>' +
