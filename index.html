@@ -2584,9 +2584,9 @@ function coursePhoto(c, icon){
     '" loading="lazy" onload="var p=this.previousElementSibling; if(p)p.style.display=\'none\'" onerror="this.remove()">';
 }
 // comma string -> array of light-orange chips (used on the course cards)
-function chipList(str){
+function chipList(str, leftAlign){
   const items = (str || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
-  return items.length ? '<div class="cc-chips">' + items.map(function(x){ return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' : '';
+  return items.length ? '<div class="cc-chips"' + (leftAlign ? ' style="justify-content:flex-start"' : '') + '>' + items.map(function(x){ return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' : '';
 }
 // comma string -> trainer-modal style chips. cls='cert' => green; '' => peach. align='right' to right-align.
 function chipRow(str, cls, align){
@@ -2999,7 +2999,26 @@ function renderCourseFaqs(courseSysId){
   mount.dataset.course = courseSysId || '';
   if (!faqs || !faqs.length) return;                    // keep defaults until data is ready
   const list = faqs.filter(function(f){ return !f.associated_to || f.associated_to === courseSysId; });
-  if (list.length) mount.innerHTML = list.map(function(f){ return faqItem(f.question, f.answer); }).join('');
+  if (!list.length) return;
+  const LIMIT = 6;
+  const visible = list.slice(0, LIMIT);
+  const hidden  = list.slice(LIMIT);
+  let html = visible.map(function(f){ return faqItem(f.question, f.answer); }).join('');
+  if (hidden.length) {
+    html += '<div id="courseFaqExtra" style="display:none">' +
+              hidden.map(function(f){ return faqItem(f.question, f.answer); }).join('') +
+            '</div>' +
+            '<div id="courseFaqMore" style="text-align:center;margin-top:16px">' +
+              '<a href="#" class="link" onclick="showAllCourseFaqs();return false" style="font-size:.95rem">Show more ↓</a>' +
+            '</div>';
+  }
+  mount.innerHTML = html;
+}
+function showAllCourseFaqs(){
+  const extra = document.getElementById('courseFaqExtra');
+  const more  = document.getElementById('courseFaqMore');
+  if (extra) extra.style.display = '';
+  if (more)  more.style.display  = 'none';
 }
 
 /* Starter dedicated course page (#course-<id>). Data-driven where available;
@@ -3135,11 +3154,13 @@ function renderCourseDetail(id){
     '<section class="cd-sec"><h2>Course Overview</h2><p class="cd-desc">' + (esc(c.description) || esc(c.about) || 'Overview coming soon.') + '</p></section>' +
     '<section class="cd-sec cd-2col">' +
       '<div><h2>Course Features</h2>' + featList + '</div>' +
-      '<div><h2>Who Should Take This</h2><p class="hint">Recommended background / pre-requisites:</p>' + (chipList(c.prerequisites) || '<p class="hint">No prior experience required — beginners welcome.</p>') + '</div>' +
-    '</section>' +
-    '<section class="cd-sec cd-2col">' +
-      '<div><h2>Certification Details</h2><p class="hint">This program prepares you for:</p>' + (chipList(c.certifications) || '<p class="hint">—</p>') + '</div>' +
-      '<div><h2>Trusted By</h2><p class="hint">Participants &amp; organizations trained so far:</p>' + (chipList(c.participants) || '<p class="hint">—</p>') + '</div>' +
+      '<div>' +
+        '<h2>Who Should Take This</h2>' +
+        (chipList(c.prerequisites, true) || '<p class="hint" style="font-size:.93rem;line-height:1.65">There are no pre-requisites for this course — it\'s perfect for anyone looking to start their career in IT, switch from a non-tech background, or explore a new technology domain.</p>') +
+        (c.certifications
+          ? '<div style="margin-top:28px"><h2>Certification Details</h2>' + chipList(c.certifications, true) + '</div>'
+          : '') +
+      '</div>' +
     '</section>' +
     '<section class="cd-sec"><h2>Your Learning Journey</h2><div id="journeyMount" class="journey"></div></section>' +
     (c.projectsApplicable ?
