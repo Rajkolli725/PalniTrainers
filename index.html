@@ -2316,7 +2316,7 @@ function renderPromoMedia(imgUrl){
   const src = imgUrl || PROMO_IMAGE_URL;
   box.classList.add('pv-image');
   box.innerHTML = src
-    ? '<img src="' + esc(src) + '" alt="VTech Infotech" style="width:100%;height:100%;object-fit:cover">'
+    ? '<img src="' + esc(src) + '" alt="VTech Infotech" style="width:100%;height:100%;object-fit:contain">'
     : '<div class="pv-overlay"><div class="pv-label">Set the hero_image_url property to show the hero image</div></div>';
 }
 
