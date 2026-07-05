@@ -3221,88 +3221,87 @@ function renderCourseDetail(id){
    circle pops in with a spring bounce. Loops indefinitely.
    ============================================================ */
 function initPrepAnimation() {
-  var svg = document.getElementById('prepSvg');
-  if (!svg) return;
+  if (!document.getElementById('prepSvg')) return;
 
-  var LINE_MS  = 300;   // ms to draw each spoke
-  var POP_MS   = 280;   // ms for the circle pop
-  var STEP_MS  = 700;   // ms between successive nodes
-  var PAUSE_MS = 1500;  // ms to hold all circles before clearing
+  var LINE_MS  = 600;   // spoke draw duration
+  var POP_MS   = 450;   // circle + label appear duration
+  var STEP_MS  = 1400;  // gap between each node starting
+  var PAUSE_MS = 2200;  // hold all visible before clearing
+  var DASH     = 155;   // matches stroke-dasharray on lines
 
   var nodes = [
-    { cx: 310, cy: 80  },
-    { cx: 440, cy: 155 },
-    { cx: 440, cy: 305 },
-    { cx: 310, cy: 380 },
-    { cx: 180, cy: 305 },
-    { cx: 180, cy: 155 }
+    { cx: 310, cy: 80  },   // 12 o'clock — Assignments
+    { cx: 440, cy: 155 },   //  2 o'clock — Projects
+    { cx: 440, cy: 305 },   //  4 o'clock — Technical Q&A
+    { cx: 310, cy: 380 },   //  6 o'clock — Resume Review
+    { cx: 180, cy: 305 },   //  8 o'clock — Mock Interviews
+    { cx: 180, cy: 155 }    // 10 o'clock — Feedback & Scoring
   ];
 
   var timers = [];
-  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function clearTimers() { for (var i = 0; i < timers.length; i++) clearTimeout(timers[i]); timers = []; }
   function alive() { return !!document.getElementById('prepSvg'); }
-  function el(id) { return document.getElementById(id); }
+  function g(id) { return document.getElementById(id); }
 
-  // Elastic-out easing — overshoots for a "pop" feel
+  function easeOut3(t) { return 1 - Math.pow(1 - t, 3); }
   function elasticOut(t) {
-    if (t <= 0) return 0;
-    if (t >= 1) return 1;
+    if (t <= 0) return 0; if (t >= 1) return 1;
     return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * (2 * Math.PI / 3)) + 1;
   }
 
-  function animScale(cg, cx, cy, from, to, ms) {
-    var start = performance.now();
-    (function frame(now) {
+  function raf(ms, onTick, onDone) {
+    var t0 = performance.now();
+    (function tick(now) {
       if (!alive()) return;
-      var t = Math.min((now - start) / ms, 1);
-      var s = from + (to - from) * elasticOut(t);
-      cg.setAttribute('transform', 'translate(' + cx + ',' + cy + ') scale(' + s + ')');
-      if (t < 1) requestAnimationFrame(frame);
-    })(start);
+      var p = Math.min((now - t0) / ms, 1);
+      onTick(p);
+      if (p < 1) requestAnimationFrame(tick);
+      else if (onDone) onDone();
+    })(t0);
   }
 
   function resetAll() {
     for (var i = 0; i < nodes.length; i++) {
-      var line = el('prepLine' + i), cg = el('prepCg' + i), lbl = el('prepLbl' + i);
-      var nd = nodes[i];
-      if (line) { line.style.transition = 'none'; line.style.strokeDashoffset = '155'; }
-      if (cg)   { cg.setAttribute('transform', 'translate(' + nd.cx + ',' + nd.cy + ') scale(0)'); }
-      if (lbl)  { lbl.style.transition = 'none'; lbl.style.opacity = '0'; }
+      var n = nodes[i];
+      var line = g('prepLine' + i), cg = g('prepCg' + i), lbl = g('prepLbl' + i);
+      if (line) line.setAttribute('stroke-dashoffset', String(DASH));
+      if (cg)   cg.setAttribute('transform', 'translate(' + n.cx + ',' + n.cy + ') scale(0)');
+      if (lbl)  lbl.setAttribute('opacity', '0');
     }
   }
 
   function showNode(i) {
     if (!alive()) return;
-    var nd = nodes[i];
-    var line = el('prepLine' + i), cg = el('prepCg' + i), lbl = el('prepLbl' + i);
-    // 1. Draw the spoke
-    if (line) {
-      line.style.transition = 'stroke-dashoffset ' + LINE_MS + 'ms ease';
-      line.style.strokeDashoffset = '0';
-    }
-    // 2. After spoke: pop circle + fade label
-    var t = setTimeout(function() {
-      if (cg) animScale(cg, nd.cx, nd.cy, 0, 1, POP_MS);
-      if (lbl) { lbl.style.transition = 'opacity 200ms ease'; lbl.style.opacity = '1'; }
-    }, LINE_MS);
-    timers.push(t);
+    var n = nodes[i];
+    var line = g('prepLine' + i), cg = g('prepCg' + i), lbl = g('prepLbl' + i);
+    raf(LINE_MS, function(p) {
+      if (line) line.setAttribute('stroke-dashoffset', (DASH * (1 - easeOut3(p))).toFixed(2));
+    }, function() {
+      raf(POP_MS, function(p) {
+        if (cg)  cg.setAttribute('transform', 'translate(' + n.cx + ',' + n.cy + ') scale(' + elasticOut(p).toFixed(4) + ')');
+        if (lbl) lbl.setAttribute('opacity', easeOut3(p).toFixed(4));
+      });
+    });
   }
 
   function runCycle() {
     clearTimers();
     resetAll();
-    var t0 = setTimeout(function step(i) {
-      if (!alive()) return;
-      showNode(i);
-      if (i + 1 < nodes.length) {
-        var tn = setTimeout(function() { step(i + 1); }, STEP_MS);
-        timers.push(tn);
-      } else {
-        var tr = setTimeout(runCycle, PAUSE_MS + LINE_MS + POP_MS);
-        timers.push(tr);
-      }
-    }.bind(null, 0), 80);
-    timers.push(t0);
+    var step = 0;
+    (function next() {
+      var t = setTimeout(function() {
+        if (!alive()) return;
+        showNode(step);
+        step++;
+        if (step < nodes.length) {
+          next();
+        } else {
+          var tr = setTimeout(runCycle, PAUSE_MS + LINE_MS + POP_MS);
+          timers.push(tr);
+        }
+      }, step === 0 ? 100 : STEP_MS);
+      timers.push(t);
+    })();
   }
 
   runCycle();
