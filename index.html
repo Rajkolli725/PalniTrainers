@@ -3173,21 +3173,19 @@ function renderCourseDetail(id){
     '<section class="cd-sec"><h2>Interview Preparation &amp; Mock Practice</h2>' +
       '<div class="prep-wrap">' +
         '<div class="prep-copy cd-rte">' + (c.intMock || '<p class="hint">Interview preparation details coming soon.</p>') + '</div>' +
-        '<div class="prep-figure"><svg viewBox="0 0 620 470" role="img" aria-label="Interview preparation map: mock interviews, technical Q and A, resume review, feedback and scoring, projects and assignments">' +
-          '<style>.ph-line{stroke:var(--accent);stroke-width:1.5;stroke-opacity:.4}.ph-ring{fill:var(--accent-soft);opacity:.55}.ph-node{fill:var(--card);stroke:var(--accent);stroke-width:2}.ph-ico{font-size:22px}.ph-lbl{fill:var(--ink);font-size:14px;font-weight:600}.ph-hub{fill:#fff;font-size:13px;font-weight:700}</style>' +
+        '<div class="prep-figure"><svg id="prepSvg" viewBox="0 0 620 470" role="img" aria-label="Interview preparation map: Assignments, Projects, Technical Q and A, Resume Review, Mock Interviews, Feedback and Scoring">' +
           '<defs><linearGradient id="prepHubGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" style="stop-color:var(--accent)"/><stop offset="1" style="stop-color:var(--primary-bg)"/></linearGradient></defs>' +
-          '<g class="ph-line"><line x1="310" y1="230" x2="310" y2="80"/><line x1="310" y1="230" x2="440" y2="155"/><line x1="310" y1="230" x2="440" y2="305"/><line x1="310" y1="230" x2="310" y2="380"/><line x1="310" y1="230" x2="180" y2="305"/><line x1="310" y1="230" x2="180" y2="155"/></g>' +
-          '<circle class="ph-ring" cx="310" cy="230" r="84"/>' +
+          '<circle fill="var(--accent-soft)" opacity=".55" cx="310" cy="230" r="84"/>' +
           '<circle cx="310" cy="230" r="70" fill="url(#prepHubGrad)"/>' +
           '<text x="310" y="219" text-anchor="middle" font-size="30">🎯</text>' +
-          '<text x="310" y="249" text-anchor="middle" class="ph-hub">Interview</text>' +
-          '<text x="310" y="266" text-anchor="middle" class="ph-hub">Ready</text>' +
-          '<circle class="ph-node" cx="310" cy="80" r="26"/><text class="ph-ico" x="310" y="88" text-anchor="middle">🎤</text><text class="ph-lbl" x="310" y="40" text-anchor="middle">Mock Interviews</text>' +
-          '<circle class="ph-node" cx="440" cy="155" r="26"/><text class="ph-ico" x="440" y="163" text-anchor="middle">💻</text><text class="ph-lbl" x="476" y="160" text-anchor="start">Technical Q&amp;A</text>' +
-          '<circle class="ph-node" cx="440" cy="305" r="26"/><text class="ph-ico" x="440" y="313" text-anchor="middle">📄</text><text class="ph-lbl" x="476" y="310" text-anchor="start">Resume Review</text>' +
-          '<circle class="ph-node" cx="310" cy="380" r="26"/><text class="ph-ico" x="310" y="388" text-anchor="middle">📊</text><text class="ph-lbl" x="310" y="424" text-anchor="middle">Feedback &amp; Scoring</text>' +
-          '<circle class="ph-node" cx="180" cy="305" r="26"/><text class="ph-ico" x="180" y="313" text-anchor="middle">🛠️</text><text class="ph-lbl" x="144" y="310" text-anchor="end">Projects</text>' +
-          '<circle class="ph-node" cx="180" cy="155" r="26"/><text class="ph-ico" x="180" y="163" text-anchor="middle">📝</text><text class="ph-lbl" x="144" y="160" text-anchor="end">Assignments</text>' +
+          '<text x="310" y="249" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Interview</text>' +
+          '<text x="310" y="266" text-anchor="middle" fill="#fff" font-size="13" font-weight="700">Ready</text>' +
+          '<g id="prepNode0"><line id="prepLine0" x1="310" y1="230" x2="310" y2="80" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".5" fill="none" stroke-dasharray="155" stroke-dashoffset="155"/><g id="prepCg0" transform="translate(310,80) scale(0)"><circle r="26" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/><text font-size="22" text-anchor="middle" dy="8">📝</text></g><text id="prepLbl0" x="310" y="40" text-anchor="middle" fill="var(--ink)" font-size="14" font-weight="600" opacity="0">Assignments</text></g>' +
+          '<g id="prepNode1"><line id="prepLine1" x1="310" y1="230" x2="440" y2="155" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".5" fill="none" stroke-dasharray="155" stroke-dashoffset="155"/><g id="prepCg1" transform="translate(440,155) scale(0)"><circle r="26" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/><text font-size="22" text-anchor="middle" dy="8">🛠️</text></g><text id="prepLbl1" x="476" y="160" text-anchor="start" fill="var(--ink)" font-size="14" font-weight="600" opacity="0">Projects</text></g>' +
+          '<g id="prepNode2"><line id="prepLine2" x1="310" y1="230" x2="440" y2="305" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".5" fill="none" stroke-dasharray="155" stroke-dashoffset="155"/><g id="prepCg2" transform="translate(440,305) scale(0)"><circle r="26" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/><text font-size="22" text-anchor="middle" dy="8">💻</text></g><text id="prepLbl2" x="476" y="310" text-anchor="start" fill="var(--ink)" font-size="14" font-weight="600" opacity="0">Technical Q&amp;A</text></g>' +
+          '<g id="prepNode3"><line id="prepLine3" x1="310" y1="230" x2="310" y2="380" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".5" fill="none" stroke-dasharray="155" stroke-dashoffset="155"/><g id="prepCg3" transform="translate(310,380) scale(0)"><circle r="26" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/><text font-size="22" text-anchor="middle" dy="8">📄</text></g><text id="prepLbl3" x="310" y="424" text-anchor="middle" fill="var(--ink)" font-size="14" font-weight="600" opacity="0">Resume Review</text></g>' +
+          '<g id="prepNode4"><line id="prepLine4" x1="310" y1="230" x2="180" y2="305" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".5" fill="none" stroke-dasharray="155" stroke-dashoffset="155"/><g id="prepCg4" transform="translate(180,305) scale(0)"><circle r="26" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/><text font-size="22" text-anchor="middle" dy="8">🎤</text></g><text id="prepLbl4" x="144" y="310" text-anchor="end" fill="var(--ink)" font-size="14" font-weight="600" opacity="0">Mock Interviews</text></g>' +
+          '<g id="prepNode5"><line id="prepLine5" x1="310" y1="230" x2="180" y2="155" stroke="var(--accent)" stroke-width="1.5" stroke-opacity=".5" fill="none" stroke-dasharray="155" stroke-dashoffset="155"/><g id="prepCg5" transform="translate(180,155) scale(0)"><circle r="26" fill="var(--card)" stroke="var(--accent)" stroke-width="2"/><text font-size="22" text-anchor="middle" dy="8">📊</text></g><text id="prepLbl5" x="144" y="160" text-anchor="end" fill="var(--ink)" font-size="14" font-weight="600" opacity="0">Feedback &amp; Scoring</text></g>' +
         '</svg></div>' +
       '</div></section>' : '') +
     '<section class="cd-sec"><h2>Training Options</h2>' +
@@ -3215,6 +3213,99 @@ function renderCourseDetail(id){
   renderJourney(c);    // build + animate the data-driven learning journey
   renderCourseFaqs(c.sysId || '');   // global + this course's FAQs (from the table)
   renderCourseBatches(c.sysId || '');   // this course's upcoming cohort batches (from the table)
+  initPrepAnimation();
+}
+
+/* ============================================================
+   Interview-Ready diagram animation — line draws first, then
+   circle pops in with a spring bounce. Loops indefinitely.
+   ============================================================ */
+function initPrepAnimation() {
+  var svg = document.getElementById('prepSvg');
+  if (!svg) return;
+
+  var LINE_MS  = 300;   // ms to draw each spoke
+  var POP_MS   = 280;   // ms for the circle pop
+  var STEP_MS  = 700;   // ms between successive nodes
+  var PAUSE_MS = 1500;  // ms to hold all circles before clearing
+
+  var nodes = [
+    { cx: 310, cy: 80  },
+    { cx: 440, cy: 155 },
+    { cx: 440, cy: 305 },
+    { cx: 310, cy: 380 },
+    { cx: 180, cy: 305 },
+    { cx: 180, cy: 155 }
+  ];
+
+  var timers = [];
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function alive() { return !!document.getElementById('prepSvg'); }
+  function el(id) { return document.getElementById(id); }
+
+  // Elastic-out easing — overshoots for a "pop" feel
+  function elasticOut(t) {
+    if (t <= 0) return 0;
+    if (t >= 1) return 1;
+    return Math.pow(2, -10 * t) * Math.sin((t * 10 - 0.75) * (2 * Math.PI / 3)) + 1;
+  }
+
+  function animScale(cg, cx, cy, from, to, ms) {
+    var start = performance.now();
+    (function frame(now) {
+      if (!alive()) return;
+      var t = Math.min((now - start) / ms, 1);
+      var s = from + (to - from) * elasticOut(t);
+      cg.setAttribute('transform', 'translate(' + cx + ',' + cy + ') scale(' + s + ')');
+      if (t < 1) requestAnimationFrame(frame);
+    })(start);
+  }
+
+  function resetAll() {
+    for (var i = 0; i < nodes.length; i++) {
+      var line = el('prepLine' + i), cg = el('prepCg' + i), lbl = el('prepLbl' + i);
+      var nd = nodes[i];
+      if (line) { line.style.transition = 'none'; line.style.strokeDashoffset = '155'; }
+      if (cg)   { cg.setAttribute('transform', 'translate(' + nd.cx + ',' + nd.cy + ') scale(0)'); }
+      if (lbl)  { lbl.style.transition = 'none'; lbl.style.opacity = '0'; }
+    }
+  }
+
+  function showNode(i) {
+    if (!alive()) return;
+    var nd = nodes[i];
+    var line = el('prepLine' + i), cg = el('prepCg' + i), lbl = el('prepLbl' + i);
+    // 1. Draw the spoke
+    if (line) {
+      line.style.transition = 'stroke-dashoffset ' + LINE_MS + 'ms ease';
+      line.style.strokeDashoffset = '0';
+    }
+    // 2. After spoke: pop circle + fade label
+    var t = setTimeout(function() {
+      if (cg) animScale(cg, nd.cx, nd.cy, 0, 1, POP_MS);
+      if (lbl) { lbl.style.transition = 'opacity 200ms ease'; lbl.style.opacity = '1'; }
+    }, LINE_MS);
+    timers.push(t);
+  }
+
+  function runCycle() {
+    clearTimers();
+    resetAll();
+    var t0 = setTimeout(function step(i) {
+      if (!alive()) return;
+      showNode(i);
+      if (i + 1 < nodes.length) {
+        var tn = setTimeout(function() { step(i + 1); }, STEP_MS);
+        timers.push(tn);
+      } else {
+        var tr = setTimeout(runCycle, PAUSE_MS + LINE_MS + POP_MS);
+        timers.push(tr);
+      }
+    }.bind(null, 0), 80);
+    timers.push(t0);
+  }
+
+  runCycle();
 }
 
 /* ============================================================
