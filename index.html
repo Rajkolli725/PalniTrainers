@@ -528,7 +528,7 @@
   /* Fixed height + width:auto + no max-width => every logo is the SAME height with
      its aspect ratio preserved (a width cap would shrink wide logos and make their
      heights uneven). */
-  .stats-alumni .al-img { height: 46px; width: auto; max-width: none; object-fit: contain; filter: brightness(0) invert(1); opacity: .9; }
+  .stats-alumni .al-img { height: 18px; width: auto; max-width: none; object-fit: contain; filter: brightness(0) invert(1); opacity: .9; }
   .stats-alumni .al-img:hover { opacity: 1; }
   .stats-alumni .al-name { color: #fff; }
 
@@ -552,7 +552,7 @@
   @keyframes alumniScroll { from { transform: translateX(-50%); } to { transform: translateX(0); } }
   @media (prefers-reduced-motion: reduce) { .alumni-track { animation: none; } }
   .al-item { display: inline-flex; align-items: center; flex: 0 0 auto; }
-  .al-img { height: 60px; width: auto; max-width: 195px; object-fit: contain; display: block; }
+  .al-img { height: 24px; width: auto; max-width: 195px; object-fit: contain; display: block; }
   .al-name { font-weight: 700; color: var(--muted); font-size: 1.02rem; white-space: nowrap; }
   @media (max-width: 560px) { .alumni-wrap { grid-template-columns: 1fr; gap: 12px; } }
 
