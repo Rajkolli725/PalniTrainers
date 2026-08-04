@@ -1470,6 +1470,12 @@
       <h1 id="careersPageHeading">Careers at VTech Infotech</h1>
       <p id="careersPageSubheading">Explore current openings and help us build the next generation of IT talent.</p>
     </div>
+    <div class="toolbar" style="max-width:840px;margin:0 auto 18px">
+      <div class="search">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
+        <input id="careersSearch" type="text" placeholder="Search by title, description or location…" oninput="renderCareersPage()" />
+      </div>
+    </div>
     <div id="careersList" style="max-width:840px;margin:0 auto"></div>
   </div>
 </div>
@@ -2651,6 +2657,9 @@ const PROP = {
   supportEmail: 'x_palni_servicen_1.support_email',
   supportNumber:'x_palni_servicen_1.support_number',
   whatsappNumber:'x_palni_servicen_1.whatsapp_number',
+  displayCallBubble:    'x_palni_servicen_1.display_call_bubble',
+  displayMessageBubble: 'x_palni_servicen_1.display_message_bubble',
+  displayWhatsappBubble:'x_palni_servicen_1.display_whatsapp_bubble',
   supportHours: 'x_palni_servicen_1.support_hours',
   supportLocation:'x_palni_servicen_1.support_location',
   offers:         'x_palni_servicen_1.offers',
@@ -2756,6 +2765,13 @@ function applyProperties(){
     const cb = document.getElementById('callBubble'); if (cb) cb.href = 'tel:' + tel;
     const tb = document.getElementById('textBubble'); if (tb) tb.href = 'sms:' + tel;
   }
+  // Show/hide each floating bubble independently (default true if the property isn't set).
+  const callBub = document.getElementById('callBubble');
+  if (callBub) callBub.style.display = boolFlag(siteProps[PROP.displayCallBubble], true) ? '' : 'none';
+  const msgBub = document.getElementById('textBubble');
+  if (msgBub) msgBub.style.display = boolFlag(siteProps[PROP.displayMessageBubble], true) ? '' : 'none';
+  const waBub = document.getElementById('waBubble');
+  if (waBub) waBub.style.display = boolFlag(siteProps[PROP.displayWhatsappBubble], true) ? '' : 'none';
   setText('contactHours',    siteProps[PROP.supportHours]);
   setText('contactLocation', siteProps[PROP.supportLocation]);
   const ci = document.getElementById('contactImage');
@@ -3189,7 +3205,15 @@ function renderCareersPage(){
   const mount = document.getElementById('careersList');
   if (!mount) return;
   if (!careers || !careers.length) { mount.innerHTML = '<div class="empty">No open positions right now. Please check back soon.</div>'; return; }
-  mount.innerHTML = careers.map(careerCardHtml).join('');
+  const box = document.getElementById('careersSearch');
+  const q = box ? box.value : '';
+  const nq = q.trim().toLowerCase();
+  const list = nq ? careers.filter(function(j){
+    return [j.name, j.job_description, j.work_location].join(' ').toLowerCase().indexOf(nq) !== -1;
+  }) : careers;
+  mount.innerHTML = list.length
+    ? list.map(careerCardHtml).join('')
+    : '<div class="empty">No openings match &ldquo;' + esc(q) + '&rdquo;.</div>';
 }
 
 /* Build "Projects You'll Build" cards from the u_project JSON object
@@ -4067,6 +4091,7 @@ function applyPageConfig(){
   setText('cohortsPageHeading',        pc.batchesHeading);   // Cohorts page reuses the section heading
   setText('faqHeading',                pc.faqHeading);
   setText('faqPageHeading',            pc.faqHeading);        // FAQ page reuses the section heading
+  setText('careersPageHeading',        pc.careersHeading);
   // Hero trust line + the four stat counters (from the table, not properties)
   if (pc.pros) { const h = document.getElementById('heroPros'); if (h) h.textContent = pc.pros; }
   setStatFromProp('statPros',     pc.pros);
@@ -4085,6 +4110,7 @@ function applyPageConfig(){
   setRich('cohortsPageSubheading',     pc.cohortBatchesSubtext);   // cohorts page subtext (same value)
   setRich('faqSubheading',             pc.faqSubtext);        // home FAQ subtext
   setRich('faqPageSubheading',         pc.faqSubtext);        // FAQ page subtext (same value)
+  setRich('careersPageSubheading',     pc.careersSubtext);
   setRich('supportSubheading',         pc.contactSubtext);    // contact section subtext
   setRich('aboutWhoWeAre',             pc.aboutUs);           // About page "Who We Are" body
   // Legal pages — the full HTML field replaces the default body when provided
