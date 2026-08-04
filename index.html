@@ -851,6 +851,14 @@
   .cd-ticks { list-style: none; padding: 0; margin: 0; }
   .cd-ticks li { position: relative; padding-left: 26px; margin-bottom: 10px; color: var(--ink); }
   .cd-ticks li::before { content: "✓"; position: absolute; left: 0; color: #5aa2ff; font-weight: 800; }
+  /* ---- Careers page ---- */
+  .career-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 26px; margin-bottom: 22px; }
+  .career-card h2 { margin: 0 0 6px; font-size: 1.3rem; }
+  .career-loc { color: var(--muted); font-size: .9rem; margin: 0 0 16px; }
+  .career-card h4 { margin: 18px 0 8px; font-size: 1rem; }
+  .career-card p { color: var(--ink); line-height: 1.6; margin: 0; }
+  .career-card ul { color: var(--ink); line-height: 1.6; margin: 0; padding-left: 20px; }
+  .career-note { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--muted); font-size: .88rem; line-height: 1.55; }
   .cd-table { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
   /* Home "Upcoming Cohort Batches" table has an extra Course column (6 cells). */
   .cd-table.bt-home .cd-trow { grid-template-columns: 1.5fr 1fr 1fr 1.2fr .9fr 150px; }
@@ -1095,6 +1103,7 @@
       <a class="navlink" onclick="toggleServicesPanel()">Services</a>
       <a class="navlink" onclick="goView('about')">About Us</a>
       <a class="navlink" onclick="goSection('contact')">Contact</a>
+      <a class="navlink" onclick="goView('careers')">Careers</a>
       <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
       <button class="btn btn-gold nav-demo" onclick="openLeadModal('','Book a Free Demo (Nav)')">Book a Free Demo</button>
     </div>
@@ -1192,6 +1201,17 @@
         <button class="carousel-btn next" aria-label="Next trainers">&#8250;</button>
       </div>
       <div style="text-align:center;margin-top:34px"><button class="btn btn-accent btn-lg" onclick="goView('trainers')">View All Trainers →</button></div>
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section alt" id="home-services">
+    <div class="container">
+      <div class="section-title reveal">
+        <h2 id="servicesPreviewHeading">End-to-End IT Services</h2>
+        <p id="servicesPreviewSubtext">From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
+      </div>
+      <div class="cards-grid" id="homeServicesGrid"></div>
     </div>
   </section>
 
@@ -1442,6 +1462,16 @@
     </div>
     <div class="cd-table bt-home" id="cohortsPageTable" style="max-width:1040px;margin:0 auto"></div>
   </div>
+
+  <!-- ===== Careers (dedicated page, populated by renderCareersPage) ===== -->
+  <div id="careersView" style="display:none">
+    <a class="back-link" href="#" onclick="goHome();return false" style="display:inline-flex;margin:6px 0 18px">&larr; Back to Home</a>
+    <div class="view-head">
+      <h1 id="careersPageHeading">Careers at VTech Infotech</h1>
+      <p id="careersPageSubheading">Explore current openings and help us build the next generation of IT talent.</p>
+    </div>
+    <div id="careersList" style="max-width:840px;margin:0 auto"></div>
+  </div>
 </div>
 
 <!-- ============================ FOOTER ============================ -->
@@ -1601,6 +1631,7 @@ const PLACEMENTS_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/
 const PLACEMENT_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/placement_image/';    // GET /{sys_id} -> company logo (binary)
 const PROPS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_properties';         // GET -> { name: value } site properties
 const SERVICES_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_services';           // GET -> [ { sys_id, title, description, highlights, button_text, order, icon } ] from x_palni_servicen_1_services
+const CAREERS_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_careers';            // GET -> { result: [ { sys_id, name, job_description, desired_candidate_profile, responsibilities, work_location, note } ] } from x_palni_servicen_1_careers (active only)
 
 // No auth header — the Scripted REST API is anonymous; credentials:'omit'
 // keeps it a clean cross-origin request governed only by the CORS rule.
@@ -2118,7 +2149,7 @@ function fillCourseSelects(){
 /* ---- Nav helpers ---- */
 function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
 function closeNav(){ const n = document.getElementById('navLinks'); if (n) n.classList.remove('open'); }
-function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0 || h.indexOf('#faq') === 0 || h.indexOf('#privacy') === 0 || h.indexOf('#terms') === 0 || h.indexOf('#cohorts') === 0); }
+function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0 || h.indexOf('#faq') === 0 || h.indexOf('#privacy') === 0 || h.indexOf('#terms') === 0 || h.indexOf('#cohorts') === 0 || h.indexOf('#careers') === 0); }
 function scrollToId(id){ const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 function goSection(id){ closeNav(); toggleServicesPanel(false); if (!onHome()) { location.hash = ''; setTimeout(function(){ scrollToId(id); }, 90); } else { scrollToId(id); } }
 function goHome(){ closeNav(); if (!onHome()) { location.hash = ''; } else { route(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
@@ -2409,7 +2440,8 @@ function serviceCardHtml(s){
 
 async function renderServices(){
   const box = document.getElementById('servicesPanelGrid');
-  if (!box) return;
+  const homeBox = document.getElementById('homeServicesGrid');
+  if (!box && !homeBox) return;
   let list = SERVICES_FALLBACK;
   try {
     const res = await fetch(SERVICES_GET_API, { headers: { 'Accept': 'application/json' } });
@@ -2418,7 +2450,9 @@ async function renderServices(){
       if (Array.isArray(data) && data.length) list = data;
     }
   } catch (e) { /* keep fallback */ }
-  box.innerHTML = list.map(serviceCardHtml).join('');
+  const html = list.map(serviceCardHtml).join('');
+  if (box) box.innerHTML = html;
+  if (homeBox) homeBox.innerHTML = html;
 }
 /* Slide-down Services panel (replaces the old on-page services section) */
 function toggleServicesPanel(open){
@@ -3031,12 +3065,20 @@ function showAllCourseFaqs(){
    server. Each section hides itself when it has no rows.
    ============================================================ */
 let cohorts = null;   // null = not loaded yet; array once fetched
+// Keep only batches starting today or later; batches with no parseable start date are kept (treated as TBA).
+function isFutureBatch(b){
+  const m = String(b.starts || '').match(/^(\d{4})-(\d{2})-(\d{2})/);
+  if (!m) return true;
+  const d = new Date(+m[1], +m[2] - 1, +m[3]);
+  const today = new Date(); today.setHours(0, 0, 0, 0);
+  return d >= today;
+}
 async function loadCohorts(){
   try {
     const res = await snFetch(COHORTS_GET_API);
     if (!res.ok) throw new Error('HTTP ' + res.status);
     const json = await res.json();
-    cohorts = (json.result || []).filter(function(b){ return b && (b.batch || b.starts || b.schedule || b.mode); });
+    cohorts = (json.result || []).filter(function(b){ return b && (b.batch || b.starts || b.schedule || b.mode); }).filter(isFutureBatch);
   } catch (e) {
     console.warn('Cohort batches: none loaded —', e.message);
     cohorts = [];
@@ -3110,6 +3152,44 @@ function renderCourseBatches(courseSysId){
   const head = '<div class="cd-trow cd-thead"><span>Batch</span><span>Starts</span><span>Schedule</span><span>Mode</span><span></span></div>';
   mount.innerHTML = head + list.map(function(b){ return batchRow(b, false); }).join('');
   sec.style.display = '';
+}
+
+/* ============================================================
+   Careers — dedicated page only (no home-page section), from
+   x_palni_servicen_1_careers. The get_careers resource returns
+   active openings only, so no client-side active filter is needed.
+   ============================================================ */
+let careers = null;   // null = not loaded yet; array once fetched
+async function loadCareers(){
+  try {
+    const res = await snFetch(CAREERS_GET_API);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    const json = await res.json();
+    careers = (json.result || []).filter(function(j){ return j && j.name; });
+  } catch (e) {
+    console.warn('Careers: none loaded —', e.message);
+    careers = [];
+  }
+  renderCareersPage();
+}
+function careerCardHtml(j){
+  return '<div class="career-card">' +
+    '<h2>' + esc(j.name || '') + '</h2>' +
+    (j.work_location ? '<p class="career-loc">📍 ' + esc(j.work_location) + '</p>' : '') +
+    (j.job_description ? '<p>' + esc(j.job_description) + '</p>' : '') +
+    (j.responsibilities ? '<h4>Responsibilities</h4>' + j.responsibilities : '') +
+    (j.desired_candidate_profile ? '<h4>Desired Candidate Profile</h4><p>' + esc(j.desired_candidate_profile) + '</p>' : '') +
+    '<div style="text-align:center;margin-top:22px">' +
+      '<button class="btn btn-primary" onclick="openLeadModal(\'\',\'' + esc((j.name || '').replace(/'/g, '')) + ' – Job Application\',{title:\'Apply for ' + esc((j.name || '').replace(/'/g, '')) + '\',subtitle:\'Tell us a bit about you and we’ll get in touch.\',submitLabel:\'Submit Application\'})">Apply Now</button>' +
+    '</div>' +
+    (j.note ? '<p class="career-note">' + esc(j.note) + '</p>' : '') +
+  '</div>';
+}
+function renderCareersPage(){
+  const mount = document.getElementById('careersList');
+  if (!mount) return;
+  if (!careers || !careers.length) { mount.innerHTML = '<div class="empty">No open positions right now. Please check back soon.</div>'; return; }
+  mount.innerHTML = careers.map(careerCardHtml).join('');
 }
 
 /* Build "Projects You'll Build" cards from the u_project JSON object
@@ -3872,6 +3952,7 @@ function route(){
   const isPrivacy  = h.indexOf('#privacy') === 0;
   const isTerms    = h.indexOf('#terms') === 0;
   const isCohorts  = h.indexOf('#cohorts') === 0;
+  const isCareers  = h.indexOf('#careers') === 0;
   const home = document.getElementById('homeView');
   const wrap = document.getElementById('appWrap');
   const mainView = document.getElementById('mainView');
@@ -3883,8 +3964,9 @@ function route(){
   const privacyView = document.getElementById('privacyView');
   const termsView = document.getElementById('termsView');
   const cohortsView = document.getElementById('cohortsView');
+  const careersView = document.getElementById('careersView');
   closeReviewModal(); closeLeadModal(); closeTrainer(); closeCourseModal(); closeNav(); toggleServicesPanel(false);
-  const wrapKids = [mainView, reviewsView, coursesView, courseDetailView, aboutView, faqView, privacyView, termsView, cohortsView];
+  const wrapKids = [mainView, reviewsView, coursesView, courseDetailView, aboutView, faqView, privacyView, termsView, cohortsView, careersView];
   function show(el){ wrapKids.forEach(function(v){ v.style.display = v === el ? '' : 'none'; }); }
 
   if (isReviews) {
@@ -3914,6 +3996,9 @@ function route(){
   } else if (isCohorts) {
     home.style.display = 'none'; wrap.style.display = ''; show(cohortsView);
     renderCohortsPage(); window.scrollTo(0, 0);
+  } else if (isCareers) {
+    home.style.display = 'none'; wrap.style.display = ''; show(careersView);
+    renderCareersPage(); window.scrollTo(0, 0);
   } else {
     wrap.style.display = 'none'; home.style.display = '';
     renderHomeTrainers(); renderHomeCourses(); initReveal();
@@ -3945,6 +4030,7 @@ loadHomeTestimonials();  // fetch top reviews for the home testimonials strip
 loadPlacements();        // fetch alumni placement logos -> fill the marquee bands
 loadFaqs();              // fetch FAQs -> home (global) + course pages (global + course-specific)
 loadCohorts();           // fetch upcoming cohort batches -> home table + course-page tables
+loadCareers();           // fetch active job openings -> Careers page only
 loadPageConfig();        // fetch page configuration -> Enterprise section body (u_enterprise HTML)
 
 /* ---- Page configuration (x_palni_servicen_1_page_configurations) ----
@@ -3973,6 +4059,7 @@ function applyPageConfig(){
   setText('trainersPageHeading',       pc.trainersHeading);  // Trainers page reuses the home heading
   setText('feedbackHeading',           pc.feedbackHeading);  // Reviews page heading is set in showAllReviews
   setText('servicesHeading',           pc.servicesHeading);
+  setText('servicesPreviewHeading',    pc.servicesHeading);  // Home services section reuses the panel heading
   setText('aboutHeading',              pc.aboutHeading);
   setText('enterpriseHeading',         pc.enterpriseHeading);
   setText('supportHeading',            pc.supportHeading);
