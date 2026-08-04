@@ -3195,9 +3195,6 @@ function careerCardHtml(j){
     (j.job_description ? '<p>' + esc(j.job_description) + '</p>' : '') +
     (j.responsibilities ? '<h4>Responsibilities</h4>' + j.responsibilities : '') +
     (j.desired_candidate_profile ? '<h4>Desired Candidate Profile</h4><p>' + esc(j.desired_candidate_profile) + '</p>' : '') +
-    '<div style="text-align:center;margin-top:22px">' +
-      '<button class="btn btn-primary" onclick="openLeadModal(\'\',\'' + esc((j.name || '').replace(/'/g, '')) + ' – Job Application\',{title:\'Apply for ' + esc((j.name || '').replace(/'/g, '')) + '\',subtitle:\'Tell us a bit about you and we’ll get in touch.\',submitLabel:\'Submit Application\'})">Apply Now</button>' +
-    '</div>' +
     (j.note ? '<p class="career-note">' + esc(j.note) + '</p>' : '') +
   '</div>';
 }
