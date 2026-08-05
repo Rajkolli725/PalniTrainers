@@ -1276,7 +1276,7 @@
           <h2 id="supportHeading" style="font-size:2rem;margin:8px 0 12px">Talk to a Course Advisor</h2>
           <p id="supportSubheading" style="color:var(--muted);margin:0 0 24px">Have questions about courses, schedules, or corporate training? Reach out and we'll get back within 1 business day.</p>
           <ul class="contact-info">
-            <li><span class="ic">📧</span><div><b>Email</b><a id="contactEmail" class="link" href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a></div></li>
+            <li><span class="ic">📧</span><div><b>Email</b><a id="contactEmail" class="link js-support-email" href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a></div></li>
             <li><span class="ic">📞</span><div><b>Phone</b><span id="contactPhone">+1 (555) 123-4567</span></div></li>
             <li><span class="ic">🕒</span><div><b>Support Hours</b><span id="contactHours">Mon–Sat, 9:00 AM – 8:00 PM</span></div></li>
             <li><span class="ic">🏢</span><div><b>Office Location</b><span id="contactLocation">Custom team programs available on request</span></div></li>
@@ -1520,7 +1520,7 @@
       <div>
         <h5>Get Started</h5>
         <a onclick="openLeadModal('','Talk to an Advisor (Footer)')">Talk to an Advisor</a>
-        <a href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a>
+        <a class="js-support-email" href="mailto:training@vtechinfotech.com">training@vtechinfotech.com</a>
         <a class="js-support-phone" href="tel:+15551234567">+1 (555) 123-4567</a>
       </div>
     </div>
@@ -2735,10 +2735,13 @@ function applyProperties(){
   // (u_professionals_trained_and_placed, u_expert_consultants_and_trainers,
   // u_project_success_rate, u_average_client_rating). See applyPageConfig().
 
-  // Contact section
+  // Contact email — updates the Contact section and the footer together.
   if (siteProps[PROP.supportEmail]) {
-    const em = document.getElementById('contactEmail');
-    if (em) { em.textContent = siteProps[PROP.supportEmail]; em.href = 'mailto:' + siteProps[PROP.supportEmail]; }
+    const email = siteProps[PROP.supportEmail];
+    document.querySelectorAll('.js-support-email').forEach(function(a){
+      a.textContent = email;
+      a.setAttribute('href', 'mailto:' + email);
+    });
   }
   setText('contactPhone',    siteProps[PROP.supportNumber]);
   // Support number across the footer, privacy, terms and FAQ contact links.
