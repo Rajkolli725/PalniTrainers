@@ -1486,19 +1486,19 @@
       <div>
         <img class="footer-logo" src="vtech-logo.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.5rem&quot;><span style=&quot;color:var(--accent)&quot;>V</span>TECH</strong>'">
         <p class="footer-about">VTech Infotech LLC — IT consulting, staffing and expert-led training that turns technology into a competitive advantage.</p>
-        <h5 style="margin-top:22px">Follow Us</h5>
+        <h5 id="followUsHeading" style="margin-top:22px">Follow Us</h5>
         <div class="footer-social">
-          <a href="https://vtechinfotech.com" target="_blank" rel="noopener" title="Website" aria-label="Website">
+          <a id="fsWebsite" href="https://vtechinfotech.com" target="_blank" rel="noopener" title="Website" aria-label="Website">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 2.5 15.4 0 18M12 3C9.5 5.6 9.5 18.4 12 21"/></svg>
           </a>
-          <a href="https://www.linkedin.com/company/vtech-infotech" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
+          <a id="fsLinkedin" href="https://www.linkedin.com/company/vtech-infotech" target="_blank" rel="noopener" title="LinkedIn" aria-label="LinkedIn">
             <svg viewBox="0 0 24 24"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
           </a>
-          <a href="https://twitter.com/vtechinfotech" target="_blank" rel="noopener" title="Twitter / X" aria-label="Twitter">
+          <a id="fsTwitter" href="https://twitter.com/vtechinfotech" target="_blank" rel="noopener" title="Twitter / X" aria-label="Twitter">
             <svg viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24h-6.66l-5.214-6.817-5.97 6.817H1.674l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"/></svg>
           </a>
-          <a href="https://www.udemy.com/user/vtech-infotech" target="_blank" rel="noopener" title="Udemy" aria-label="Udemy"><span class="fs-udemy">Ud</span></a>
-          <a href="https://www.youtube.com/@vtechinfotech" target="_blank" rel="noopener" title="YouTube" aria-label="YouTube">
+          <a id="fsUdemy" href="https://www.udemy.com/user/vtech-infotech" target="_blank" rel="noopener" title="Udemy" aria-label="Udemy"><span class="fs-udemy">Ud</span></a>
+          <a id="fsYoutube" href="https://www.youtube.com/@vtechinfotech" target="_blank" rel="noopener" title="YouTube" aria-label="YouTube">
             <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
           </a>
         </div>
@@ -1661,7 +1661,7 @@ function mapRecord(p){
     certs: splitList(String(p.certifications || '')),
     trainings: +p.trainings || 0,
     impl: +p.implementations || 0,
-    linkedin: '',                  // no LinkedIn column in the table
+    linkedin: p.linkedin_url || p.u_linkedin_url || '',   // ServiceNow "u_linkedin_url" -> LinkedIn icon (disabled when empty)
     email: p.email || '',
     bio: p.bio || '',
     shortBio: p.short_bio || p.u_short_bio || '',   // ServiceNow "u_short_bio" -> the "About" panel
@@ -1798,7 +1798,7 @@ function openTrainer(id){
   const m = members.find(x => x.id === id);
   if (!m) return;
   const r = computeRating(m);
-  const linkedin = m.linkedin || ('https://www.linkedin.com/search/results/all/?keywords=' + encodeURIComponent(m.name));
+  const linkedin = m.linkedin || '';
   const avatar = m.avatar ? `<img src="${m.avatar}" alt="${esc(m.name)}">` : `<span class="avatar-initials">${initials(m.name)}</span>`;
   const skillChips = (m.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join('') || '<span class="hint">—</span>';
   const certChips = (m.certs||[]).map(s=>`<span class="chip cert">${esc(s)}</span>`).join('') || '<span class="hint">—</span>';
@@ -1823,7 +1823,7 @@ function openTrainer(id){
             <span class="stars">${stars(r)}</span>
           </div>
           <div class="cta-row">
-            <a class="icon-btn linkedin" href="${esc(linkedin)}" target="_blank" rel="noopener" title="Connect on LinkedIn">
+            <a class="icon-btn linkedin${linkedin ? '' : ' disabled'}" href="${linkedin ? esc(linkedin) : '#'}"${linkedin ? ' target="_blank" rel="noopener"' : ''} title="${linkedin ? 'Connect on LinkedIn' : 'LinkedIn profile not available'}">
               <svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>
             </a>
             <a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=${encodeURIComponent('Inquiry about ' + m.name)}" title="Contact (training@vtechinfotech.com)">
@@ -2506,10 +2506,10 @@ function initCarousels(){
 /* Social / attachment icon row (LinkedIn, email, download résumé) — shared by the
    trainer modal and the home card's expanded (+) bio panel. */
 function trainerCtaRow(m){
-  const linkedin = m.linkedin || ('https://www.linkedin.com/search/results/all/?keywords=' + encodeURIComponent(m.name));
+  const linkedin = m.linkedin || '';
   const hasResume = !!m.resumeId;
   return '<div class="cta-row">' +
-      '<a class="icon-btn linkedin" href="' + esc(linkedin) + '" target="_blank" rel="noopener" title="Connect on LinkedIn">' +
+      '<a class="icon-btn linkedin' + (linkedin ? '' : ' disabled') + '" href="' + (linkedin ? esc(linkedin) : '#') + '"' + (linkedin ? ' target="_blank" rel="noopener"' : '') + ' title="' + (linkedin ? 'Connect on LinkedIn' : 'LinkedIn profile not available') + '">' +
         '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>' +
       '</a>' +
       '<a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=' + encodeURIComponent('Inquiry about ' + m.name) + '" title="Contact (training@vtechinfotech.com)">' +
@@ -2659,6 +2659,11 @@ const PROP = {
   displayCallBubble:    'x_palni_servicen_1.display_call_bubble',
   displayMessageBubble: 'x_palni_servicen_1.display_message_bubble',
   displayWhatsappBubble:'x_palni_servicen_1.display_whatsapp_bubble',
+  displayYoutubeIcon:  'x_palni_servicen_1.display_youtube_icon',
+  displayUdemyIcon:    'x_palni_servicen_1.display_udemy_icon',
+  displayTwitterIcon:  'x_palni_servicen_1.display_twitter_icon',
+  displayLinkedinIcon: 'x_palni_servicen_1.display_linkedin_icon',
+  displayWebsiteIcon:  'x_palni_servicen_1.display_website_icon',
   supportHours: 'x_palni_servicen_1.support_hours',
   supportLocation:'x_palni_servicen_1.support_location',
   offers:         'x_palni_servicen_1.offers',
@@ -2774,6 +2779,24 @@ function applyProperties(){
   if (msgBub) msgBub.style.display = boolFlag(siteProps[PROP.displayMessageBubble], true) ? '' : 'none';
   const waBub = document.getElementById('waBubble');
   if (waBub) waBub.style.display = boolFlag(siteProps[PROP.displayWhatsappBubble], true) ? '' : 'none';
+  // Footer social icons — show/hide individually; hide the "Follow Us" heading
+  // when every icon is hidden (default true per icon if the property isn't set).
+  const socialFlags = [
+    ['fsWebsite',  PROP.displayWebsiteIcon],
+    ['fsLinkedin', PROP.displayLinkedinIcon],
+    ['fsTwitter',  PROP.displayTwitterIcon],
+    ['fsUdemy',    PROP.displayUdemyIcon],
+    ['fsYoutube',  PROP.displayYoutubeIcon]
+  ];
+  let anySocialVisible = false;
+  socialFlags.forEach(function(pair){
+    const el = document.getElementById(pair[0]);
+    const visible = boolFlag(siteProps[pair[1]], true);
+    if (el) el.style.display = visible ? '' : 'none';
+    if (visible) anySocialVisible = true;
+  });
+  const followUs = document.getElementById('followUsHeading');
+  if (followUs) followUs.style.display = anySocialVisible ? '' : 'none';
   setText('contactHours',    siteProps[PROP.supportHours]);
   setText('contactLocation', siteProps[PROP.supportLocation]);
   const ci = document.getElementById('contactImage');
