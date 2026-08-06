@@ -752,7 +752,7 @@
      =================================================================== */
   .cc-card { position: relative; height: 100%; }
   .cc-figure { position: relative; width: 100%; aspect-ratio: 4 / 5; display: flex; flex-direction: column;
-    border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow); }
+    border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--card); box-shadow: var(--shadow); cursor: pointer; }
   .cc-photo { position: relative; flex: 0 0 72%; overflow: hidden; background: linear-gradient(135deg, var(--primary-bg), #16263f); }
   /* Near-square photo area; fit the whole picture (no crop), centered. */
   .cc-photo img, .cc-photo .cimg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; padding: 6px; }
@@ -2915,7 +2915,7 @@ function courseCardHtml(c, i){
     ? '<ul class="cc-highs">' + highs.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'
     : '';
   return '<div class="cc-card" id="cc-' + esc(c.id) + '">' +
-      '<div class="cc-figure">' +
+      '<div class="cc-figure" onclick="openCourseDetail(\'' + esc(c.id) + '\')" title="View ' + safeName + '">' +
         '<button class="cc-plus" onclick="toggleCourse(event,\'' + esc(c.id) + '\')" aria-label="More details" title="More details">+</button>' +
         '<div class="cc-photo">' + photo + '</div>' +
         '<div class="cc-body">' +
