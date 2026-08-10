@@ -410,13 +410,16 @@
   .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
   @media (max-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .cards-grid { grid-template-columns: 1fr; } }
-  /* Home "Services" grid: column count adapts to how many service cards there are. */
-  #homeServicesGrid.svc-cols-2 { grid-template-columns: repeat(2, 1fr); }
-  #homeServicesGrid.svc-cols-3 { grid-template-columns: repeat(3, 1fr); }
-  #homeServicesGrid.svc-cols-4 { grid-template-columns: repeat(2, 1fr); }
-  @media (max-width: 900px) { #homeServicesGrid.svc-cols-3 { grid-template-columns: repeat(2, 1fr); } }
+  /* Home + nav-panel "Services" grids: column count adapts to how many service cards there are. */
+  #homeServicesGrid.svc-cols-2, #servicesPanelGrid.svc-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  #homeServicesGrid.svc-cols-3, #servicesPanelGrid.svc-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  #homeServicesGrid.svc-cols-4, #servicesPanelGrid.svc-cols-4 { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 900px) {
+    #homeServicesGrid.svc-cols-3, #servicesPanelGrid.svc-cols-3 { grid-template-columns: repeat(2, 1fr); }
+  }
   @media (max-width: 560px) {
-    #homeServicesGrid.svc-cols-2, #homeServicesGrid.svc-cols-3, #homeServicesGrid.svc-cols-4 { grid-template-columns: 1fr; }
+    #homeServicesGrid.svc-cols-2, #homeServicesGrid.svc-cols-3, #homeServicesGrid.svc-cols-4,
+    #servicesPanelGrid.svc-cols-2, #servicesPanelGrid.svc-cols-3, #servicesPanelGrid.svc-cols-4 { grid-template-columns: 1fr; }
   }
   .course-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);
     transition: transform .18s, box-shadow .18s, border-color .18s; display: flex; flex-direction: column; }
@@ -2464,14 +2467,16 @@ async function renderServices(){
     }
   } catch (e) { /* keep fallback */ }
   const html = list.map(serviceCardHtml).join('');
-  if (box) box.innerHTML = html;
-  if (homeBox) {
-    homeBox.innerHTML = html;
-    homeBox.classList.remove('svc-cols-2', 'svc-cols-3', 'svc-cols-4');
-    if (list.length === 2) homeBox.classList.add('svc-cols-2');
-    else if (list.length === 3) homeBox.classList.add('svc-cols-3');
-    else if (list.length === 4) homeBox.classList.add('svc-cols-4');
+  function fillGrid(el){
+    if (!el) return;
+    el.innerHTML = html;
+    el.classList.remove('svc-cols-2', 'svc-cols-3', 'svc-cols-4');
+    if (list.length === 2) el.classList.add('svc-cols-2');
+    else if (list.length === 3) el.classList.add('svc-cols-3');
+    else if (list.length === 4) el.classList.add('svc-cols-4');
   }
+  fillGrid(box);
+  fillGrid(homeBox);
 }
 /* Slide-down Services panel (replaces the old on-page services section) */
 function toggleServicesPanel(open){
