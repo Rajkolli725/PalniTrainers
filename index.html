@@ -1511,6 +1511,9 @@
           <a id="fsYoutube" href="https://www.youtube.com/@vtechinfotech" target="_blank" rel="noopener" title="YouTube" aria-label="YouTube">
             <svg viewBox="0 0 24 24"><path d="M23.5 6.2a3.02 3.02 0 0 0-2.12-2.14C19.5 3.55 12 3.55 12 3.55s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.2C0 8.07 0 12 0 12s0 3.93.5 5.8a3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14C24 15.93 24 12 24 12s0-3.93-.5-5.8zM9.55 15.57V8.43L15.82 12l-6.27 3.57z"/></svg>
           </a>
+          <a id="fsInstagram" href="https://www.instagram.com/vtechinfotech" target="_blank" rel="noopener" title="Instagram" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.16c3.2 0 3.58.01 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.64.07-4.85.07s-3.58-.01-4.85-.07c-3.26-.15-4.77-1.7-4.92-4.92-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07 2.7.27.27 2.7.07 7.05.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.35 2.63 6.78 6.98 6.98 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c4.35-.2 6.78-2.63 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95C21.73 2.7 19.3.27 14.95.07 13.67.01 13.26 0 12 0z"/><path d="M12 5.84A6.16 6.16 0 1 0 18.16 12 6.16 6.16 0 0 0 12 5.84zM12 16a4 4 0 1 1 4-4 4 4 0 0 1-4 4z"/><circle cx="18.41" cy="5.59" r="1.44"/></svg>
+          </a>
         </div>
       </div>
       <div>
@@ -2682,6 +2685,8 @@ const PROP = {
   displayTwitterIcon:  'x_palni_servicen_1.display_twitter_icon',
   displayLinkedinIcon: 'x_palni_servicen_1.display_linkedin_icon',
   displayWebsiteIcon:  'x_palni_servicen_1.display_website_icon',
+  displayInstagramIcon:'x_palni_servicen_1.display_instagram_icon',
+  socialInstagramUrl:  'x_palni_servicen_1.social_instagram_url',
   footerText:      'x_palni_servicen_1.footer_text',
   aboutHeroSubtext:'x_palni_servicen_1.about_us_hero_section_subtext',
   supportHours: 'x_palni_servicen_1.support_hours',
@@ -2806,7 +2811,8 @@ function applyProperties(){
     ['fsLinkedin', PROP.displayLinkedinIcon],
     ['fsTwitter',  PROP.displayTwitterIcon],
     ['fsUdemy',    PROP.displayUdemyIcon],
-    ['fsYoutube',  PROP.displayYoutubeIcon]
+    ['fsYoutube',  PROP.displayYoutubeIcon],
+    ['fsInstagram',PROP.displayInstagramIcon]
   ];
   let anySocialVisible = false;
   socialFlags.forEach(function(pair){
@@ -2817,6 +2823,10 @@ function applyProperties(){
   });
   const followUs = document.getElementById('followUsHeading');
   if (followUs) followUs.style.display = anySocialVisible ? '' : 'none';
+  if (siteProps[PROP.socialInstagramUrl]) {
+    const ig = document.getElementById('fsInstagram');
+    if (ig) ig.href = siteProps[PROP.socialInstagramUrl];
+  }
   setText('footerAbout',       siteProps[PROP.footerText]);
   setText('aboutHeroSubtext',  siteProps[PROP.aboutHeroSubtext]);
   setText('contactHours',    siteProps[PROP.supportHours]);
