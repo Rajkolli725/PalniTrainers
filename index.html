@@ -1135,7 +1135,7 @@
       <button class="svc-close" onclick="toggleServicesPanel(false)" aria-label="Close services">&times;</button>
     </div>
     <div class="cards-grid" id="servicesPanelGrid"></div>
-    <div style="text-align:center;margin-top:26px"><button class="btn btn-accent btn-lg" onclick="toggleServicesPanel(false);openLeadModal('','Talk to Us About Our Services (Nav Panel)')">Talk to Us About Our Services</button></div>
+    <div style="text-align:center;margin-top:26px"><button id="servicesPanelCta" class="btn btn-accent btn-lg" onclick="toggleServicesPanel(false);openLeadModal('','Talk to Us About Our Services (Nav Panel)')">Talk to Us About Our Services</button></div>
   </div>
 </div>
 
@@ -1221,7 +1221,7 @@
         <p id="servicesPreviewSubtext">From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
       </div>
       <div class="cards-grid" id="homeServicesGrid"></div>
-      <div style="text-align:center;margin-top:34px"><button class="btn btn-accent btn-lg" onclick="openLeadModal('','Talk to Us About Our Services (Home)')">Talk to Us About Our Services</button></div>
+      <div style="text-align:center;margin-top:34px"><button id="servicesHomeCta" class="btn btn-accent btn-lg" onclick="openLeadModal('','Talk to Us About Our Services (Home)')">Talk to Us About Our Services</button></div>
     </div>
   </section>
 
@@ -2687,6 +2687,7 @@ const PROP = {
   displayInstagramIcon:'x_palni_servicen_1.display_instagram_icon',
   socialInstagramUrl:  'x_palni_servicen_1.social_instagram_url',
   footerText:      'x_palni_servicen_1.footer_text',
+  servicesCtaText: 'x_palni_servicen_1.services_CTA_button_text',
   aboutHeroSubtext:'x_palni_servicen_1.about_us_hero_section_subtext',
   supportHours: 'x_palni_servicen_1.support_hours',
   supportLocation:'x_palni_servicen_1.support_location',
@@ -2827,6 +2828,8 @@ function applyProperties(){
     if (ig) ig.href = siteProps[PROP.socialInstagramUrl];
   }
   setText('footerAbout',       siteProps[PROP.footerText]);
+  setText('servicesHomeCta',   siteProps[PROP.servicesCtaText]);
+  setText('servicesPanelCta',  siteProps[PROP.servicesCtaText]);
   setText('aboutHeroSubtext',  siteProps[PROP.aboutHeroSubtext]);
   setText('contactHours',    siteProps[PROP.supportHours]);
   setText('contactLocation', siteProps[PROP.supportLocation]);
