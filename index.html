@@ -1617,7 +1617,6 @@ function buildSeed(){
       impl: (i * 7) % 45,                                   // 0..44
       linkedin: '',
       email: (first[i] + '.' + last[i]).toLowerCase() + '@' + company.toLowerCase().replace(/[^a-z]/g,'') + '.com',
-      resume: '',
       bio: bios[i % bios.length],
       shortBio: roles[i % roles.length] + ' at ' + company + ' — ' + (2 + (i % 18)) + '+ years delivering hands-on training and real-world projects.'
     });
@@ -1636,7 +1635,6 @@ function withId(m){ if(!m.id) m.id = 'm_' + Date.now().toString(36) + '_' + (_id
    ============================================================ */
 const SN = { instance: 'https://ven07539.service-now.com' };
 const API_URL     = SN.instance + '/api/x_palni_servicen_1/team_profiles';  // GET -> list of members
-const RESUME_URL  = API_URL + '/resume/';                                   // GET /resume/{sysId} -> base64
 const REVIEWS_GET_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_trainee_feedback';  // GET -> list of reviews
 const REVIEWS_POST_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/post_trainee_feedback'; // POST -> submit (lands in staging table)
 const LEADS_API        = SN.instance + '/api/x_palni_servicen_1/team_profiles/register_lead';         // POST -> capture a website lead (x_palni_servicen_1_lead_registration)
@@ -1680,9 +1678,7 @@ function mapRecord(p){
     email: p.email || '',
     bio: p.bio || '',
     shortBio: p.short_bio || p.u_short_bio || '',   // ServiceNow "u_short_bio" -> the "About" panel
-    avatar: p.photo || '',         // data URI returned by the API (or '' -> initials)
-    resumeId: p.resume_id || '',
-    resumeName: p.resume_name || ''
+    avatar: p.photo || ''          // data URI returned by the API (or '' -> initials)
   };
 }
 
@@ -1704,26 +1700,6 @@ async function loadMembers(){
     members = seed.map(m => withId({ ...m }));
     route();
   }
-}
-
-// Resume is returned by the Scripted REST API as base64; turn it into a download.
-async function downloadResume(id){
-  const m = members.find(x => x.id === id);
-  if (!m || !m.resumeId) { alert('No resume available for this member.'); return; }
-  try {
-    const res = await snFetch(RESUME_URL + encodeURIComponent(m.sysId));
-    if (!res.ok) throw new Error('HTTP ' + res.status);
-    const j = (await res.json()).result || {};
-    if (!j.data) throw new Error('empty response');
-    const bin = atob(j.data);
-    const arr = new Uint8Array(bin.length);
-    for (let i = 0; i < bin.length; i++) arr[i] = bin.charCodeAt(i);
-    const url = URL.createObjectURL(new Blob([arr], { type: j.content_type || 'application/octet-stream' }));
-    const link = document.createElement('a');
-    link.href = url; link.download = j.file_name || m.resumeName || 'resume';
-    document.body.appendChild(link); link.click(); link.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 5000);
-  } catch (e) { alert('Could not download resume: ' + e.message); }
 }
 
 function useDemoData(){ members = seed.map(m => withId({...m})); render(); }
@@ -1817,7 +1793,6 @@ function openTrainer(id){
   const avatar = m.avatar ? `<img src="${m.avatar}" alt="${esc(m.name)}">` : `<span class="avatar-initials">${initials(m.name)}</span>`;
   const skillChips = (m.skills||[]).map(s=>`<span class="chip">${esc(s)}</span>`).join('') || '<span class="hint">—</span>';
   const certChips = (m.certs||[]).map(s=>`<span class="chip cert">${esc(s)}</span>`).join('') || '<span class="hint">—</span>';
-  const hasResume = !!m.resumeId;
   const ov = document.getElementById('trainerModal');
   ov.innerHTML = `
     <div class="tr-modal">
@@ -1844,9 +1819,6 @@ function openTrainer(id){
             <a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=${encodeURIComponent('Inquiry about ' + m.name)}" title="Contact (training@vtechinfotech.com)">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>
             </a>
-            <button class="icon-btn ${hasResume ? '' : 'disabled'}" onclick="downloadResume('${m.id}')" title="${hasResume ? 'Download resume' : 'No resume available'}">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-            </button>
           </div>
         </div>
         <div class="tr-col">
@@ -2523,11 +2495,10 @@ function initCarousels(){
   });
 }
 
-/* Social / attachment icon row (LinkedIn, email, download résumé) — shared by the
+/* Social / attachment icon row (LinkedIn, email) — shared by the
    trainer modal and the home card's expanded (+) bio panel. */
 function trainerCtaRow(m){
   const linkedin = m.linkedin || '';
-  const hasResume = !!m.resumeId;
   return '<div class="cta-row">' +
       '<a class="icon-btn linkedin' + (linkedin ? '' : ' disabled') + '" href="' + (linkedin ? esc(linkedin) : '#') + '"' + (linkedin ? ' target="_blank" rel="noopener"' : '') + ' title="' + (linkedin ? 'Connect on LinkedIn' : 'LinkedIn profile not available') + '">' +
         '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4.98 3.5C4.98 4.88 3.87 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V23h-4V8zm7.5 0h3.8v2.05h.05c.53-1 1.83-2.05 3.77-2.05 4.03 0 4.78 2.65 4.78 6.1V23h-4v-6.6c0-1.57-.03-3.6-2.2-3.6-2.2 0-2.53 1.72-2.53 3.49V23h-4V8z"/></svg>' +
@@ -2535,9 +2506,6 @@ function trainerCtaRow(m){
       '<a class="icon-btn" href="mailto:training@vtechinfotech.com?subject=' + encodeURIComponent('Inquiry about ' + m.name) + '" title="Contact (training@vtechinfotech.com)">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 6 10-6"/></svg>' +
       '</a>' +
-      '<button class="icon-btn ' + (hasResume ? '' : 'disabled') + '" onclick="downloadResume(\'' + esc(m.id) + '\')" title="' + (hasResume ? 'Download resume' : 'No resume available') + '">' +
-        '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3v12m0 0 4-4m-4 4-4-4"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>' +
-      '</button>' +
     '</div>';
 }
 
