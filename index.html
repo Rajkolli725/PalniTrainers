@@ -339,7 +339,6 @@
     display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
   .svc-pills { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 16px; }
   .svc-pills span { background: #ffe9d9; color: #b4491f; font-size: .78rem; font-weight: 600; padding: 4px 10px; border-radius: 999px; }
-  .svc-actions { margin-top: auto; text-align: center; }
   /* Cohort table: course name as a link to its course page */
   .cohort-course-link { color: var(--accent); font-weight: 600; text-decoration: underline; cursor: pointer; }
   .cohort-course-link:hover { color: var(--primary-bg); }
@@ -509,7 +508,7 @@
   .site-footer h5 { font-size: .95rem; margin: 0 0 14px; color: #1e3a5f; }
   .site-footer a { color: #45617e; text-decoration: none; display: block; margin-bottom: 9px; font-size: .9rem; cursor: pointer; }
   .site-footer a:hover { color: #e8541e; }
-  .footer-logo { height: 40px; margin-bottom: 14px; background: #fff; padding: 6px 8px; border-radius: 8px; }
+  .footer-logo { height: 54px; margin-bottom: 10px; background: #fff; padding: 6px 8px; border-radius: 8px; }
   .footer-about { color: #45617e; font-size: .9rem; max-width: 280px; }
   .footer-bottom { border-top: 1px solid #cfe0f2; margin-top: 36px; padding-top: 18px; text-align: center; font-size: .83rem; color: #45617e; }
   /* Footer social icons */
@@ -1136,6 +1135,7 @@
       <button class="svc-close" onclick="toggleServicesPanel(false)" aria-label="Close services">&times;</button>
     </div>
     <div class="cards-grid" id="servicesPanelGrid"></div>
+    <div style="text-align:center;margin-top:26px"><button class="btn btn-accent btn-lg" onclick="toggleServicesPanel(false);openLeadModal('','Talk to Us About Our Services (Nav Panel)')">Talk to Us About Our Services</button></div>
   </div>
 </div>
 
@@ -1221,6 +1221,7 @@
         <p id="servicesPreviewSubtext">From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
       </div>
       <div class="cards-grid" id="homeServicesGrid"></div>
+      <div style="text-align:center;margin-top:34px"><button class="btn btn-accent btn-lg" onclick="openLeadModal('','Talk to Us About Our Services (Home)')">Talk to Us About Our Services</button></div>
     </div>
   </section>
 
@@ -2447,13 +2448,10 @@ function serviceCardHtml(s){
   const thumb = s.icon
     ? '<div class="svc-thumb"><img src="' + esc(s.icon) + '" alt="' + esc(title) + '"></div>'
     : '<div class="svc-thumb">🛠️</div>';
-  const label = s.button_text || 'Learn More';
-  const arg = esc(label + ' – ' + title).replace(/'/g, "\\'");
   return '<div class="svc-card">' +
       '<div class="svc-card-head">' + thumb + '<h3 class="svc-title">' + esc(title) + '</h3></div>' +
       '<p class="svc-desc">' + esc(s.description || '') + '</p>' +
       (pills ? '<div class="svc-pills">' + pills + '</div>' : '') +
-      '<div class="svc-actions"><button class="btn btn-primary" onclick="toggleServicesPanel(false);openLeadModal(\'\',\'' + arg + '\')">' + esc(label) + '</button></div>' +
     '</div>';
 }
 
