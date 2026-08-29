@@ -318,20 +318,8 @@
     width: 28px; height: 28px; border: none; border-radius: 50%; background: rgba(255,255,255,.22);
     color: #fff; font-size: 1.25rem; line-height: 1; cursor: pointer; display: grid; place-items: center; }
   .offer-close:hover { background: rgba(255,255,255,.42); }
-  /* Services mega-panel (slides down under the nav) */
-  .svc-ov { position: fixed; inset: 0; background: rgba(15,23,42,.45); z-index: 44; opacity: 0; pointer-events: none; transition: opacity .25s ease; }
-  .svc-ov.open { opacity: 1; pointer-events: auto; }
-  .svc-panel { position: fixed; top: 0; left: 0; right: 0; z-index: 45; max-width: 1120px; margin: 0 auto; background: var(--card);
-    border: 1px solid var(--line); border-top: none; border-radius: 0 0 16px 16px;
-    box-shadow: var(--shadow); transform: translateY(-100%); transition: transform .32s ease; max-height: 90vh; overflow-y: auto; }
-  .svc-panel.open { transform: translateY(0); }
-  .svc-panel-inner { padding: 104px 20px 32px; }
-  .svc-panel-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 22px; }
-  .svc-panel-head h3 { margin: 0; font-size: 1.5rem; }
-  .svc-close { flex: 0 0 auto; width: 40px; height: 40px; border: none; border-radius: 10px; background: var(--ghost-bg); color: var(--ink); font-size: 1.3rem; line-height: 1; cursor: pointer; }
-  .svc-close:hover { background: var(--ghost-hover); }
-  @media (max-width: 640px) { .svc-panel-inner { padding: 92px 16px 26px; } }
-  /* Service cards (dynamic, from x_palni_servicen_1_services) */
+  /* Service cards (dynamic, from x_palni_servicen_1_services) — used by the
+     Training Services home page's on-page Services section. */
   .svc-card { display: flex; flex-direction: column; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; }
   .svc-card-head { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
   .svc-thumb { flex: 0 0 auto; width: 64px; height: 64px; border-radius: 14px; object-fit: cover; overflow: hidden; background: var(--accent-soft); display: grid; place-items: center; color: var(--accent); font-size: 1.6rem; }
@@ -399,6 +387,136 @@
   .section-title p { color: var(--muted); font-size: 1.05rem; margin: 0; }
   @media (max-width: 640px) { .section { padding: 50px 0; } .section-title { margin-bottom: 32px; } .section-title h2 { font-size: 1.7rem; } }
 
+  /* ===================================================================
+     NEW LANDING PAGE ("Enterprise IT Services" design) — shown by
+     default at "#". The previous full homepage moved to
+     "#training-services" (nav Services -> Training Services).
+     Static content for now; colors reuse the site's existing tokens.
+     =================================================================== */
+  .hl-accent { color: var(--accent); }
+  .lp-hero { background: var(--brand-grad); color: #fff; padding: 64px 20px 70px; position: relative; overflow: hidden; }
+  .lp-hero-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
+  .lp-hero h1 { font-size: 2.6rem; line-height: 1.16; margin: 0 0 18px; font-weight: 800; }
+  .lp-hero h1 .hl { color: var(--gold); }
+  .lp-hero .lp-lede { font-size: 1.05rem; color: rgba(255,255,255,.9); max-width: 480px; margin: 0 0 26px; }
+  .lp-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+  .lp-hero-badges { display: flex; flex-wrap: wrap; gap: 20px; font-size: .84rem; color: rgba(255,255,255,.85); }
+  .lp-hero-badges span { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+  @media (max-width: 900px) { .lp-hero-inner { grid-template-columns: 1fr; } .lp-hero h1 { font-size: 2.1rem; } }
+
+  /* Hub-and-spoke hero diagram (static; simplified version of the mockup) */
+  .lp-hub { position: relative; width: 100%; max-width: 420px; aspect-ratio: 1 / 1; margin: 30px auto 0; }
+  .lp-hub-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 118px; height: 118px; border-radius: 50%;
+    background: #fff; color: var(--primary-bg); display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-weight: 800; box-shadow: 0 12px 30px rgba(0,0,0,.35); text-align: center; line-height: 1.25; z-index: 2; padding: 6px; }
+  .lp-hub-center b { color: var(--accent); font-size: 1.15rem; }
+  .lp-hub-center span { font-size: .66rem; font-weight: 700; max-width: 88px; }
+  .lp-hub-node { position: absolute; width: 96px; text-align: center; color: #fff; font-size: .76rem; font-weight: 600; z-index: 1; }
+  .lp-hub-ic { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.35);
+    display: grid; place-items: center; font-size: 1.4rem; margin: 0 auto 8px; }
+  .lp-hub-node.n1 { top: 0; left: 50%; transform: translateX(-50%); }
+  .lp-hub-node.n2 { top: 24%; right: -6%; }
+  .lp-hub-node.n3 { bottom: 4%; right: 2%; }
+  .lp-hub-node.n4 { bottom: 4%; left: 2%; }
+  .lp-hub-node.n5 { top: 24%; left: -6%; }
+  @media (max-width: 900px) { .lp-hub { max-width: 320px; } .lp-hub-node { width: 78px; font-size: .66rem; } .lp-hub-ic { width: 48px; height: 48px; font-size: 1.15rem; } .lp-hub-center { width: 96px; height: 96px; } }
+
+  /* Our IT Services — expandable cards */
+  .itsvc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
+  @media (max-width: 900px) { .itsvc-grid { grid-template-columns: 1fr; } }
+  .itsvc-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 24px; text-align: center; transition: border-color .15s; }
+  .itsvc-card.open { border-color: var(--accent); }
+  .itsvc-ic { width: 62px; height: 62px; border-radius: 50%; margin: 0 auto 18px; display: grid; place-items: center; font-size: 1.7rem; color: #fff; }
+  .itsvc-card h3 { margin: 0 0 10px; font-size: 1.12rem; }
+  .itsvc-card p { color: var(--muted); font-size: .93rem; line-height: 1.55; margin: 0; }
+  .itsvc-more { display: none; text-align: left; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink); font-size: .89rem; line-height: 1.6; }
+  .itsvc-card.open .itsvc-more { display: block; }
+  .itsvc-learn { display: inline-flex; align-items: center; gap: 5px; margin-top: 16px; background: none; border: none; color: var(--accent); font-weight: 700; font-size: .88rem; cursor: pointer; padding: 0; }
+  .itsvc-learn .car { transition: transform .2s; display: inline-block; }
+  .itsvc-card.open .itsvc-learn .car { transform: rotate(90deg); }
+
+  /* Dark feature band (AI-Powered / Data Engineering) */
+  .lp-band { background: var(--primary-bg); color: #fff; padding: 64px 0; }
+  .lp-band-inner { max-width: 1120px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1.15fr; gap: 50px; align-items: center; }
+  .lp-band h2 { font-size: 1.9rem; margin: 0 0 14px; }
+  .lp-band h2 .hl { color: var(--gold); }
+  .lp-band p { color: rgba(255,255,255,.85); margin: 0 0 12px; line-height: 1.6; }
+  .lp-band-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
+  .lp-band-tile { display: flex; gap: 12px; }
+  .lp-band-tile .lp-tile-ic { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.1); display: grid; place-items: center; font-size: 1.2rem; }
+  .lp-band-tile h4 { margin: 0 0 4px; font-size: .95rem; color: var(--gold); }
+  .lp-band-tile p { margin: 0; font-size: .84rem; color: rgba(255,255,255,.78); }
+  @media (max-width: 900px) { .lp-band-inner { grid-template-columns: 1fr; } .lp-band-grid { grid-template-columns: 1fr; } }
+
+  /* ServiceNow Solutions section (light, checklist + simplified dashboard mockup) */
+  .lp-sn { padding: 70px 0; }
+  .lp-sn-inner { max-width: 1120px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+  .lp-sn h2 { font-size: 1.9rem; margin: 0 0 14px; }
+  .lp-sn p { color: var(--muted); line-height: 1.6; margin: 0 0 20px; }
+  .lp-sn-check { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; margin: 0 0 26px; list-style: none; padding: 0; }
+  .lp-sn-check li { display: flex; align-items: center; gap: 8px; font-size: .92rem; font-weight: 600; color: var(--ink); }
+  .lp-sn-check li::before { content: "✓"; color: #16a34a; font-weight: 800; }
+  @media (max-width: 900px) { .lp-sn-inner { grid-template-columns: 1fr; } }
+
+  .lp-mockup { position: relative; }
+  .lp-mockup-window { background: var(--ink); color: #fff; border-radius: 14px; box-shadow: 0 24px 60px rgba(20,28,55,.28); overflow: hidden; }
+  .lp-mockup-bar { display: flex; align-items: center; gap: 6px; padding: 10px 14px; background: rgba(255,255,255,.06); font-size: .78rem; color: rgba(255,255,255,.7); }
+  .lp-mockup-bar b { width: 9px; height: 9px; border-radius: 50%; background: rgba(255,255,255,.35); display: inline-block; }
+  .lp-mockup-body { padding: 18px; }
+  .lp-mockup-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; margin-bottom: 16px; }
+  .lp-mockup-stat { background: rgba(255,255,255,.06); border-radius: 10px; padding: 10px 8px; text-align: center; }
+  .lp-mockup-stat b { display: block; font-size: 1.2rem; }
+  .lp-mockup-stat span { font-size: .66rem; color: rgba(255,255,255,.65); }
+  .lp-mockup-stat.good b { color: #4ade80; }
+  .lp-mockup-charts { display: grid; grid-template-columns: 1.3fr 1fr; gap: 12px; }
+  .lp-mockup-chart-box { background: rgba(255,255,255,.06); border-radius: 10px; padding: 10px; min-height: 66px; }
+  .lp-mockup-sparkline { display: flex; align-items: flex-end; gap: 3px; height: 46px; }
+  .lp-mockup-sparkline i { flex: 1; background: var(--gold); border-radius: 2px 2px 0 0; opacity: .9; }
+  .lp-mockup-donut { width: 54px; height: 54px; border-radius: 50%; margin: 4px auto;
+    background: conic-gradient(var(--accent) 0 40%, var(--gold) 40% 65%, rgba(255,255,255,.25) 65% 100%); }
+  .lp-mockup-phone { position: absolute; right: -18px; bottom: -22px; width: 118px; background: var(--ink); color: #fff; border-radius: 16px;
+    box-shadow: 0 18px 40px rgba(20,28,55,.3); padding: 12px 10px; border: 3px solid rgba(255,255,255,.15); }
+  .lp-mockup-phone ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+  .lp-mockup-phone li { display: flex; justify-content: space-between; font-size: .66rem; color: rgba(255,255,255,.85); }
+  .lp-mockup-phone li b { color: var(--gold); }
+  @media (max-width: 560px) { .lp-mockup-phone { display: none; } }
+
+  /* Small icon+label tag rows (Data Engineering band, Training CTA card) */
+  .lp-tagrow { display: flex; flex-wrap: wrap; gap: 18px; margin: 18px 0 0; }
+  .lp-tagrow span { display: inline-flex; align-items: center; gap: 7px; font-size: .82rem; font-weight: 600; color: rgba(255,255,255,.88); white-space: nowrap; }
+  .lp-tagrow.light span { color: var(--ink); }
+
+  /* Training CTA card */
+  .lp-training { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
+    padding: 32px 30px; display: grid; grid-template-columns: auto 1fr auto; gap: 26px; align-items: center; }
+  .lp-training-ic { width: 76px; height: 76px; border-radius: 18px; background: var(--accent-soft); display: grid; place-items: center; font-size: 2rem; flex: 0 0 auto; }
+  .lp-training h3 { margin: 0 0 6px; font-size: 1.3rem; }
+  .lp-training p { margin: 0 0 12px; color: var(--muted); font-size: .93rem; }
+  @media (max-width: 860px) { .lp-training { grid-template-columns: 1fr; text-align: center; } .lp-training-ic { margin: 0 auto; } }
+
+  /* Trusted-by logos (static placeholders) */
+  .lp-trusted { padding: 54px 0 60px; text-align: center; }
+  .lp-trusted h3 { font-size: 1.05rem; margin: 0 0 6px; }
+  .lp-trusted .hint { font-size: .78rem; color: var(--muted); margin: 4px 0 0; }
+  .lp-trusted-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px 42px; margin: 28px 0; }
+  .lp-trusted-row span { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); font-size: .98rem; }
+
+  /* Final CTA */
+  .lp-final { background: var(--primary-bg); color: #fff; padding: 46px 0; }
+  .lp-final-inner { max-width: 1120px; margin: 0 auto; padding: 0 20px; display: flex; justify-content: space-between; align-items: center; gap: 26px; flex-wrap: wrap; }
+  .lp-final h2 { margin: 0 0 8px; font-size: 1.6rem; }
+  .lp-final p { margin: 0; color: rgba(255,255,255,.85); max-width: 560px; }
+
+  /* Nav "Services" dropdown (replaces the old slide-down mega-panel) */
+  .nav-dropdown { position: relative; }
+  .nav-dropdown-menu { position: absolute; top: 100%; left: 0; margin-top: 6px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; box-shadow: var(--shadow); min-width: 190px; padding: 6px; display: none; flex-direction: column; z-index: 60; }
+  .nav-dropdown-menu.open { display: flex; }
+  .nav-dropdown-menu a { padding: 10px 12px; border-radius: 8px; color: var(--ink); font-weight: 600; font-size: .9rem; cursor: pointer; }
+  .nav-dropdown-menu a:hover { background: var(--ghost-bg); color: var(--accent); }
+  .nav-caret { font-size: .65em; margin-left: 3px; }
+  @media (max-width: 880px) { .nav-dropdown-menu { position: static; box-shadow: none; border: none; margin: 0 0 0 10px; padding: 0; } }
+
   /* ---- Stats band ---- */
   .stats-band { background: var(--brand-grad); color: #fff; }
   .stats-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 24px; padding: 14px 0; text-align: center; }
@@ -411,16 +529,13 @@
   .cards-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; }
   @media (max-width: 900px) { .cards-grid { grid-template-columns: 1fr 1fr; } }
   @media (max-width: 560px) { .cards-grid { grid-template-columns: 1fr; } }
-  /* Home + nav-panel "Services" grids: column count adapts to how many service cards there are. */
-  #homeServicesGrid.svc-cols-2, #servicesPanelGrid.svc-cols-2 { grid-template-columns: repeat(2, 1fr); }
-  #homeServicesGrid.svc-cols-3, #servicesPanelGrid.svc-cols-3 { grid-template-columns: repeat(3, 1fr); }
-  #homeServicesGrid.svc-cols-4, #servicesPanelGrid.svc-cols-4 { grid-template-columns: repeat(2, 1fr); }
-  @media (max-width: 900px) {
-    #homeServicesGrid.svc-cols-3, #servicesPanelGrid.svc-cols-3 { grid-template-columns: repeat(2, 1fr); }
-  }
+  /* Home "Services" grid: column count adapts to how many service cards there are. */
+  #homeServicesGrid.svc-cols-2 { grid-template-columns: repeat(2, 1fr); }
+  #homeServicesGrid.svc-cols-3 { grid-template-columns: repeat(3, 1fr); }
+  #homeServicesGrid.svc-cols-4 { grid-template-columns: repeat(2, 1fr); }
+  @media (max-width: 900px) { #homeServicesGrid.svc-cols-3 { grid-template-columns: repeat(2, 1fr); } }
   @media (max-width: 560px) {
-    #homeServicesGrid.svc-cols-2, #homeServicesGrid.svc-cols-3, #homeServicesGrid.svc-cols-4,
-    #servicesPanelGrid.svc-cols-2, #servicesPanelGrid.svc-cols-3, #servicesPanelGrid.svc-cols-4 { grid-template-columns: 1fr; }
+    #homeServicesGrid.svc-cols-2, #homeServicesGrid.svc-cols-3, #homeServicesGrid.svc-cols-4 { grid-template-columns: 1fr; }
   }
   .course-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow);
     transition: transform .18s, box-shadow .18s, border-color .18s; display: flex; flex-direction: column; }
@@ -1111,7 +1226,13 @@
       <a class="navlink" onclick="goHome()">Home</a>
       <a class="navlink" onclick="goView('all-courses')">Courses</a>
       <a class="navlink" onclick="goView('trainers')">Expert Mentors</a>
-      <a class="navlink" onclick="toggleServicesPanel()">Services</a>
+      <div class="nav-dropdown" id="servicesDropdown">
+        <a class="navlink" onclick="toggleServicesDropdown(event)">Services <span class="nav-caret">▾</span></a>
+        <div class="nav-dropdown-menu" id="servicesDropdownMenu">
+          <a onclick="closeNav();toggleServicesDropdown();goSection('it-services','')">IT Services</a>
+          <a onclick="closeNav();toggleServicesDropdown();goView('training-services')">Training Services</a>
+        </div>
+      </div>
       <a class="navlink" onclick="goView('about')">About Us</a>
       <a class="navlink" onclick="goView('careers')">Careers</a>
       <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
@@ -1128,20 +1249,204 @@
   </div>
 </div>
 
-<!-- Services mega-panel (opens from the Services nav link) -->
-<div id="servicesOv" class="svc-ov" onclick="toggleServicesPanel(false)"></div>
-<div id="servicesPanel" class="svc-panel" role="dialog" aria-label="Our services">
-  <div class="svc-panel-inner container">
-    <div class="svc-panel-head">
-      <div><h3 id="servicesHeading">End-to-End IT Services</h3><p class="hint" id="servicesSubtext" style="margin:4px 0 0">From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p></div>
-      <button class="svc-close" onclick="toggleServicesPanel(false)" aria-label="Close services">&times;</button>
+<!-- ============================ NEW LANDING PAGE (default view) ============================ -->
+<div id="landingView">
+
+  <!-- Hero -->
+  <section class="lp-hero">
+    <div class="lp-hero-inner">
+      <div>
+        <h1>Enterprise IT Services.<br><span class="hl">AI-Powered.</span> <span class="hl">Data-Driven.</span><br><span class="hl">ServiceNow</span> at the Core.</h1>
+        <p class="lp-lede">VTech Infotech delivers end-to-end IT services that help organizations modernize, automate, and scale with deep expertise in AI, Data Engineering, and the ServiceNow platform.</p>
+        <div class="lp-hero-cta">
+          <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Hero)')">Talk to an IT Expert</button>
+          <button class="btn btn-outline-light btn-lg" onclick="goSection('it-services','')">Explore Our Services</button>
+        </div>
+        <div class="lp-hero-badges">
+          <span>📈 Enterprise IT Solutions</span>
+          <span>⚙️ AI &amp; Automation</span>
+          <span>🗄️ Data Engineering</span>
+          <span>🏛️ ServiceNow Expertise</span>
+        </div>
+      </div>
+      <div class="lp-hub">
+        <div class="lp-hub-center"><b>now</b><span>ServiceNow at the Core</span></div>
+        <div class="lp-hub-node n1"><div class="lp-hub-ic">🧠</div>AI &amp; Automation</div>
+        <div class="lp-hub-node n2"><div class="lp-hub-ic">☁️</div>Cloud &amp; Integration</div>
+        <div class="lp-hub-node n3"><div class="lp-hub-ic">🧩</div>Applications &amp; Modernization</div>
+        <div class="lp-hub-node n4"><div class="lp-hub-ic">👥</div>IT Consulting &amp; Implementation</div>
+        <div class="lp-hub-node n5"><div class="lp-hub-ic">🗄️</div>Data Engineering</div>
+      </div>
     </div>
-    <div class="cards-grid" id="servicesPanelGrid"></div>
-    <div style="text-align:center;margin-top:26px"><button id="servicesPanelCta" class="btn btn-accent btn-lg" onclick="toggleServicesPanel(false);openLeadModal('','Talk to Us About Our Services (Nav Panel)')">Talk to Us About Our Services</button></div>
-  </div>
+  </section>
+
+  <!-- Our IT Services -->
+  <section class="section" id="it-services">
+    <div class="container">
+      <div class="section-title reveal">
+        <h2>Our IT Services</h2>
+        <p>Comprehensive IT solutions designed to help you innovate, automate, and grow.</p>
+      </div>
+      <div class="itsvc-grid">
+        <div class="itsvc-card reveal">
+          <div class="itsvc-ic" style="background:#16a34a">👥</div>
+          <h3>General IT Services</h3>
+          <p>End-to-end IT consulting, implementation, integration, cloud, application development, automation, and managed services tailored to your business needs.</p>
+          <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
+          <div class="itsvc-more">Our General IT Services cover the full lifecycle — advisory, architecture, build and ongoing managed support — so your technology investments stay aligned with business outcomes as you scale.</div>
+        </div>
+        <div class="itsvc-card reveal">
+          <div class="itsvc-ic" style="background:var(--primary-bg)">🧠</div>
+          <h3>AI + ServiceNow Solutions</h3>
+          <p>Leverage AI and ServiceNow to automate workflows, improve experiences, enhance decision-making, and drive enterprise productivity.</p>
+          <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
+          <div class="itsvc-more">We combine ServiceNow workflow automation with practical AI — from virtual agents to predictive intelligence — to help teams resolve work faster and make better decisions.</div>
+        </div>
+        <div class="itsvc-card reveal">
+          <div class="itsvc-ic" style="background:#0f766e">⚙️</div>
+          <h3>ServiceNow Consulting &amp; Implementation</h3>
+          <p>Strategy, consulting, implementation, integration, customization, automation, and managed services across the ServiceNow platform.</p>
+          <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
+          <div class="itsvc-more">From ITSM and ITOM rollouts to CSM, GRC and custom app development, our certified consultants design and implement ServiceNow solutions that fit the way your teams actually work.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI-Powered band -->
+  <section class="lp-band">
+    <div class="lp-band-inner">
+      <div class="reveal">
+        <h2>AI-<span class="hl">Powered.</span> Enterprise-Ready.</h2>
+        <p>We help organizations turn AI from an emerging technology into practical business value.</p>
+        <p>From strategy to implementation, VTech delivers AI solutions that drive efficiency, innovation, and exceptional experiences.</p>
+        <button class="btn btn-gold btn-lg" style="margin-top:8px" onclick="openLeadModal('','Explore AI Solutions (Landing)')">Explore AI Solutions →</button>
+      </div>
+      <div class="lp-band-grid reveal">
+        <div class="lp-band-tile"><div class="lp-tile-ic">🎯</div><div><h4>AI Strategy &amp; Advisory</h4><p>Identify high-value opportunities and build a practical AI roadmap.</p></div></div>
+        <div class="lp-band-tile"><div class="lp-tile-ic">🤖</div><div><h4>AI Automation</h4><p>Use intelligent automation to streamline processes and improve productivity.</p></div></div>
+        <div class="lp-band-tile"><div class="lp-tile-ic">✨</div><div><h4>Generative AI &amp; AI Applications</h4><p>Build practical AI solutions that enhance employee and customer experiences.</p></div></div>
+        <div class="lp-band-tile"><div class="lp-tile-ic">🔗</div><div><h4>AI + ServiceNow</h4><p>Combine ServiceNow workflows with AI to create smarter, faster, more autonomous operations.</p></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ServiceNow Solutions -->
+  <section class="lp-sn">
+    <div class="lp-sn-inner">
+      <div class="reveal">
+        <h2><span class="hl-accent">ServiceNow</span> Solutions That Drive Enterprise Transformation</h2>
+        <p>From strategy and implementation to integration, automation, and managed services, VTech helps organizations maximize the value of the ServiceNow platform.</p>
+        <ul class="lp-sn-check">
+          <li>IT Service Management (ITSM)</li>
+          <li>Customer Service Management (CSM)</li>
+          <li>IT Operations Management (ITOM)</li>
+          <li>Governance, Risk &amp; Compliance (GRC)</li>
+          <li>IT Asset Management (ITAM)</li>
+          <li>HR Service Delivery (HRSD)</li>
+          <li>Strategic Portfolio Management (SPM)</li>
+          <li>Security Operations (SecOps)</li>
+        </ul>
+        <button class="btn btn-navy btn-lg" onclick="openLeadModal('','Explore ServiceNow Services (Landing)')">Explore ServiceNow Services →</button>
+      </div>
+      <div class="lp-mockup reveal">
+        <div class="lp-mockup-window">
+          <div class="lp-mockup-bar"><b></b><b></b><b></b>&nbsp;Service Operations Workspace</div>
+          <div class="lp-mockup-body">
+            <div class="lp-mockup-stats">
+              <div class="lp-mockup-stat"><b>241</b><span>Open Incidents</span></div>
+              <div class="lp-mockup-stat"><b>82</b><span>Open Changes</span></div>
+              <div class="lp-mockup-stat"><b>15</b><span>Problems</span></div>
+              <div class="lp-mockup-stat good"><b>96%</b><span>SLA Compliance</span></div>
+            </div>
+            <div class="lp-mockup-charts">
+              <div class="lp-mockup-chart-box"><div class="lp-mockup-sparkline"><i style="height:30%"></i><i style="height:55%"></i><i style="height:40%"></i><i style="height:70%"></i><i style="height:50%"></i><i style="height:85%"></i><i style="height:60%"></i></div></div>
+              <div class="lp-mockup-chart-box"><div class="lp-mockup-donut"></div></div>
+            </div>
+          </div>
+        </div>
+        <div class="lp-mockup-phone">
+          <ul>
+            <li>My Tasks <b>7</b></li>
+            <li>Open Incidents <b>4</b></li>
+            <li>My Approvals <b>2</b></li>
+            <li>Change Tasks <b>3</b></li>
+            <li>Open Requests <b>5</b></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Data Engineering band -->
+  <section class="lp-band" style="padding:48px 0">
+    <div class="lp-band-inner reveal" style="grid-template-columns:auto 1fr auto;align-items:center;gap:26px">
+      <div class="lp-tile-ic" style="width:64px;height:64px;font-size:1.8rem;border-radius:16px">🗄️</div>
+      <div>
+        <h2 style="font-size:1.5rem;margin-bottom:6px">Data <span class="hl">Engineering</span> &amp; Modern Data Solutions</h2>
+        <p style="margin-bottom:0">Build the data foundation needed to support analytics, automation, and AI.</p>
+        <div class="lp-tagrow">
+          <span>🗃️ Data Engineering</span>
+          <span>🔀 Data Integration</span>
+          <span>🧵 Data Pipelines</span>
+          <span>☁️ Cloud Data Platforms</span>
+          <span>📊 Data Modernization</span>
+        </div>
+      </div>
+      <button class="btn btn-outline-light btn-lg" onclick="openLeadModal('','Explore Data Services (Landing)')">Explore Data Services →</button>
+    </div>
+  </section>
+
+  <!-- Training CTA card -->
+  <section class="section alt">
+    <div class="container">
+      <div class="lp-training reveal">
+        <div class="lp-training-ic">🎓</div>
+        <div>
+          <h3>Build <span class="hl-accent">ServiceNow</span> Expertise. Build Your Future.</h3>
+          <p>VTech offers hands-on, project-driven ServiceNow training designed for real-world success.</p>
+          <div class="lp-tagrow light">
+            <span>👤 Expert-Led Training</span>
+            <span>🧪 Hands-on Labs</span>
+            <span>📁 Real-world Projects</span>
+            <span>🛡️ Certification Guidance</span>
+          </div>
+        </div>
+        <button class="btn btn-navy btn-lg" onclick="goView('training-services')">Explore ServiceNow Training →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Trusted by -->
+  <section class="lp-trusted">
+    <div class="container">
+      <h3 class="reveal">Trusted by Forward-Thinking Organizations</h3>
+      <div class="lp-trusted-row reveal">
+        <span>➕ Global Healthcare</span>
+        <span>🛡️ FinServ Solutions</span>
+        <span>🛒 RetailPlus</span>
+        <span>🔷 TechGlobal</span>
+        <span>⚙️ EduCare Solutions</span>
+        <span>🏭 ManufactureX</span>
+      </div>
+      <p class="hint">(Client logos are for representation purpose only)</p>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="lp-final">
+    <div class="lp-final-inner">
+      <div>
+        <h2>Ready to Transform Your Technology Strategy?</h2>
+        <p>Whether you're modernizing your IT environment, implementing ServiceNow, exploring AI opportunities, or building your data capabilities, VTech can help you move from strategy to execution.</p>
+      </div>
+      <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Final CTA)')">Talk to an IT Expert</button>
+    </div>
+  </section>
+
 </div>
 
-<!-- ============================ HOME / LANDING ============================ -->
+<!-- ============================ TRAINING SERVICES (previous home page) ============================ -->
 <div id="homeView">
 
   <!-- Hero -->
@@ -1532,7 +1837,7 @@
         <a onclick="goView('all-courses')">Our Courses</a>
         <a onclick="goView('trainers')">Our Experts</a>
         <a onclick="goView('reviews')">Reviews</a>
-        <a onclick="goSection('contact')">Contact</a>
+        <a onclick="goSection('contact','training-services')">Contact</a>
       </div>
       <div>
         <h5>Get Started</h5>
@@ -2143,11 +2448,27 @@ function fillCourseSelects(){
 /* ---- Nav helpers ---- */
 function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
 function closeNav(){ const n = document.getElementById('navLinks'); if (n) n.classList.remove('open'); }
-function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0 || h.indexOf('#faq') === 0 || h.indexOf('#privacy') === 0 || h.indexOf('#terms') === 0 || h.indexOf('#cohorts') === 0 || h.indexOf('#careers') === 0); }
+function onHome(){ const h = location.hash; return !(h.indexOf('#trainers') === 0 || h.indexOf('#reviews') === 0 || h.indexOf('#all-courses') === 0 || h.indexOf('#course-') === 0 || h.indexOf('#about') === 0 || h.indexOf('#faq') === 0 || h.indexOf('#privacy') === 0 || h.indexOf('#terms') === 0 || h.indexOf('#cohorts') === 0 || h.indexOf('#careers') === 0 || h.indexOf('#training-services') === 0); }
 function scrollToId(id){ const el = document.getElementById(id); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
-function goSection(id){ closeNav(); toggleServicesPanel(false); if (!onHome()) { location.hash = ''; setTimeout(function(){ scrollToId(id); }, 90); } else { scrollToId(id); } }
+// hash: which page the section lives on ('' = new landing page, 'training-services' = old home page, etc.)
+function goSection(id, hash){
+  closeNav();
+  const target = hash ? '#' + hash : '';
+  if (location.hash !== target) { location.hash = target; setTimeout(function(){ scrollToId(id); }, 90); }
+  else { scrollToId(id); }
+}
 function goHome(){ closeNav(); if (!onHome()) { location.hash = ''; } else { route(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }
-function goView(v){ closeNav(); toggleServicesPanel(false); location.hash = '#' + v; }
+function goView(v){ closeNav(); location.hash = '#' + v; }
+function toggleServicesDropdown(e){
+  if (e) e.stopPropagation();
+  const m = document.getElementById('servicesDropdownMenu');
+  if (m) m.classList.toggle('open');
+}
+document.addEventListener('click', function(){ const m = document.getElementById('servicesDropdownMenu'); if (m) m.classList.remove('open'); });
+function toggleItSvc(btn){
+  const card = btn.closest('.itsvc-card');
+  if (card) card.classList.toggle('open');
+}
 
 /* ---- Lead capture ---- */
 function leadVal(form, n){ const el = form.querySelector('[name="' + n + '"]'); return el ? el.value.trim() : ''; }
@@ -2430,9 +2751,8 @@ function serviceCardHtml(s){
 }
 
 async function renderServices(){
-  const box = document.getElementById('servicesPanelGrid');
   const homeBox = document.getElementById('homeServicesGrid');
-  if (!box && !homeBox) return;
+  if (!homeBox) return;
   let list = SERVICES_FALLBACK;
   try {
     const res = await fetch(SERVICES_GET_API, { headers: { 'Accept': 'application/json' } });
@@ -2441,27 +2761,11 @@ async function renderServices(){
       if (Array.isArray(data) && data.length) list = data;
     }
   } catch (e) { /* keep fallback */ }
-  const html = list.map(serviceCardHtml).join('');
-  function fillGrid(el){
-    if (!el) return;
-    el.innerHTML = html;
-    el.classList.remove('svc-cols-2', 'svc-cols-3', 'svc-cols-4');
-    if (list.length === 2) el.classList.add('svc-cols-2');
-    else if (list.length === 3) el.classList.add('svc-cols-3');
-    else if (list.length === 4) el.classList.add('svc-cols-4');
-  }
-  fillGrid(box);
-  fillGrid(homeBox);
-}
-/* Slide-down Services panel (replaces the old on-page services section) */
-function toggleServicesPanel(open){
-  const p = document.getElementById('servicesPanel'), ov = document.getElementById('servicesOv');
-  if (!p || !ov) return;
-  const show = (open === undefined) ? !p.classList.contains('open') : open;
-  p.classList.toggle('open', show);
-  ov.classList.toggle('open', show);
-  document.body.style.overflow = show ? 'hidden' : '';
-  closeNav();
+  homeBox.innerHTML = list.map(serviceCardHtml).join('');
+  homeBox.classList.remove('svc-cols-2', 'svc-cols-3', 'svc-cols-4');
+  if (list.length === 2) homeBox.classList.add('svc-cols-2');
+  else if (list.length === 3) homeBox.classList.add('svc-cols-3');
+  else if (list.length === 4) homeBox.classList.add('svc-cols-4');
 }
 
 /* ---- Generic looping carousel: arrows + autoplay, scrolls one page (row) at a time ---- */
@@ -2799,7 +3103,6 @@ function applyProperties(){
   }
   setText('footerAbout',       siteProps[PROP.footerText]);
   setText('servicesHomeCta',   siteProps[PROP.servicesCtaText]);
-  setText('servicesPanelCta',  siteProps[PROP.servicesCtaText]);
   setText('aboutHeroSubtext',  siteProps[PROP.aboutHeroSubtext]);
   setText('contactHours',    siteProps[PROP.supportHours]);
   setText('contactLocation', siteProps[PROP.supportLocation]);
@@ -4008,7 +4311,7 @@ function animateCount(el){
   requestAnimationFrame(tick);
 }
 
-/* ---- Router: Home (default) / Trainers / Reviews ---- */
+/* ---- Router: Landing (default) / Training Services (previous home) / Trainers / Reviews / ... ---- */
 function route(){
   const h = location.hash;
   const isReviews  = h.indexOf('#reviews')  === 0;
@@ -4021,6 +4324,8 @@ function route(){
   const isTerms    = h.indexOf('#terms') === 0;
   const isCohorts  = h.indexOf('#cohorts') === 0;
   const isCareers  = h.indexOf('#careers') === 0;
+  const isTraining = h.indexOf('#training-services') === 0;
+  const landing = document.getElementById('landingView');
   const home = document.getElementById('homeView');
   const wrap = document.getElementById('appWrap');
   const mainView = document.getElementById('mainView');
@@ -4033,43 +4338,48 @@ function route(){
   const termsView = document.getElementById('termsView');
   const cohortsView = document.getElementById('cohortsView');
   const careersView = document.getElementById('careersView');
-  closeReviewModal(); closeLeadModal(); closeTrainer(); closeCourseModal(); closeNav(); toggleServicesPanel(false);
+  closeReviewModal(); closeLeadModal(); closeTrainer(); closeCourseModal(); closeNav();
   const wrapKids = [mainView, reviewsView, coursesView, courseDetailView, aboutView, faqView, privacyView, termsView, cohortsView, careersView];
   function show(el){ wrapKids.forEach(function(v){ v.style.display = v === el ? '' : 'none'; }); }
+  // Toggle between the three top-level shells: new landing page, old "Training Services" home page, appWrap sub-pages.
+  function showTop(el){ landing.style.display = el === landing ? '' : 'none'; home.style.display = el === home ? '' : 'none'; wrap.style.display = el === wrap ? '' : 'none'; }
 
   if (isReviews) {
-    home.style.display = 'none'; wrap.style.display = ''; show(reviewsView);
+    showTop(wrap); show(reviewsView);
     loadReviews(); window.scrollTo(0, 0);
   } else if (isTrainers) {
-    home.style.display = 'none'; wrap.style.display = ''; show(mainView);
+    showTop(wrap); show(mainView);
     render(); window.scrollTo(0, 0);
   } else if (isCourses) {
-    home.style.display = 'none'; wrap.style.display = ''; show(coursesView);
+    showTop(wrap); show(coursesView);
     renderCoursesPage(); window.scrollTo(0, 0);
   } else if (isCourseDetail) {
-    home.style.display = 'none'; wrap.style.display = ''; show(courseDetailView);
+    showTop(wrap); show(courseDetailView);
     renderCourseDetail(h.slice('#course-'.length)); window.scrollTo(0, 0);
   } else if (isAbout) {
-    home.style.display = 'none'; wrap.style.display = ''; show(aboutView);
+    showTop(wrap); show(aboutView);
     window.scrollTo(0, 0);
   } else if (isFaq) {
-    home.style.display = 'none'; wrap.style.display = ''; show(faqView);
+    showTop(wrap); show(faqView);
     window.scrollTo(0, 0);
   } else if (isPrivacy) {
-    home.style.display = 'none'; wrap.style.display = ''; show(privacyView);
+    showTop(wrap); show(privacyView);
     window.scrollTo(0, 0);
   } else if (isTerms) {
-    home.style.display = 'none'; wrap.style.display = ''; show(termsView);
+    showTop(wrap); show(termsView);
     window.scrollTo(0, 0);
   } else if (isCohorts) {
-    home.style.display = 'none'; wrap.style.display = ''; show(cohortsView);
+    showTop(wrap); show(cohortsView);
     renderCohortsPage(); window.scrollTo(0, 0);
   } else if (isCareers) {
-    home.style.display = 'none'; wrap.style.display = ''; show(careersView);
+    showTop(wrap); show(careersView);
     renderCareersPage(); window.scrollTo(0, 0);
+  } else if (isTraining) {
+    showTop(home);
+    renderHomeTrainers(); renderHomeCourses(); initReveal(); window.scrollTo(0, 0);
   } else {
-    wrap.style.display = 'none'; home.style.display = '';
-    renderHomeTrainers(); renderHomeCourses(); initReveal();
+    showTop(landing);
+    initReveal();
   }
 }
 
@@ -4126,8 +4436,7 @@ function applyPageConfig(){
   setText('trainersPreviewHeading',    pc.trainersHeading);
   setText('trainersPageHeading',       pc.trainersHeading);  // Trainers page reuses the home heading
   setText('feedbackHeading',           pc.feedbackHeading);  // Reviews page heading is set in showAllReviews
-  setText('servicesHeading',           pc.servicesHeading);
-  setText('servicesPreviewHeading',    pc.servicesHeading);  // Home services section reuses the panel heading
+  setText('servicesPreviewHeading',    pc.servicesHeading);
   setText('aboutHeading',              pc.aboutHeading);
   setText('enterpriseHeading',         pc.enterpriseHeading);
   setText('supportHeading',            pc.supportHeading);
@@ -4148,7 +4457,7 @@ function applyPageConfig(){
   setRich('trainersPageSubheading',    pc.trainersSubtext);   // trainers page subheading (same value)
   setRich('coursesSubheading',         pc.coursesSubtext);    // home courses preview subtext
   setRich('coursesPageSubheading',     pc.coursesSubtext);    // courses page subheading (same value)
-  setRich('servicesSubtext',           pc.servicesSubtext);   // services mega-menu subtext
+  setRich('servicesPreviewSubtext',    pc.servicesSubtext);   // Training Services page's on-page Services section subtext
   setRich('feedbackSubheading',        pc.alumniFeedbackSubtext);  // home reviews subtext (reviews page set in showAllReviews)
   setRich('batchesSubheading',         pc.cohortBatchesSubtext);   // home cohort batches subtext
   setRich('cohortsPageSubheading',     pc.cohortBatchesSubtext);   // cohorts page subtext (same value)
