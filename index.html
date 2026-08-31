@@ -494,12 +494,12 @@
   .lp-training p { margin: 0 0 12px; color: var(--muted); font-size: .93rem; }
   @media (max-width: 860px) { .lp-training { grid-template-columns: 1fr; text-align: center; } .lp-training-ic { margin: 0 auto; } }
 
-  /* Trusted-by logos (static placeholders) */
+  /* Trusted-by logos */
   .lp-trusted { padding: 54px 0 60px; text-align: center; }
   .lp-trusted h3 { font-size: 1.05rem; margin: 0 0 6px; }
-  .lp-trusted .hint { font-size: .78rem; color: var(--muted); margin: 4px 0 0; }
   .lp-trusted-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px 42px; margin: 28px 0; }
   .lp-trusted-row span { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); font-size: .98rem; }
+  .lp-trusted-row .al-img { height: 32px; }
 
   /* Final CTA */
   .lp-final { background: var(--primary-bg); color: #fff; padding: 46px 0; }
@@ -1421,7 +1421,7 @@
   <section class="lp-trusted">
     <div class="container">
       <h3 class="reveal" id="logosHeading">Trusted by Forward-Thinking Organizations</h3>
-      <div class="lp-trusted-row reveal">
+      <div class="lp-trusted-row reveal" id="landingLogosRow">
         <span>➕ Global Healthcare</span>
         <span>🛡️ FinServ Solutions</span>
         <span>🛒 RetailPlus</span>
@@ -1429,7 +1429,6 @@
         <span>⚙️ EduCare Solutions</span>
         <span>🏭 ManufactureX</span>
       </div>
-      <p class="hint">(Client logos are for representation purpose only)</p>
     </div>
   </section>
 
@@ -1952,7 +1951,7 @@ const FAQS_GET_API       = SN.instance + '/api/x_palni_servicen_1/team_profiles/
 const COHORTS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_cohort_batches';   // GET -> { result: [ {course, course_id, batch, starts, schedule, mode} ] }
 const PAGECFG_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_page_config';      // GET -> { result: { enterprise } } from x_palni_servicen_1_page_configurations
 const CURRICULUM_FILE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_curriculum/';  // GET /{sys_id} -> u_course_curriculum file (download)
-const PLACEMENTS_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_placements';       // GET -> { result: [ { sys_id, name, profile_picture } ] }
+const PLACEMENTS_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_placements';       // GET -> { result: [ { sys_id, name, profile_picture, logo_placement } ] } -- logo_placement: "home_page" | "training_services_page"
 const PLACEMENT_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/placement_image/';    // GET /{sys_id} -> company logo (binary)
 const PROPS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_properties';         // GET -> { name: value } site properties
 const SERVICES_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_services';           // GET -> [ { sys_id, title, description, highlights, button_text, order, icon } ] from x_palni_servicen_1_services
@@ -4078,8 +4077,14 @@ function mapPlacement(p){
   // Prefer an embedded data URI; else stream the profile_picture by sys_id.
   let logo = p.profile_picture || p.logo || p.photo || p.image || '';
   if (!logo && sysId) logo = PLACEMENT_IMAGE_API + encodeURIComponent(sysId);
-  return { name: p.name || p.company || p.short_description || 'Company', logo: logo };
+  return {
+    name: p.name || p.company || p.short_description || 'Company',
+    logo: logo,
+    // u_logo_placement choice: "home_page" -> new landing page logo row; "training_services_page" -> the Training Services page's scrolling band.
+    logoPlacement: p.logo_placement || p.u_logo_placement || ''
+  };
 }
+function placementsFor(tag){ return placements.filter(function(p){ return p.logoPlacement === tag; }); }
 function buildFallbackPlacements(){
   return ['PepsiCo', 'Wipro', 'Capgemini', 'Cognizant', 'HCL', 'Accenture', 'Deloitte', 'Infosys', 'IBM', 'TCS']
     .map(function(n){ return { name: n, logo: '' }; });
@@ -4093,11 +4098,22 @@ function alumniLogo(p){
   return '<span class="al-item"><span class="al-name">' + name + '</span></span>';
 }
 function fillAlumniBands(){
-  const list = placements.length ? placements : buildFallbackPlacements();
+  const tagged = placementsFor('training_services_page');
+  const list = tagged.length ? tagged : buildFallbackPlacements();
   const logos = list.map(alumniLogo).join('');
   // Duplicate the set so the marquee loops seamlessly.
   document.querySelectorAll('.alumni-track').forEach(function(t){ t.innerHTML = logos + logos; });
   trimAlumniLogos();   // crop each logo's transparent padding so all render at the same visible height
+}
+// Landing page's static "Trusted by" row — home_page-tagged placements only.
+// Leaves the hard-coded placeholder row in place if none are tagged yet.
+function fillLandingLogos(){
+  const mount = document.getElementById('landingLogosRow');
+  if (!mount) return;
+  const list = placementsFor('home_page');
+  if (!list.length) return;
+  mount.innerHTML = list.map(alumniLogo).join('');
+  trimAlumniLogos();
 }
 
 /* Logo files are uploaded with wildly different canvases/whitespace (some are
@@ -4109,7 +4125,7 @@ function fillAlumniBands(){
 const _logoTrimCache = {};   // url -> trimmed dataURL, or null = leave original
 function trimAlumniLogos(){
   const byUrl = {};
-  document.querySelectorAll('.stats-alumni .al-img').forEach(function(im){
+  document.querySelectorAll('.stats-alumni .al-img, .lp-trusted-row .al-img').forEach(function(im){
     const u = im.getAttribute('src');
     if (!u || u.indexOf('data:') === 0) return;
     (byUrl[u] = byUrl[u] || []).push(im);
@@ -4163,6 +4179,7 @@ async function loadPlacements(){
     placements = [];
   }
   fillAlumniBands();
+  fillLandingLogos();
 }
 
 /* ============================================================
