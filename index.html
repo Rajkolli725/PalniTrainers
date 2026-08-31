@@ -1224,19 +1224,18 @@
     <button class="nav-toggle" onclick="toggleNav()" aria-label="Menu">☰</button>
     <div class="nav-links" id="navLinks">
       <a class="navlink" onclick="goHome()">Home</a>
-      <a class="navlink" onclick="goView('all-courses')">Courses</a>
-      <a class="navlink" onclick="goView('trainers')">Expert Mentors</a>
       <div class="nav-dropdown" id="servicesDropdown">
         <a class="navlink" onclick="toggleServicesDropdown(event)">Services <span class="nav-caret">▾</span></a>
         <div class="nav-dropdown-menu" id="servicesDropdownMenu">
           <a onclick="closeNav();toggleServicesDropdown();goSection('it-services','')">IT Services</a>
           <a onclick="closeNav();toggleServicesDropdown();goView('training-services')">Training Services</a>
+          <a onclick="closeNav();toggleServicesDropdown();goView('all-courses')">Course Offerings</a>
         </div>
       </div>
       <a class="navlink" onclick="goView('about')">About Us</a>
       <a class="navlink" onclick="goView('careers')">Careers</a>
       <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
-      <button class="btn btn-gold nav-demo" onclick="openLeadModal('','Book a Free Demo (Nav)')">Book a Free Demo</button>
+      <button class="btn btn-gold nav-demo" onclick="openLeadModal('','Book a Free Demo (Nav)')">Contact Us</button>
     </div>
   </div>
 </nav>
