@@ -497,9 +497,16 @@
   /* Trusted-by logos */
   .lp-trusted { padding: 54px 0 60px; text-align: center; }
   .lp-trusted h3 { font-size: 1.05rem; margin: 0 0 6px; }
+  .lp-trusted-wrap { overflow: hidden; position: relative; min-width: 0; }
   .lp-trusted-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 30px 42px; margin: 28px 0; }
   .lp-trusted-row span { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--ink); font-size: .98rem; }
   .lp-trusted-row .al-img { height: 32px; }
+  /* When there are too many logos to fit on one line, scroll them like the Training Services marquee. */
+  .lp-trusted-wrap.scrolling { -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent); }
+  .lp-trusted-wrap.scrolling .lp-trusted-row { flex-wrap: nowrap; justify-content: flex-start; width: max-content; animation: alumniScroll 30s linear infinite; }
+  .lp-trusted-wrap.scrolling:hover .lp-trusted-row { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) { .lp-trusted-wrap.scrolling .lp-trusted-row { animation: none; } }
 
   /* Final CTA */
   .lp-final { background: var(--primary-bg); color: #fff; padding: 46px 0; }
@@ -1421,13 +1428,15 @@
   <section class="lp-trusted">
     <div class="container">
       <h3 class="reveal" id="logosHeading">Trusted by Forward-Thinking Organizations</h3>
-      <div class="lp-trusted-row reveal" id="landingLogosRow">
-        <span>➕ Global Healthcare</span>
-        <span>🛡️ FinServ Solutions</span>
-        <span>🛒 RetailPlus</span>
-        <span>🔷 TechGlobal</span>
-        <span>⚙️ EduCare Solutions</span>
-        <span>🏭 ManufactureX</span>
+      <div class="lp-trusted-wrap reveal" id="landingLogosWrap">
+        <div class="lp-trusted-row" id="landingLogosRow">
+          <span>➕ Global Healthcare</span>
+          <span>🛡️ FinServ Solutions</span>
+          <span>🛒 RetailPlus</span>
+          <span>🔷 TechGlobal</span>
+          <span>⚙️ EduCare Solutions</span>
+          <span>🏭 ManufactureX</span>
+        </div>
       </div>
     </div>
   </section>
@@ -4105,15 +4114,33 @@ function fillAlumniBands(){
   document.querySelectorAll('.alumni-track').forEach(function(t){ t.innerHTML = logos + logos; });
   trimAlumniLogos();   // crop each logo's transparent padding so all render at the same visible height
 }
-// Landing page's static "Trusted by" row — home_page-tagged placements only.
+// Landing page's "Trusted by" row — home_page-tagged placements only.
 // Leaves the hard-coded placeholder row in place if none are tagged yet.
+// If the logos are too many to fit on one line, switch to a scrolling
+// marquee (same look/behavior as the Training Services page's band).
 function fillLandingLogos(){
+  const wrap = document.getElementById('landingLogosWrap');
   const mount = document.getElementById('landingLogosRow');
   if (!mount) return;
   const list = placementsFor('home_page');
   if (!list.length) return;
-  mount.innerHTML = list.map(alumniLogo).join('');
+  const html = list.map(alumniLogo).join('');
+  mount.innerHTML = html;
   trimAlumniLogos();
+  if (wrap) wrap.classList.remove('scrolling');
+  mount.style.flexWrap = 'nowrap';
+  mount.style.width = 'max-content';
+  requestAnimationFrame(function(){
+    const containerWidth = wrap ? wrap.clientWidth : mount.parentElement.clientWidth;
+    const overflow = mount.scrollWidth > containerWidth;
+    if (overflow) {
+      if (wrap) wrap.classList.add('scrolling');
+      mount.innerHTML = html + html;   // duplicate so the loop is seamless
+    } else {
+      mount.style.flexWrap = '';
+      mount.style.width = '';
+    }
+  });
 }
 
 /* Logo files are uploaded with wildly different canvases/whitespace (some are
