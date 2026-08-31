@@ -516,25 +516,13 @@
 
   /* Nav "Services" dropdown (replaces the old slide-down mega-panel) */
   .nav-dropdown { position: relative; }
-  .nav-dropdown > .navlink { display: inline-flex; align-items: center; gap: 4px; }
-  .nav-caret { font-size: .65em; display: inline-block; transition: transform .2s ease; }
-  .nav-dropdown.open .nav-caret { transform: rotate(180deg); }
-  .nav-dropdown-menu { position: absolute; top: 100%; left: 0; margin-top: 10px; background: var(--card); border: 1px solid var(--line);
-    border-radius: 14px; box-shadow: var(--shadow); min-width: 280px; padding: 8px; display: flex; flex-direction: column; gap: 2px;
-    z-index: 60; opacity: 0; visibility: hidden; transform: translateY(-6px); transition: opacity .18s ease, transform .18s ease, visibility .18s; }
-  .nav-dropdown.open .nav-dropdown-menu { opacity: 1; visibility: visible; transform: translateY(0); }
-  .nav-dropdown-item { display: flex; align-items: flex-start; gap: 12px; padding: 11px 12px; border-radius: 10px; color: var(--ink); cursor: pointer; text-decoration: none; }
-  .nav-dropdown-item:hover { background: var(--ghost-bg); }
-  .nav-dropdown-ic { flex: 0 0 auto; width: 38px; height: 38px; border-radius: 10px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font-size: 1.05rem; }
-  .nav-dropdown-item b { display: block; font-size: .92rem; font-weight: 700; color: var(--ink); }
-  .nav-dropdown-item:hover b { color: var(--accent); }
-  .nav-dropdown-item span { display: block; font-size: .78rem; color: var(--muted); margin-top: 2px; line-height: 1.35; }
-  @media (max-width: 880px) {
-    .nav-dropdown-menu { position: static; box-shadow: none; border: none; margin: 4px 0 4px 10px; padding: 0; min-width: 0;
-      opacity: 1; visibility: visible; transform: none; display: none; }
-    .nav-dropdown.open .nav-dropdown-menu { display: flex; }
-    .nav-dropdown-ic { width: 32px; height: 32px; font-size: .95rem; }
-  }
+  .nav-dropdown-menu { position: absolute; top: 100%; left: 0; margin-top: 6px; background: var(--card); border: 1px solid var(--line);
+    border-radius: 12px; box-shadow: var(--shadow); min-width: 190px; padding: 6px; display: none; flex-direction: column; z-index: 60; }
+  .nav-dropdown-menu.open { display: flex; }
+  .nav-dropdown-menu a { padding: 10px 12px; border-radius: 8px; color: var(--ink); font-weight: 600; font-size: .9rem; cursor: pointer; }
+  .nav-dropdown-menu a:hover { background: var(--ghost-bg); color: var(--accent); }
+  .nav-caret { font-size: .65em; margin-left: 3px; }
+  @media (max-width: 880px) { .nav-dropdown-menu { position: static; box-shadow: none; border: none; margin: 0 0 0 10px; padding: 0; } }
 
   /* ---- Stats band ---- */
   .stats-band { background: var(--brand-grad); color: #fff; }
@@ -1246,18 +1234,9 @@
       <div class="nav-dropdown" id="servicesDropdown">
         <a class="navlink" onclick="toggleServicesDropdown(event)">Services <span class="nav-caret">▾</span></a>
         <div class="nav-dropdown-menu" id="servicesDropdownMenu">
-          <a class="nav-dropdown-item" onclick="closeNav();toggleServicesDropdown();goSection('it-services','')">
-            <div class="nav-dropdown-ic">🧩</div>
-            <div><b>IT Services</b><span>Consulting, AI, cloud &amp; ServiceNow solutions</span></div>
-          </a>
-          <a class="nav-dropdown-item" onclick="closeNav();toggleServicesDropdown();goView('training-services')">
-            <div class="nav-dropdown-ic">🎓</div>
-            <div><b>Training Services</b><span>Hands-on courses, mentorship &amp; certification prep</span></div>
-          </a>
-          <a class="nav-dropdown-item" onclick="closeNav();toggleServicesDropdown();goView('all-courses')">
-            <div class="nav-dropdown-ic">📚</div>
-            <div><b>Course Offerings</b><span>Browse all available courses</span></div>
-          </a>
+          <a onclick="closeNav();toggleServicesDropdown();goSection('it-services','')">IT Services</a>
+          <a onclick="closeNav();toggleServicesDropdown();goView('training-services')">Training Services</a>
+          <a onclick="closeNav();toggleServicesDropdown();goView('all-courses')">Course Offerings</a>
         </div>
       </div>
       <a class="navlink" onclick="goView('about')">About Us</a>
@@ -2483,10 +2462,10 @@ function goHome(){ closeNav(); if (!onHome()) { location.hash = ''; } else { rou
 function goView(v){ closeNav(); location.hash = '#' + v; }
 function toggleServicesDropdown(e){
   if (e) e.stopPropagation();
-  const d = document.getElementById('servicesDropdown');
-  if (d) d.classList.toggle('open');
+  const m = document.getElementById('servicesDropdownMenu');
+  if (m) m.classList.toggle('open');
 }
-document.addEventListener('click', function(){ const d = document.getElementById('servicesDropdown'); if (d) d.classList.remove('open'); });
+document.addEventListener('click', function(){ const m = document.getElementById('servicesDropdownMenu'); if (m) m.classList.remove('open'); });
 function toggleItSvc(btn){
   const card = btn.closest('.itsvc-card');
   if (card) card.classList.toggle('open');
