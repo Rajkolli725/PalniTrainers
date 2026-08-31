@@ -1255,11 +1255,11 @@
   <section class="lp-hero">
     <div class="lp-hero-inner">
       <div>
-        <h1>Enterprise IT Services.<br><span class="hl">AI-Powered.</span> <span class="hl">Data-Driven.</span><br><span class="hl">ServiceNow</span> at the Core.</h1>
-        <p class="lp-lede">VTech Infotech delivers end-to-end IT services that help organizations modernize, automate, and scale with deep expertise in AI, Data Engineering, and the ServiceNow platform.</p>
+        <h1 id="landingHeroHeading">Enterprise IT Services.<br><span class="hl">AI-Powered.</span> <span class="hl">Data-Driven.</span><br><span class="hl">ServiceNow</span> at the Core.</h1>
+        <p class="lp-lede" id="landingHeroSubtext">VTech Infotech delivers end-to-end IT services that help organizations modernize, automate, and scale with deep expertise in AI, Data Engineering, and the ServiceNow platform.</p>
         <div class="lp-hero-cta">
-          <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Hero)')">Talk to an IT Expert</button>
-          <button class="btn btn-outline-light btn-lg" onclick="goSection('it-services','')">Explore Our Services</button>
+          <button id="landingHeroCta1" class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Hero)')">Talk to an IT Expert</button>
+          <button id="landingHeroCta2" class="btn btn-outline-light btn-lg" onclick="goSection('it-services','')">Explore Our Services</button>
         </div>
         <div class="lp-hero-badges">
           <span>📈 Enterprise IT Solutions</span>
@@ -1268,7 +1268,7 @@
           <span>🏛️ ServiceNow Expertise</span>
         </div>
       </div>
-      <div class="lp-hub">
+      <div class="lp-hub" id="landingHeroMedia">
         <div class="lp-hub-center"><b>now</b><span>ServiceNow at the Core</span></div>
         <div class="lp-hub-node n1"><div class="lp-hub-ic">🧠</div>AI &amp; Automation</div>
         <div class="lp-hub-node n2"><div class="lp-hub-ic">☁️</div>Cloud &amp; Integration</div>
@@ -1283,8 +1283,8 @@
   <section class="section" id="it-services">
     <div class="container">
       <div class="section-title reveal">
-        <h2>Our IT Services</h2>
-        <p>Comprehensive IT solutions designed to help you innovate, automate, and grow.</p>
+        <h2 id="itServicesHeading">Our IT Services</h2>
+        <p id="itServicesSubtext">Comprehensive IT solutions designed to help you innovate, automate, and grow.</p>
       </div>
       <div class="itsvc-grid">
         <div class="itsvc-card reveal">
@@ -1316,10 +1316,12 @@
   <section class="lp-band">
     <div class="lp-band-inner">
       <div class="reveal">
-        <h2>AI-<span class="hl">Powered.</span> Enterprise-Ready.</h2>
-        <p>We help organizations turn AI from an emerging technology into practical business value.</p>
-        <p>From strategy to implementation, VTech delivers AI solutions that drive efficiency, innovation, and exceptional experiences.</p>
-        <button class="btn btn-gold btn-lg" style="margin-top:8px" onclick="openLeadModal('','Explore AI Solutions (Landing)')">Explore AI Solutions →</button>
+        <h2 id="enterpriseReadyHeading">AI-<span class="hl">Powered.</span> Enterprise-Ready.</h2>
+        <div id="enterpriseReadySubtext">
+          <p>We help organizations turn AI from an emerging technology into practical business value.</p>
+          <p>From strategy to implementation, VTech delivers AI solutions that drive efficiency, innovation, and exceptional experiences.</p>
+        </div>
+        <button id="enterpriseReadyCta" class="btn btn-gold btn-lg" style="margin-top:8px" onclick="openLeadModal('','Explore AI Solutions (Landing)')">Explore AI Solutions →</button>
       </div>
       <div class="lp-band-grid reveal">
         <div class="lp-band-tile"><div class="lp-tile-ic">🎯</div><div><h4>AI Strategy &amp; Advisory</h4><p>Identify high-value opportunities and build a practical AI roadmap.</p></div></div>
@@ -1334,9 +1336,9 @@
   <section class="lp-sn">
     <div class="lp-sn-inner">
       <div class="reveal">
-        <h2><span class="hl-accent">ServiceNow</span> Solutions That Drive Enterprise Transformation</h2>
-        <p>From strategy and implementation to integration, automation, and managed services, VTech helps organizations maximize the value of the ServiceNow platform.</p>
-        <ul class="lp-sn-check">
+        <h2 id="solutionsDriveHeading"><span class="hl-accent">ServiceNow</span> Solutions That Drive Enterprise Transformation</h2>
+        <p id="solutionsDriveSubtext">From strategy and implementation to integration, automation, and managed services, VTech helps organizations maximize the value of the ServiceNow platform.</p>
+        <ul class="lp-sn-check" id="solutionsDriveList">
           <li>IT Service Management (ITSM)</li>
           <li>Customer Service Management (CSM)</li>
           <li>IT Operations Management (ITOM)</li>
@@ -1347,7 +1349,7 @@
           <li>Security Operations (SecOps)</li>
         </ul>
       </div>
-      <div class="lp-mockup reveal">
+      <div class="lp-mockup reveal" id="solutionsDriveMedia">
         <div class="lp-mockup-window">
           <div class="lp-mockup-bar"><b></b><b></b><b></b>&nbsp;Service Operations Workspace</div>
           <div class="lp-mockup-body">
@@ -1381,8 +1383,8 @@
     <div class="lp-band-inner reveal" style="grid-template-columns:auto 1fr auto;align-items:center;gap:26px">
       <div class="lp-tile-ic" style="width:64px;height:64px;font-size:1.8rem;border-radius:16px">🗄️</div>
       <div>
-        <h2 style="font-size:1.5rem;margin-bottom:6px">Data <span class="hl">Engineering</span> &amp; Modern Data Solutions</h2>
-        <p style="margin-bottom:0">Build the data foundation needed to support analytics, automation, and AI.</p>
+        <h2 id="dataEngHeading" style="font-size:1.5rem;margin-bottom:6px">Data <span class="hl">Engineering</span> &amp; Modern Data Solutions</h2>
+        <p id="dataEngSubtext" style="margin-bottom:0">Build the data foundation needed to support analytics, automation, and AI.</p>
         <div class="lp-tagrow">
           <span>🗃️ Data Engineering</span>
           <span>🔀 Data Integration</span>
@@ -1391,7 +1393,7 @@
           <span>📊 Data Modernization</span>
         </div>
       </div>
-      <button class="btn btn-outline-light btn-lg" onclick="openLeadModal('','Explore Data Services (Landing)')">Explore Data Services →</button>
+      <button id="dataEngCta" class="btn btn-outline-light btn-lg" onclick="openLeadModal('','Explore Data Services (Landing)')">Explore Data Services →</button>
     </div>
   </section>
 
@@ -1401,8 +1403,8 @@
       <div class="lp-training reveal">
         <div class="lp-training-ic">🎓</div>
         <div>
-          <h3>Build <span class="hl-accent">ServiceNow</span> Expertise. Build Your Future.</h3>
-          <p>VTech offers hands-on, project-driven ServiceNow training designed for real-world success.</p>
+          <h3 id="buildExpertiseHeading">Build <span class="hl-accent">ServiceNow</span> Expertise. Build Your Future.</h3>
+          <p id="buildExpertiseSubtext">VTech offers hands-on, project-driven ServiceNow training designed for real-world success.</p>
           <div class="lp-tagrow light">
             <span>👤 Expert-Led Training</span>
             <span>🧪 Hands-on Labs</span>
@@ -1410,7 +1412,7 @@
             <span>🛡️ Certification Guidance</span>
           </div>
         </div>
-        <button class="btn btn-navy btn-lg" onclick="goView('training-services')">Explore ServiceNow Training →</button>
+        <button id="buildExpertiseCta" class="btn btn-navy btn-lg" onclick="goView('training-services')">Explore ServiceNow Training →</button>
       </div>
     </div>
   </section>
@@ -1418,7 +1420,7 @@
   <!-- Trusted by -->
   <section class="lp-trusted">
     <div class="container">
-      <h3 class="reveal">Trusted by Forward-Thinking Organizations</h3>
+      <h3 class="reveal" id="logosHeading">Trusted by Forward-Thinking Organizations</h3>
       <div class="lp-trusted-row reveal">
         <span>➕ Global Healthcare</span>
         <span>🛡️ FinServ Solutions</span>
@@ -1435,10 +1437,10 @@
   <section class="lp-final">
     <div class="lp-final-inner">
       <div>
-        <h2>Ready to Transform Your Technology Strategy?</h2>
-        <p>Whether you're modernizing your IT environment, implementing ServiceNow, exploring AI opportunities, or building your data capabilities, VTech can help you move from strategy to execution.</p>
+        <h2 id="readyTransformHeading">Ready to Transform Your Technology Strategy?</h2>
+        <p id="readyTransformSubtext">Whether you're modernizing your IT environment, implementing ServiceNow, exploring AI opportunities, or building your data capabilities, VTech can help you move from strategy to execution.</p>
       </div>
-      <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Final CTA)')">Talk to an IT Expert</button>
+      <button id="readyTransformCta" class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Final CTA)')">Talk to an IT Expert</button>
     </div>
   </section>
 
@@ -3029,6 +3031,29 @@ function setRich(id, html){
 }
 // Strip all tags from a ServiceNow HTML field -> plain text (for string-built views).
 function stripHtml(html){ return String(html == null ? '' : html).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim(); }
+// Replace an element's markup wholesale with a ServiceNow HTML field (e.g. a heading
+// with an embedded <span class="hl"> highlight, or a multi-paragraph block). Unlike
+// setRich, this does NOT strip <p> tags -- the field controls the full markup.
+// Empty values are ignored (the hard-coded default markup is kept).
+function setHtml(id, html){
+  const el = document.getElementById(id);
+  if (el && html && String(html).trim()) el.innerHTML = html;
+}
+// Swap a static illustration container for a real <img> once a ServiceNow image
+// URL is provided; leaves the CSS/SVG illustration in place otherwise.
+function setMediaImage(id, url, alt){
+  if (!url) return;
+  const el = document.getElementById(id);
+  if (el) el.innerHTML = '<img src="' + esc(url) + '" alt="' + esc(alt || '') + '" style="width:100%;height:100%;object-fit:contain">';
+}
+// Render the ServiceNow Solutions checklist from a comma-separated u_solutions value.
+function renderSolutionsList(raw){
+  const mount = document.getElementById('solutionsDriveList');
+  if (!mount) return;
+  const items = String(raw || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  if (!items.length) return;
+  mount.innerHTML = items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('');
+}
 
 // Apply property values to the page (each falls back to the hard-coded default).
 function applyProperties(){
@@ -4410,7 +4435,8 @@ loadCareers();           // fetch active job openings -> Careers page only
 loadPageConfig();        // fetch page configuration -> Enterprise section body (u_enterprise HTML)
 
 /* ---- Page configuration (x_palni_servicen_1_page_configurations) ----
-   Currently supplies the Enterprise section body from the u_enterprise HTML field. */
+   Supplies headings/subtexts/CTAs/images across the site, including the
+   Enterprise section body (u_enterprise) and the new landing page. */
 async function loadPageConfig(){
   try {
     const res = await snFetch(PAGECFG_GET_API);
@@ -4475,6 +4501,33 @@ function applyPageConfig(){
     const el = document.getElementById('enterpriseBody');
     if (el) el.innerHTML = pc.enterprise;
   }
+
+  // ---- New landing page (Enterprise IT Services design) ----
+  setHtml('landingHeroHeading',   pc.lpHeroHeading);
+  setRich('landingHeroSubtext',   pc.lpHeroSubtext);
+  setText('landingHeroCta1',      pc.lpHeroCta);
+  setText('landingHeroCta2',      pc.lpHeroCta2);
+  setMediaImage('landingHeroMedia', pc.lpHeroImage, 'VTech Infotech — Enterprise IT Services');
+  setText('itServicesHeading',    pc.itServicesHeading);
+  setRich('itServicesSubtext',    pc.itServicesSubtext);
+  setHtml('enterpriseReadyHeading', pc.enterpriseReadyHeading);
+  setHtml('enterpriseReadySubtext', pc.enterpriseReadySubtext);
+  setText('enterpriseReadyCta',   pc.enterpriseReadyCta);
+  setHtml('solutionsDriveHeading', pc.solutionsDriveHeading);
+  setRich('solutionsDriveSubtext', pc.solutionsDriveSubtext);
+  if (pc.solutions) renderSolutionsList(pc.solutions);
+  setMediaImage('solutionsDriveMedia', pc.solutionsDriveImage, 'ServiceNow Service Operations Workspace');
+  setHtml('dataEngHeading',       pc.dataEngHeading);
+  setRich('dataEngSubtext',       pc.dataEngSubtext);
+  setText('dataEngCta',           pc.dataEngCta);
+  setHtml('buildExpertiseHeading', pc.buildExpertiseHeading);
+  setRich('buildExpertiseSubtext', pc.buildExpertiseSubtext);
+  setText('buildExpertiseCta',    pc.buildExpertiseCta);
+  setText('logosHeading',         pc.logosHeading);
+  setText('readyTransformHeading', pc.readyTransformHeading);
+  setRich('readyTransformSubtext', pc.readyTransformSubtext);
+  setText('readyTransformCta',    pc.readyTransformCta);
+
   initReveal();   // re-observe the (reset) stat counters so they animate into view
 }
 initReveal();            // scroll-reveal + animated counters
