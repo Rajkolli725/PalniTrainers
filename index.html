@@ -411,22 +411,20 @@
     font-weight: 800; box-shadow: 0 12px 30px rgba(0,0,0,.35); text-align: center; line-height: 1.25; z-index: 2; padding: 6px; }
   .lp-hub-center b { color: var(--accent); font-size: 1.15rem; }
   .lp-hub-center span { font-size: .66rem; font-weight: 700; max-width: 88px; }
-  .lp-hub-node { position: absolute; width: 96px; text-align: center; color: #fff; font-size: .76rem; font-weight: 600; z-index: 1; }
-  .lp-hub-ic { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,.08); border: 1.5px solid rgba(255,255,255,.35);
-    display: grid; place-items: center; font-size: 1.4rem; margin: 0 auto 8px; }
+  .lp-hub-node { position: absolute; width: 96px; min-height: 48px; display: flex; align-items: center; justify-content: center;
+    text-align: center; color: #fff; font-size: .76rem; font-weight: 600; z-index: 1; }
   .lp-hub-node.n1 { top: 0; left: 50%; transform: translateX(-50%); }
   .lp-hub-node.n2 { top: 24%; right: -6%; }
   .lp-hub-node.n3 { bottom: 4%; right: 2%; }
   .lp-hub-node.n4 { bottom: 4%; left: 2%; }
   .lp-hub-node.n5 { top: 24%; left: -6%; }
-  @media (max-width: 900px) { .lp-hub { max-width: 320px; } .lp-hub-node { width: 78px; font-size: .66rem; } .lp-hub-ic { width: 48px; height: 48px; font-size: 1.15rem; } .lp-hub-center { width: 96px; height: 96px; } }
+  @media (max-width: 900px) { .lp-hub { max-width: 320px; } .lp-hub-node { width: 78px; font-size: .66rem; } .lp-hub-center { width: 96px; height: 96px; } }
 
   /* Our IT Services — expandable cards */
   .itsvc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
   @media (max-width: 900px) { .itsvc-grid { grid-template-columns: 1fr; } }
   .itsvc-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 24px; text-align: center; transition: border-color .15s; }
   .itsvc-card.open { border-color: var(--accent); }
-  .itsvc-ic { width: 62px; height: 62px; border-radius: 50%; margin: 0 auto 18px; display: grid; place-items: center; font-size: 1.7rem; color: #fff; }
   .itsvc-card h3 { margin: 0 0 10px; font-size: 1.12rem; }
   .itsvc-card p { color: var(--muted); font-size: .93rem; line-height: 1.55; margin: 0; }
   .itsvc-more { display: none; text-align: left; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink); font-size: .89rem; line-height: 1.6; }
@@ -443,7 +441,6 @@
   .lp-band p { color: rgba(255,255,255,.85); margin: 0 0 12px; line-height: 1.6; }
   .lp-band-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; }
   .lp-band-tile { display: flex; gap: 12px; }
-  .lp-band-tile .lp-tile-ic { flex: 0 0 auto; width: 44px; height: 44px; border-radius: 12px; background: rgba(255,255,255,.1); display: grid; place-items: center; font-size: 1.2rem; }
   .lp-band-tile h4 { margin: 0 0 4px; font-size: .95rem; color: var(--gold); }
   .lp-band-tile p { margin: 0; font-size: .84rem; color: rgba(255,255,255,.78); }
   @media (max-width: 900px) { .lp-band-inner { grid-template-columns: 1fr; } .lp-band-grid { grid-template-columns: 1fr; } }
@@ -488,11 +485,10 @@
 
   /* Training CTA card */
   .lp-training { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
-    padding: 32px 30px; display: grid; grid-template-columns: auto 1fr auto; gap: 26px; align-items: center; }
-  .lp-training-ic { width: 76px; height: 76px; border-radius: 18px; background: var(--accent-soft); display: grid; place-items: center; font-size: 2rem; flex: 0 0 auto; }
+    padding: 32px 30px; display: grid; grid-template-columns: 1fr auto; gap: 26px; align-items: center; }
   .lp-training h3 { margin: 0 0 6px; font-size: 1.3rem; }
   .lp-training p { margin: 0 0 12px; color: var(--muted); font-size: .93rem; }
-  @media (max-width: 860px) { .lp-training { grid-template-columns: 1fr; text-align: center; } .lp-training-ic { margin: 0 auto; } }
+  @media (max-width: 860px) { .lp-training { grid-template-columns: 1fr; text-align: center; } }
 
   /* Trusted-by logos */
   .lp-trusted { padding: 54px 0 60px; text-align: center; }
@@ -1269,19 +1265,19 @@
           <button id="landingHeroCta2" class="btn btn-gold btn-lg" onclick="goSection('it-services','')">Explore Our Services</button>
         </div>
         <div class="lp-hero-badges">
-          <span>📈 Enterprise IT Solutions</span>
-          <span>⚙️ AI &amp; Automation</span>
-          <span>🗄️ Data Engineering</span>
-          <span>🏛️ ServiceNow Expertise</span>
+          <span>Enterprise IT Solutions</span>
+          <span>AI &amp; Automation</span>
+          <span>Data Engineering</span>
+          <span>ServiceNow Expertise</span>
         </div>
       </div>
       <div class="lp-hub" id="landingHeroMedia">
         <div class="lp-hub-center"><b>now</b><span>ServiceNow at the Core</span></div>
-        <div class="lp-hub-node n1"><div class="lp-hub-ic">🧠</div>AI &amp; Automation</div>
-        <div class="lp-hub-node n2"><div class="lp-hub-ic">☁️</div>Cloud &amp; Integration</div>
-        <div class="lp-hub-node n3"><div class="lp-hub-ic">🧩</div>Applications &amp; Modernization</div>
-        <div class="lp-hub-node n4"><div class="lp-hub-ic">👥</div>IT Consulting &amp; Implementation</div>
-        <div class="lp-hub-node n5"><div class="lp-hub-ic">🗄️</div>Data Engineering</div>
+        <div class="lp-hub-node n1">AI &amp; Automation</div>
+        <div class="lp-hub-node n2">Cloud &amp; Integration</div>
+        <div class="lp-hub-node n3">Applications &amp; Modernization</div>
+        <div class="lp-hub-node n4">IT Consulting &amp; Implementation</div>
+        <div class="lp-hub-node n5">Data Engineering</div>
       </div>
     </div>
   </section>
@@ -1295,21 +1291,18 @@
       </div>
       <div class="itsvc-grid">
         <div class="itsvc-card reveal">
-          <div class="itsvc-ic" style="background:#16a34a">👥</div>
           <h3>General IT Services</h3>
           <p>End-to-end IT consulting, implementation, integration, cloud, application development, automation, and managed services tailored to your business needs.</p>
           <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
           <div class="itsvc-more">Our General IT Services cover the full lifecycle — advisory, architecture, build and ongoing managed support — so your technology investments stay aligned with business outcomes as you scale.</div>
         </div>
         <div class="itsvc-card reveal">
-          <div class="itsvc-ic" style="background:var(--primary-bg)">🧠</div>
           <h3>AI + ServiceNow Solutions</h3>
           <p>Leverage AI and ServiceNow to automate workflows, improve experiences, enhance decision-making, and drive enterprise productivity.</p>
           <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
           <div class="itsvc-more">We combine ServiceNow workflow automation with practical AI — from virtual agents to predictive intelligence — to help teams resolve work faster and make better decisions.</div>
         </div>
         <div class="itsvc-card reveal">
-          <div class="itsvc-ic" style="background:#0f766e">⚙️</div>
           <h3>ServiceNow Consulting &amp; Implementation</h3>
           <p>Strategy, consulting, implementation, integration, customization, automation, and managed services across the ServiceNow platform.</p>
           <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
@@ -1331,10 +1324,10 @@
         <button id="enterpriseReadyCta" class="btn btn-gold btn-lg" style="margin-top:8px" onclick="openLeadModal('','Explore AI Solutions (Landing)')">Explore AI Solutions →</button>
       </div>
       <div class="lp-band-grid reveal">
-        <div class="lp-band-tile"><div class="lp-tile-ic">🎯</div><div><h4>AI Strategy &amp; Advisory</h4><p>Identify high-value opportunities and build a practical AI roadmap.</p></div></div>
-        <div class="lp-band-tile"><div class="lp-tile-ic">🤖</div><div><h4>AI Automation</h4><p>Use intelligent automation to streamline processes and improve productivity.</p></div></div>
-        <div class="lp-band-tile"><div class="lp-tile-ic">✨</div><div><h4>Generative AI &amp; AI Applications</h4><p>Build practical AI solutions that enhance employee and customer experiences.</p></div></div>
-        <div class="lp-band-tile"><div class="lp-tile-ic">🔗</div><div><h4>AI + ServiceNow</h4><p>Combine ServiceNow workflows with AI to create smarter, faster, more autonomous operations.</p></div></div>
+        <div class="lp-band-tile"><div><h4>AI Strategy &amp; Advisory</h4><p>Identify high-value opportunities and build a practical AI roadmap.</p></div></div>
+        <div class="lp-band-tile"><div><h4>AI Automation</h4><p>Use intelligent automation to streamline processes and improve productivity.</p></div></div>
+        <div class="lp-band-tile"><div><h4>Generative AI &amp; AI Applications</h4><p>Build practical AI solutions that enhance employee and customer experiences.</p></div></div>
+        <div class="lp-band-tile"><div><h4>AI + ServiceNow</h4><p>Combine ServiceNow workflows with AI to create smarter, faster, more autonomous operations.</p></div></div>
       </div>
     </div>
   </section>
@@ -1387,17 +1380,16 @@
 
   <!-- Data Engineering band -->
   <section class="lp-band" style="padding:48px 0">
-    <div class="lp-band-inner reveal" style="grid-template-columns:auto 1fr auto;align-items:center;gap:26px">
-      <div class="lp-tile-ic" style="width:64px;height:64px;font-size:1.8rem;border-radius:16px">🗄️</div>
+    <div class="lp-band-inner reveal" style="grid-template-columns:1fr auto;align-items:center;gap:26px">
       <div>
         <h2 id="dataEngHeading" style="font-size:1.5rem;margin-bottom:6px">Data <span class="hl">Engineering</span> &amp; Modern Data Solutions</h2>
         <p id="dataEngSubtext" style="margin-bottom:0">Build the data foundation needed to support analytics, automation, and AI.</p>
         <div class="lp-tagrow">
-          <span>🗃️ Data Engineering</span>
-          <span>🔀 Data Integration</span>
-          <span>🧵 Data Pipelines</span>
-          <span>☁️ Cloud Data Platforms</span>
-          <span>📊 Data Modernization</span>
+          <span>Data Engineering</span>
+          <span>Data Integration</span>
+          <span>Data Pipelines</span>
+          <span>Cloud Data Platforms</span>
+          <span>Data Modernization</span>
         </div>
       </div>
       <button id="dataEngCta" class="btn btn-gold btn-lg" onclick="openLeadModal('','Explore Data Services (Landing)')">Explore Data Services →</button>
@@ -1408,15 +1400,14 @@
   <section class="section alt">
     <div class="container">
       <div class="lp-training reveal">
-        <div class="lp-training-ic">🎓</div>
         <div>
           <h3 id="buildExpertiseHeading">Build <span class="hl-accent">ServiceNow</span> Expertise. Build Your Future.</h3>
           <p id="buildExpertiseSubtext">VTech offers hands-on, project-driven ServiceNow training designed for real-world success.</p>
           <div class="lp-tagrow light">
-            <span>👤 Expert-Led Training</span>
-            <span>🧪 Hands-on Labs</span>
-            <span>📁 Real-world Projects</span>
-            <span>🛡️ Certification Guidance</span>
+            <span>Expert-Led Training</span>
+            <span>Hands-on Labs</span>
+            <span>Real-world Projects</span>
+            <span>Certification Guidance</span>
           </div>
         </div>
         <button id="buildExpertiseCta" class="btn btn-gold btn-lg" onclick="goView('training-services')">Explore ServiceNow Training →</button>
