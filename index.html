@@ -1939,6 +1939,7 @@ const CURRICULUM_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/
 const FAQS_GET_API       = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_faqs';             // GET -> { result: [ { question, answer, associated_to } ] }
 const COHORTS_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_cohort_batches';   // GET -> { result: [ {course, course_id, batch, starts, schedule, mode} ] }
 const PAGECFG_GET_API    = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_page_config';      // GET -> { result: { enterprise } } from x_palni_servicen_1_page_configurations
+const PAGECFG_IMAGE_API  = SN.instance + '/api/x_palni_servicen_1/team_profiles/page_config_image/';   // GET /{attachment_sys_id} -> hero/solutions-drive image (binary). The Image field's getValue() IS the attachment's own sys_id.
 const CURRICULUM_FILE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/course_curriculum/';  // GET /{sys_id} -> u_course_curriculum file (download)
 const PLACEMENTS_GET_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/get_placements';       // GET -> { result: [ { sys_id, name, profile_picture, logo_placement } ] } -- logo_placement: "home_page" | "training_services_page"
 const PLACEMENT_IMAGE_API = SN.instance + '/api/x_palni_servicen_1/team_profiles/placement_image/';    // GET /{sys_id} -> company logo (binary)
@@ -3035,6 +3036,12 @@ function setMediaImage(id, url, alt){
   if (!url) return;
   const el = document.getElementById(id);
   if (el) el.innerHTML = '<img src="' + esc(url) + '" alt="' + esc(alt || '') + '" style="width:100%;height:100%;object-fit:contain">';
+}
+// An "Image" field's getValue() in ServiceNow returns the sys_attachment record's
+// own sys_id (not a data URI, not the parent record's sys_id) — stream it through
+// the page_config_image resource rather than expecting JSON to carry the binary.
+function attachmentImageUrl(attachmentSysId){
+  return attachmentSysId ? PAGECFG_IMAGE_API + encodeURIComponent(attachmentSysId) : '';
 }
 // Render the ServiceNow Solutions checklist from a comma-separated u_solutions value.
 function renderSolutionsList(raw){
@@ -4586,7 +4593,7 @@ function applyPageConfig(){
   renderTagSpans('landingHeroBadges', pc.lpHeroSupportText);
   setText('landingHeroCta1',      pc.lpHeroCta);
   setText('landingHeroCta2',      pc.lpHeroCta2);
-  setMediaImage('landingHeroMedia', pc.lpHeroImage, 'VTech Infotech — Enterprise IT Services');
+  setMediaImage('landingHeroMedia', attachmentImageUrl(pc.lpHeroImage), 'VTech Infotech — Enterprise IT Services');
   setText('itServicesHeading',    pc.itServicesHeading);
   setRich('itServicesSubtext',    pc.itServicesSubtext);
   if (pc.itServicesCards) renderItServices(pc.itServicesCards);
@@ -4597,7 +4604,7 @@ function applyPageConfig(){
   setHtml('solutionsDriveHeading', pc.solutionsDriveHeading);
   setRich('solutionsDriveSubtext', pc.solutionsDriveSubtext);
   if (pc.solutions) renderSolutionsList(pc.solutions);
-  setMediaImage('solutionsDriveMedia', pc.solutionsDriveImage, 'ServiceNow Service Operations Workspace');
+  setMediaImage('solutionsDriveMedia', attachmentImageUrl(pc.solutionsDriveImage), 'ServiceNow Service Operations Workspace');
   setHtml('dataEngHeading',       pc.dataEngHeading);
   renderTagSpans('dataEngTags',   pc.dataEngSupportText);
   setText('dataEngCta',           pc.dataEngCta);
