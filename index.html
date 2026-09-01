@@ -2135,7 +2135,10 @@ function openTrainer(id){
 }
 function closeTrainer(){ const ov = document.getElementById('trainerModal'); if (ov) { ov.style.display = 'none'; ov.innerHTML = ''; } }
 
-function splitList(v){ return v.split(',').map(s=>s.trim()).filter(Boolean); }
+// comma string -> trimmed array; collapses any run of whitespace (extra spaces
+// around/inside a comma-separated value) down to a single space, so uneven
+// spacing typed into a ServiceNow field always renders consistently.
+function splitList(v){ return String(v || '').split(',').map(s=>s.trim().replace(/\s+/g, ' ')).filter(Boolean); }
 
 /* ============================================================
    Reviews & Feedback (one global page for ALL trainers)
@@ -2730,8 +2733,7 @@ const SERVICES_FALLBACK = [
 
 function serviceCardHtml(s){
   const title = s.title || '';
-  const pills = String(s.highlights || '').split(',').map(function(t){ return t.trim(); }).filter(Boolean)
-    .map(function(t){ return '<span>' + esc(t) + '</span>'; }).join('');
+  const pills = splitList(s.highlights).map(function(t){ return '<span>' + esc(t) + '</span>'; }).join('');
   const thumb = s.icon
     ? '<div class="svc-thumb"><img src="' + esc(s.icon) + '" alt="' + esc(title) + '"></div>'
     : '<div class="svc-thumb">🛠️</div>';
@@ -2911,12 +2913,12 @@ function coursePhoto(c, icon){
 }
 // comma string -> array of light-orange chips (used on the course cards)
 function chipList(str, leftAlign){
-  const items = (str || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  const items = splitList(str);
   return items.length ? '<div class="cc-chips"' + (leftAlign ? ' style="justify-content:flex-start"' : '') + '>' + items.map(function(x){ return '<span>' + esc(x) + '</span>'; }).join('') + '</div>' : '';
 }
 // comma string -> trainer-modal style chips. cls='cert' => green; '' => peach. align='right' to right-align.
 function chipRow(str, cls, align){
-  const items = (str || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  const items = splitList(str);
   if (!items.length) return '<span class="hint">—</span>';
   const style = align === 'right' ? ' style="justify-content:flex-end"' : '';
   return '<div class="chips"' + style + '>' + items.map(function(x){ return '<span class="chip' + (cls ? ' ' + cls : '') + '">' + esc(x) + '</span>'; }).join('') + '</div>';
@@ -3042,7 +3044,7 @@ function setMediaImage(id, url, alt){
 function renderSolutionsList(raw){
   const mount = document.getElementById('solutionsDriveList');
   if (!mount) return;
-  const items = String(raw || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  const items = splitList(raw);
   if (!items.length) return;
   mount.innerHTML = items.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('');
 }
@@ -3054,7 +3056,7 @@ function renderSolutionsList(raw){
 function renderTagSpans(id, raw){
   const mount = document.getElementById(id);
   if (!mount) return;
-  const items = String(raw || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  const items = splitList(raw);
   if (!items.length) return;
   mount.innerHTML = items.map(function(x){ return '<span>' + esc(x) + '</span>'; }).join('');
 }
@@ -3274,7 +3276,7 @@ function courseCardHtml(c, i){
   const photo = coursePhoto(c, icon, i);
   const safeName = esc((c.name || '').replace(/'/g, ''));
   // Certifications: comma-separated -> one chip each
-  const certs = (c.certifications || '').split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+  const certs = splitList(c.certifications);
   const certChips = certs.length
     ? '<div class="cc-chips">' + certs.map(function(x){ return '<span>' + esc(x) + '</span>'; }).join('') + '</div>'
     : '';
