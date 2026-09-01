@@ -426,9 +426,8 @@
   .itsvc-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px 24px; text-align: center; transition: border-color .15s; }
   .itsvc-card.open { border-color: var(--accent); }
   .itsvc-card h3 { margin: 0 0 10px; font-size: 1.12rem; }
-  .itsvc-card p { color: var(--muted); font-size: .93rem; line-height: 1.55; margin: 0; }
-  .itsvc-more { display: none; text-align: left; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); color: var(--ink); font-size: .89rem; line-height: 1.6; }
-  .itsvc-card.open .itsvc-more { display: block; }
+  .itsvc-card p { color: var(--muted); font-size: .93rem; line-height: 1.55; margin: 0; text-align: left; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+  .itsvc-card.open p { -webkit-line-clamp: unset; overflow: visible; }
   .itsvc-learn { display: inline-flex; align-items: center; gap: 5px; margin-top: 16px; background: none; border: none; color: var(--accent); font-weight: 700; font-size: .88rem; cursor: pointer; padding: 0; }
   .itsvc-learn .car { transition: transform .2s; display: inline-block; }
   .itsvc-card.open .itsvc-learn .car { transform: rotate(90deg); }
@@ -1292,21 +1291,18 @@
       <div class="itsvc-grid">
         <div class="itsvc-card reveal">
           <h3>General IT Services</h3>
-          <p>End-to-end IT consulting, implementation, integration, cloud, application development, automation, and managed services tailored to your business needs.</p>
+          <p>End-to-end IT consulting, implementation, integration, cloud, application development, automation, and managed services tailored to your business needs. Our General IT Services cover the full lifecycle — advisory, architecture, build and ongoing managed support — so your technology investments stay aligned with business outcomes as you scale.</p>
           <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
-          <div class="itsvc-more">Our General IT Services cover the full lifecycle — advisory, architecture, build and ongoing managed support — so your technology investments stay aligned with business outcomes as you scale.</div>
         </div>
         <div class="itsvc-card reveal">
           <h3>AI + ServiceNow Solutions</h3>
-          <p>Leverage AI and ServiceNow to automate workflows, improve experiences, enhance decision-making, and drive enterprise productivity.</p>
+          <p>Leverage AI and ServiceNow to automate workflows, improve experiences, enhance decision-making, and drive enterprise productivity. We combine ServiceNow workflow automation with practical AI — from virtual agents to predictive intelligence — to help teams resolve work faster and make better decisions.</p>
           <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
-          <div class="itsvc-more">We combine ServiceNow workflow automation with practical AI — from virtual agents to predictive intelligence — to help teams resolve work faster and make better decisions.</div>
         </div>
         <div class="itsvc-card reveal">
           <h3>ServiceNow Consulting &amp; Implementation</h3>
-          <p>Strategy, consulting, implementation, integration, customization, automation, and managed services across the ServiceNow platform.</p>
+          <p>Strategy, consulting, implementation, integration, customization, automation, and managed services across the ServiceNow platform. From ITSM and ITOM rollouts to CSM, GRC and custom app development, our certified consultants design and implement ServiceNow solutions that fit the way your teams actually work.</p>
           <button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>
-          <div class="itsvc-more">From ITSM and ITOM rollouts to CSM, GRC and custom app development, our certified consultants design and implement ServiceNow solutions that fit the way your teams actually work.</div>
         </div>
       </div>
     </div>
@@ -3063,7 +3059,9 @@ function renderTagSpans(id, raw){
 
 /* Build the landing page's "Our IT Services" cards from the page-configurations
    u_our_it_services name-value pairs field: object key = card heading,
-   object value = card text.
+   object value = card text. Each card shows a 4-line clamped preview of the
+   text with a "Learn More" button (toggleItSvc) that expands it in place —
+   the CSS line-clamp on .itsvc-card p handles the truncation/expand.
    Empty/invalid -> keep the hard-coded default 3 cards already in the markup. */
 function renderItServices(raw){
   const mount = document.querySelector('.itsvc-grid');
@@ -3074,7 +3072,8 @@ function renderItServices(raw){
   const keys = (obj && typeof obj === 'object') ? Object.keys(obj) : [];
   if (!keys.length) return;
   mount.innerHTML = keys.map(function(k){
-    return '<div class="itsvc-card reveal"><h3>' + esc(k) + '</h3><p>' + esc(String(obj[k])) + '</p></div>';
+    return '<div class="itsvc-card reveal"><h3>' + esc(k) + '</h3><p>' + esc(String(obj[k])) + '</p>'
+      + '<button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button></div>';
   }).join('');
   initReveal();
 }
