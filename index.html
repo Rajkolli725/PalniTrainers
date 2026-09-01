@@ -3048,24 +3048,24 @@ function renderSolutionsList(raw){
 }
 
 /* Build the landing page's "Our IT Services" cards from the page-configurations
-   u_our_it_services JSON object {title: "short description||expanded detail"}.
-   The "||" splits the card's visible summary from its "Learn More" detail text;
-   the detail half (and the button) is omitted if a card has no "||" part.
-   Empty/invalid -> keep the hard-coded default 3 cards already in the markup. */
+   u_our_it_services plain string field. Cards are separated by ";" and each
+   card is "Title|Short description|Expanded Learn More text" (the Learn More
+   part is optional — omit it, along with the trailing "|", to hide the button).
+   Semicolon/pipe (not comma) is used as the separator because the description
+   text itself naturally contains commas.
+   Empty -> keep the hard-coded default 3 cards already in the markup. */
 function renderItServices(raw){
   const mount = document.querySelector('.itsvc-grid');
   if (!mount) return;
-  let obj = null;
-  if (raw && typeof raw === 'object') obj = raw;
-  else if (raw) { try { obj = JSON.parse(raw); } catch (e) { obj = null; } }
-  const keys = (obj && typeof obj === 'object') ? Object.keys(obj) : [];
-  if (!keys.length) return;
-  mount.innerHTML = keys.map(function(k){
-    const parts = String(obj[k]).split('||');
-    const desc = (parts[0] || '').trim();
-    const more = (parts[1] || '').trim();
+  const items = String(raw || '').split(';').map(function(s){ return s.trim(); }).filter(Boolean);
+  if (!items.length) return;
+  mount.innerHTML = items.map(function(entry){
+    const parts = entry.split('|').map(function(s){ return s.trim(); });
+    const title = parts[0] || '';
+    const desc  = parts[1] || '';
+    const more  = parts[2] || '';
     return '<div class="itsvc-card reveal">'
-      + '<h3>' + esc(k) + '</h3>'
+      + '<h3>' + esc(title) + '</h3>'
       + '<p>' + esc(desc) + '</p>'
       + (more ? '<button class="itsvc-learn" onclick="toggleItSvc(this)">Learn More <span class="car">→</span></button>'
               + '<div class="itsvc-more">' + esc(more) + '</div>' : '')
@@ -3075,18 +3075,20 @@ function renderItServices(raw){
 }
 
 /* Build the landing page's AI-Powered/"Enterprise Ready" band tiles from the
-   page-configurations u_enterprise_ready_solutions JSON object {title: text}.
-   Empty/invalid -> keep the hard-coded default 4 tiles already in the markup. */
+   page-configurations u_enterprise_ready_solutions plain string field. Tiles
+   are separated by ";" and each tile is "Title|Description" (pipe, not comma,
+   since the description text naturally contains commas).
+   Empty -> keep the hard-coded default 4 tiles already in the markup. */
 function renderEnterpriseReady(raw){
   const mount = document.querySelector('.lp-band-grid');
   if (!mount) return;
-  let obj = null;
-  if (raw && typeof raw === 'object') obj = raw;
-  else if (raw) { try { obj = JSON.parse(raw); } catch (e) { obj = null; } }
-  const keys = (obj && typeof obj === 'object') ? Object.keys(obj) : [];
-  if (!keys.length) return;
-  mount.innerHTML = keys.map(function(k){
-    return '<div class="lp-band-tile"><div><h4>' + esc(k) + '</h4><p>' + esc(String(obj[k])) + '</p></div></div>';
+  const items = String(raw || '').split(';').map(function(s){ return s.trim(); }).filter(Boolean);
+  if (!items.length) return;
+  mount.innerHTML = items.map(function(entry){
+    const parts = entry.split('|').map(function(s){ return s.trim(); });
+    const title = parts[0] || '';
+    const desc  = parts[1] || '';
+    return '<div class="lp-band-tile"><div><h4>' + esc(title) + '</h4><p>' + esc(desc) + '</p></div></div>';
   }).join('');
 }
 
