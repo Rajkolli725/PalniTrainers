@@ -1236,7 +1236,7 @@
       <a class="navlink" onclick="goView('about')">About Us</a>
       <a class="navlink" onclick="goView('careers')">Careers</a>
       <button class="icon-toggle" id="themeBtn" onclick="toggleTheme()" title="Toggle day / night theme">🌙</button>
-      <button class="btn btn-gold nav-demo" onclick="openLeadModal('','Book a Free Demo (Nav)')">Contact Us</button>
+      <button class="btn btn-gold nav-demo" onclick="openLeadModal('', this.textContent.trim() + ' (Nav)')">Contact Us</button>
     </div>
   </div>
 </nav>
@@ -1259,7 +1259,7 @@
         <h1 id="landingHeroHeading">Enterprise IT Services.<br><span class="hl">AI-Powered.</span> <span class="hl">Data-Driven.</span><br><span class="hl">ServiceNow</span> at the Core.</h1>
         <p class="lp-lede" id="landingHeroSubtext">VTech Infotech delivers end-to-end IT services that help organizations modernize, automate, and scale with deep expertise in AI, Data Engineering, and the ServiceNow platform.</p>
         <div class="lp-hero-cta">
-          <button id="landingHeroCta1" class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Hero)')">Talk to an IT Expert</button>
+          <button id="landingHeroCta1" class="btn btn-gold btn-lg" onclick="openLeadModal('', this.textContent.trim() + ' (Landing Hero)')">Talk to an IT Expert</button>
           <button id="landingHeroCta2" class="btn btn-gold btn-lg" onclick="goSection('it-services','')">Explore Our Services</button>
         </div>
         <div class="lp-hero-badges" id="landingHeroBadges">
@@ -1309,7 +1309,7 @@
           <p>We help organizations turn AI from an emerging technology into practical business value.</p>
           <p>From strategy to implementation, VTech delivers AI solutions that drive efficiency, innovation, and exceptional experiences.</p>
         </div>
-        <button id="enterpriseReadyCta" class="btn btn-gold btn-lg" style="margin-top:8px" onclick="openLeadModal('','Explore AI Solutions (Landing)')">Explore AI Solutions →</button>
+        <button id="enterpriseReadyCta" class="btn btn-gold btn-lg" style="margin-top:8px" onclick="openLeadModal('', this.textContent.trim() + ' (Landing)')">Explore AI Solutions →</button>
       </div>
       <div class="lp-band-grid reveal">
         <div class="lp-band-tile"><div><h4>AI Strategy &amp; Advisory</h4><p>Identify high-value opportunities and build a practical AI roadmap.</p></div></div>
@@ -1380,7 +1380,7 @@
           <span>Data Modernization</span>
         </div>
       </div>
-      <button id="dataEngCta" class="btn btn-gold btn-lg" onclick="openLeadModal('','Explore Data Services (Landing)')">Explore Data Services →</button>
+      <button id="dataEngCta" class="btn btn-gold btn-lg" onclick="openLeadModal('', this.textContent.trim() + ' (Landing)')">Explore Data Services →</button>
     </div>
   </section>
 
@@ -1420,7 +1420,7 @@
         <h2 id="readyTransformHeading">Ready to Transform Your Technology Strategy?</h2>
         <p id="readyTransformSubtext">Whether you're modernizing your IT environment, implementing ServiceNow, exploring AI opportunities, or building your data capabilities, VTech can help you move from strategy to execution.</p>
       </div>
-      <button id="readyTransformCta" class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an IT Expert (Landing Final CTA)')">Talk to an IT Expert</button>
+      <button id="readyTransformCta" class="btn btn-gold btn-lg" onclick="openLeadModal('', this.textContent.trim() + ' (Landing Final CTA)')">Talk to an IT Expert</button>
     </div>
   </section>
 
@@ -1508,7 +1508,7 @@
         <p id="servicesPreviewSubtext">From consulting and staffing to cloud, AI and expert-led training — one partner across your technology journey.</p>
       </div>
       <div class="cards-grid" id="homeServicesGrid"></div>
-      <div style="text-align:center;margin-top:34px"><button id="servicesHomeCta" class="btn btn-accent btn-lg" onclick="openLeadModal('','Talk to Us About Our Services (Home)')">Talk to Us About Our Services</button></div>
+      <div style="text-align:center;margin-top:34px"><button id="servicesHomeCta" class="btn btn-accent btn-lg" onclick="openLeadModal('', this.textContent.trim() + ' (Home)')">Talk to Us About Our Services</button></div>
     </div>
   </section>
 
@@ -1543,7 +1543,7 @@
         <div id="enterpriseBody" class="ent-body">Give your teams job-ready skills with custom private cohorts — built around your goals, tech stack and schedule across ServiceNow, Salesforce, Cloud, Data &amp; AI. Certification-focused, hands-on, and led by practitioners.</div>
       </div>
       <div style="text-align:center;margin-top:8px">
-        <button class="btn btn-accent btn-lg" onclick="openLeadModal('','Enterprise Training (Home)')">Talk to Us About Team Training</button>
+        <button class="btn btn-accent btn-lg" onclick="openLeadModal('', this.textContent.trim() + ' (Home)')">Talk to Us About Team Training</button>
       </div>
     </div>
   </section>
@@ -1668,7 +1668,7 @@
     <section class="cd-sec cd-cta">
       <h2 id="letsBuildHeading">Let's Build Your Future</h2>
       <p id="letsBuildSubtext">Talk to an advisor about training, consulting or staffing for you or your team.</p>
-      <button id="letsBuildCta" class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an Advisor (About)')">Talk to an Advisor</button>
+      <button id="letsBuildCta" class="btn btn-gold btn-lg" onclick="openLeadModal('', this.textContent.trim() + ' (About)')">Talk to an Advisor</button>
     </section>
   </div>
 
@@ -2574,6 +2574,7 @@ function showLeadThanks(name){
 function ctaLabel(source){
   let s = String(source || '').split('(')[0];   // drop "(Home)" / "(Nav)" context
   s = s.split(/\s[–-]\s/)[0];                    // drop " – Course" / " - Course" context
+  s = s.replace(/[\s→›»]+$/, '');                // drop a trailing arrow glyph some CTA buttons use
   s = s.trim();
   return s || 'Request Free Demo';
 }
@@ -2597,10 +2598,12 @@ function openLeadModal(course, source, opts){
   opts = opts || {};
   const todayStr = new Date().toISOString().slice(0, 10);   // min date for the preferred-date picker
   source = (source || 'Book a Free Demo').replace(/'/g, '');
-  const title      = opts.title || 'Book Your Free Demo';
+  // Heading and submit button both default to the label of the CTA that opened
+  // the form (derived from `source`), e.g. "Contact Us (Home)" -> "Contact Us",
+  // "Enroll Now – ServiceNow" -> "Enroll Now" — so the form always echoes back
+  // whatever the user actually clicked.
+  const title      = opts.title || ctaLabel(source);
   const subtitle   = opts.subtitle || 'Tell us a bit about you and we’ll get in touch within 1 business day.';
-  // Button text reflects the CTA that opened the form (derived from `source`),
-  // e.g. "Contact Us (Home)" -> "Contact Us", "Enroll Now – ServiceNow" -> "Enroll Now".
   const submitLabel = opts.submitLabel || ctaLabel(source);
   const dlCourse   = opts.downloadCurriculumSysId || '';   // if set: download the curriculum after the lead saves
   const ov = document.getElementById('leadModal');
@@ -3514,7 +3517,7 @@ function fmtBatchDate(s){
 }
 function batchNotifyBtn(courseName){
   const sn = esc(String(courseName || '').replace(/'/g, ''));
-  return '<button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{submitLabel:\'Notify Me\'})">Notify Me</button>';
+  return '<button class="btn btn-primary" onclick="openLeadModal(\'' + sn + '\',\'Batch Enquiry – ' + sn + '\',{title:\'Notify Me\',submitLabel:\'Notify Me\'})">Notify Me</button>';
 }
 function batchRow(b, withCourse){
   var courseCell = b.course_id
@@ -4328,7 +4331,7 @@ function pricingCorporateCard(){
     '<p class="plan-tag">' + esc(c.tag) + '</p>' +
     '<div class="plan-div"></div>' +
     '<div class="plan-sec-title">' + esc(c.getTitle) + '</div><ul class="plan-list">' + feats + '</ul>' +
-    '<div class="plan-foot"><button class="btn btn-primary plan-cta" onclick="openLeadModal(\'' + safe + '\',\'Corporate Training – ' + safe + '\')">' + esc(c.cta) + '</button></div>' +
+    '<div class="plan-foot"><button class="btn btn-primary plan-cta" onclick="openLeadModal(\'' + safe + '\',\'Corporate Training – ' + safe + '\',{title:\'' + esc(c.cta).replace(/'/g, '') + '\',submitLabel:\'' + esc(c.cta).replace(/'/g, '') + '\'})">' + esc(c.cta) + '</button></div>' +
   '</div>';
 }
 function renderPricingBody(){
