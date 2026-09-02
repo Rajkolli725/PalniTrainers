@@ -35,6 +35,7 @@
     --nav-line: #e4e8ef;
     --radius: 16px;
     --shadow: 0 1px 3px rgba(20,28,55,.08), 0 10px 30px rgba(20,28,55,.07);
+    --hero-pad-top: 46px;   /* shared by .hero-wrap and .lp-hero so both hero sections always sit the same distance below the nav */
   }
   body.dark {
     --bg: #0e1a2e;
@@ -394,7 +395,7 @@
      Static content for now; colors reuse the site's existing tokens.
      =================================================================== */
   .hl-accent { color: var(--accent); }
-  .lp-hero { background: var(--brand-grad); color: #fff; padding: 64px 20px 74px; position: relative; overflow: hidden; }
+  .lp-hero { background: var(--brand-grad); color: #fff; padding: var(--hero-pad-top) 20px 74px; position: relative; overflow: hidden; }
   .lp-hero-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
   .lp-hero h1 { font-size: 2.6rem; line-height: 1.16; margin: 0 0 18px; font-weight: 800; }
   .lp-hero h1 .hl { color: var(--gold); }
@@ -625,8 +626,8 @@
   .site-footer h5 { font-size: .95rem; margin: 0 0 14px; color: #1e3a5f; }
   .site-footer a { color: #45617e; text-decoration: none; display: block; margin-bottom: 9px; font-size: .9rem; cursor: pointer; }
   .site-footer a:hover { color: #e8541e; }
-  .footer-logo { height: 54px; margin-bottom: 10px; background: #fff; padding: 6px 8px; border-radius: 8px; }
-  .footer-about { color: #45617e; font-size: .9rem; max-width: 280px; }
+  .footer-logo { height: 54px; margin-bottom: 6px; background: #fff; padding: 6px 8px; border-radius: 8px; display: block; }
+  .footer-about { color: #45617e; font-size: .9rem; max-width: 280px; margin: 0; }
   .footer-bottom { border-top: 1px solid #cfe0f2; margin-top: 36px; padding-top: 18px; text-align: center; font-size: .83rem; color: #45617e; }
   /* Footer social icons */
   .footer-social { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
@@ -829,7 +830,7 @@
   /* ===================================================================
      HERO PROMO VIDEO
      =================================================================== */
-  .hero-wrap { padding: 64px 20px 76px; }
+  .hero-wrap { padding: var(--hero-pad-top) 20px 76px; }
   /* Two-column hero: left = heading + rating + CTAs, right = justified paragraph (equal heights) */
   .hero-top { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: stretch; text-align: left; margin-bottom: 44px; }
   .hero-left { display: flex; flex-direction: column; justify-content: space-between; }
@@ -1780,7 +1781,7 @@
   <div class="container">
     <div class="footer-grid">
       <div>
-        <img class="footer-logo" src="vtech-logo.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.5rem&quot;><span style=&quot;color:var(--accent)&quot;>V</span>TECH</strong>'">
+        <img class="footer-logo" src="vtech-logo-footer.png" alt="VTech Infotech LLC" onerror="this.outerHTML='<strong style=&quot;font-size:1.5rem&quot;><span style=&quot;color:var(--accent)&quot;>V</span>TECH</strong>'">
         <p class="footer-about" id="footerAbout">VTech Infotech LLC — IT consulting, staffing and expert-led training that turns technology into a competitive advantage.</p>
         <h5 id="followUsHeading" style="margin-top:22px">Follow Us</h5>
         <div class="footer-social">
