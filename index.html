@@ -1665,9 +1665,9 @@
       </div>
     </section>
     <section class="cd-sec cd-cta">
-      <h2>Let's Build Your Future</h2>
-      <p>Talk to an advisor about training, consulting or staffing for you or your team.</p>
-      <button class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an Advisor (About)')">Talk to an Advisor</button>
+      <h2 id="letsBuildHeading">Let's Build Your Future</h2>
+      <p id="letsBuildSubtext">Talk to an advisor about training, consulting or staffing for you or your team.</p>
+      <button id="letsBuildCta" class="btn btn-gold btn-lg" onclick="openLeadModal('','Talk to an Advisor (About)')">Talk to an Advisor</button>
     </section>
   </div>
 
@@ -4575,6 +4575,9 @@ function applyPageConfig(){
   setRich('supportSubheading',         pc.contactSubtext);    // contact section subtext
   setRich('aboutWhoWeAre',             pc.aboutUs);           // About page body (heading removed, text kept)
   if (pc.ourValues) renderOurValues(pc.ourValues);            // About page "Our Values" cards
+  setText('letsBuildHeading',          pc.letsBuildHeading);  // About page "Let's Build Your Future" CTA
+  setRich('letsBuildSubtext',          pc.letsBuildSubtext);
+  setText('letsBuildCta',              pc.letsBuildCta);
   // Legal pages — the full HTML field replaces the default body when provided
   const pb = document.getElementById('privacyBody');
   if (pb && pc.privacyPolicy && String(pc.privacyPolicy).trim()) pb.innerHTML = pc.privacyPolicy;
