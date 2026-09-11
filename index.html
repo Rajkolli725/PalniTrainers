@@ -393,6 +393,19 @@
      =================================================================== */
   .hl-accent { color: var(--accent); }
   .lp-hero { background: var(--brand-grad); color: #fff; padding: var(--hero-pad-top) 20px 74px; position: relative; overflow: hidden; }
+  /* Ambient backdrop: once a hero photo loads, a heavily blurred copy of that same
+     photo fills the section behind it, so the background picks up the photo's own
+     colors instead of a fixed gradient — the photo reads as if it extends into the
+     background. A dark-to-transparent scrim sits on top (unblurred, so it stays crisp)
+     to keep the left-side heading text readable. Shared by both hero sections. */
+  .hero-ambient-bg { position: absolute; inset: -12%; z-index: 0; background-size: cover; background-position: center;
+    filter: blur(60px) saturate(1.3) brightness(.82); transform: scale(1.05);
+    opacity: 0; transition: opacity .5s ease; pointer-events: none; }
+  .hero-ambient-bg.show { opacity: 1; }
+  .hero-ambient-scrim { position: absolute; inset: 0; z-index: 0; pointer-events: none;
+    background: linear-gradient(100deg, rgba(10,22,42,.88) 0%, rgba(10,22,42,.62) 42%, rgba(10,22,42,.18) 75%);
+    opacity: 0; transition: opacity .5s ease; }
+  .hero-ambient-scrim.show { opacity: 1; }
   .lp-hero-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
   .lp-hero h1 { font-size: 2.6rem; line-height: 1.16; margin: 0 0 18px; font-weight: 800; }
   .lp-hero h1 .hl { color: var(--gold); }
@@ -830,7 +843,7 @@
   /* ===================================================================
      HERO PROMO VIDEO
      =================================================================== */
-  .hero-wrap { padding: var(--hero-pad-top) 20px 74px; }
+  .hero-wrap { padding: var(--hero-pad-top) 20px 74px; position: relative; z-index: 1; }
   /* Two-column hero: left = heading + rating + CTAs, right = justified paragraph (equal heights) */
   .hero-top { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: stretch; text-align: left; margin-bottom: 44px; }
   .hero-left { display: flex; flex-direction: column; justify-content: space-between; }
@@ -1256,6 +1269,8 @@
 
   <!-- Hero -->
   <section class="lp-hero">
+    <div class="hero-ambient-bg" id="landingHeroAmbientBg"></div>
+    <div class="hero-ambient-scrim" id="landingHeroAmbientScrim"></div>
     <div class="lp-hero-inner">
       <div>
         <h1 id="landingHeroHeading">Enterprise IT Services.<br><span class="hl">AI-Powered.</span> <span class="hl">Data-Driven.</span><br><span class="hl">ServiceNow</span> at the Core.</h1>
@@ -1433,6 +1448,8 @@
 
   <!-- Hero -->
   <section class="hero" id="home">
+    <div class="hero-ambient-bg" id="trainingHeroAmbientBg"></div>
+    <div class="hero-ambient-scrim" id="trainingHeroAmbientScrim"></div>
     <div class="container hero-wrap hs2">
       <div class="hero-top">
         <div class="hero-left">
@@ -2653,6 +2670,7 @@ function renderPromoMedia(imgUrl){
   box.innerHTML = src
     ? '<img src="' + esc(src) + '" alt="VTech Infotech" style="width:100%;height:100%;object-fit:cover;display:block">'
     : '<div class="pv-overlay"><div class="pv-label">Set the hero_image_url property to show the hero image</div></div>';
+  setHeroAmbientBackdrop('trainingHero', src);
 }
 
 /* ---- Home: "slot machine" testimonials ----
@@ -3035,6 +3053,20 @@ function setMediaImage(id, url, alt){
   if (!el) return;
   el.classList.add('lp-media-photo');
   el.innerHTML = '<img src="' + esc(url) + '" alt="' + esc(alt || '') + '">';
+  setHeroAmbientBackdrop(id.replace(/Media$/, ''), url);
+}
+// If this hero has matching "<prefix>AmbientBg"/"<prefix>AmbientScrim" elements
+// (e.g. "landingHero" -> landingHeroAmbientBg), fill the backdrop with the same
+// photo so the hero background picks up its colors. No-op for heroes without one
+// (e.g. solutionsDriveMedia, which keeps its own framed-photo look).
+function setHeroAmbientBackdrop(prefix, url){
+  const bg = document.getElementById(prefix + 'AmbientBg');
+  const scrim = document.getElementById(prefix + 'AmbientScrim');
+  if (!bg) return;
+  if (!url) { bg.classList.remove('show'); if (scrim) scrim.classList.remove('show'); return; }
+  bg.style.backgroundImage = "url('" + String(url).replace(/'/g, '%27') + "')";
+  bg.classList.add('show');
+  if (scrim) scrim.classList.add('show');
 }
 // An "Image" field's getValue() in ServiceNow returns the sys_attachment record's
 // own sys_id (not a data URI, not the parent record's sys_id) — stream it through
