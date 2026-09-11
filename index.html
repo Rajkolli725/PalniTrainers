@@ -411,7 +411,10 @@
   /* A real uploaded photo (set via setMediaImage) gets the same framed-photo
      treatment used for the About page hero and the Support section's map image. */
   .lp-media-photo img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.28); }
-  #landingHeroMedia.lp-media-photo { max-width: 560px; aspect-ratio: 4 / 3; margin: 20px auto 0; }
+  /* Hero photo: borderless, blended straight into the hero gradient (no card/shadow),
+     sized to a 650x420 box so it matches the reference layout. */
+  #landingHeroMedia.lp-media-photo { max-width: 650px; aspect-ratio: 650 / 420; margin: 20px auto 0; }
+  #landingHeroMedia.lp-media-photo img { border-radius: 0; box-shadow: none; }
   #solutionsDriveMedia.lp-media-photo { min-height: 360px; }
   @media (max-width: 900px) { #landingHeroMedia.lp-media-photo { max-width: 100%; } }
 
@@ -861,11 +864,12 @@
     .hero-wrap.hs2 .hero-right .lede { margin-bottom: 26px; }
     .hero-wrap.hs2 .promo-video { margin: 0; max-width: none; }
   }
+  /* Borderless, blended straight into the hero gradient (no card/border/shadow),
+     sized to the same 650x420 box as the landing page hero photo. */
   .promo-video {
-    position: relative; max-width: 940px; margin: 0 auto; aspect-ratio: 16 / 9;
-    border-radius: 20px; overflow: hidden;
+    position: relative; max-width: 650px; margin: 0 auto; aspect-ratio: 650 / 420;
+    overflow: hidden;
     background: linear-gradient(135deg, #142440 0%, #1e3a5f 55%, #5a3318 100%);
-    border: 1px solid rgba(255,255,255,.16); box-shadow: 0 34px 80px rgba(0,0,0,.45);
   }
   .promo-video .pv-overlay { position: absolute; inset: 0; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 20px; }
@@ -2647,7 +2651,7 @@ function renderPromoMedia(imgUrl){
   const src = imgUrl || PROMO_IMAGE_URL;
   box.classList.add('pv-image');
   box.innerHTML = src
-    ? '<img src="' + esc(src) + '" alt="VTech Infotech" style="width:100%;height:100%;object-fit:contain">'
+    ? '<img src="' + esc(src) + '" alt="VTech Infotech" style="width:100%;height:100%;object-fit:cover;display:block">'
     : '<div class="pv-overlay"><div class="pv-label">Set the hero_image_url property to show the hero image</div></div>';
 }
 
