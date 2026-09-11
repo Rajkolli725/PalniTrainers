@@ -414,7 +414,7 @@
 
   /* A real uploaded photo (set via setMediaImage) gets the same framed-photo
      treatment used for the About page hero and the Support section's map image. */
-  .lp-media-photo img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.28); }
+  .lp-media-photo img { display: block; width: 100%; height: 100%; object-fit: contain; border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.28); }
   /* Hero photo: no card border/shadow, and the left edge fades to transparent so
      the hero gradient blends into the photo instead of a hard border. */
   #landingHeroMedia.lp-media-photo img { border-radius: 0; box-shadow: none;
@@ -779,14 +779,24 @@
     left: 50%; right: 50%; margin-left: -50vw; margin-right: -50vw; width: 100vw;
     margin-top: -24px; margin-bottom: 34px; overflow: hidden; }
   /* Match the About page body width (.wrap: max-width 1000px, 16px side padding)
-     so the hero's content edges line up with the sections below it. */
-  .about-hero .container { max-width: 1000px; padding: 46px 16px 52px; text-align: left; }
+     so the hero's content edges line up with the sections below it. Reserve room
+     on the right for the photo, which — like the other hero photos on the site —
+     is positioned independently of this container so it can bleed to the section's
+     true top/bottom/right edges. */
+  .about-hero .container { max-width: 1000px; padding: 46px 16px 52px; text-align: left;
+    position: relative; z-index: 1; padding-right: 520px; }
   .about-hero .about-back { display: inline-flex; color: #ffd9c7; margin: 0 0 16px; }
   .about-hero .about-back:hover { color: #fff; }
-  .about-hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; }
   .about-hero p { color: rgba(255,255,255,.92); margin: 0; font-size: 1.05rem; line-height: 1.6; }
-  .about-hero-media img { width: 100%; height: 100%; max-height: 320px; object-fit: cover; border-radius: 16px; display: block; box-shadow: 0 18px 40px rgba(0,0,0,.32); }
-  @media (max-width: 820px) { .about-hero-grid { grid-template-columns: 1fr; gap: 22px; } .about-hero-media img { max-height: 240px; } }
+  .about-hero-media { position: absolute; top: 0; right: 0; bottom: 0; width: 650px; z-index: 0; }
+  .about-hero-media img { width: 100%; height: 100%; object-fit: contain; display: block;
+    border-radius: 0; box-shadow: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 22%); }
+  @media (max-width: 820px) {
+    .about-hero .container { padding-right: 16px; }
+    .about-hero-media { position: static; width: 100%; height: auto; aspect-ratio: 650 / 420; margin-top: 22px; }
+  }
   @media (max-width: 760px) { .about-hero .container { padding-top: 34px; padding-bottom: 40px; } }
   .about-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 0 0 42px; }
   @media (max-width: 640px) { .about-stats { grid-template-columns: 1fr 1fr; } }
@@ -893,7 +903,7 @@
     overflow: hidden;
     background: linear-gradient(135deg, #142440 0%, #1e3a5f 55%, #5a3318 100%);
   }
-  .promo-video img { border-radius: 0; box-shadow: none; object-fit: cover;
+  .promo-video img { border-radius: 0; box-shadow: none; object-fit: contain;
     -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
     mask-image: linear-gradient(to right, transparent 0%, #000 22%); }
   .promo-video .pv-overlay { position: absolute; inset: 0; display: flex; flex-direction: column;
@@ -1669,14 +1679,12 @@
     <section class="about-hero">
       <div class="container">
         <a class="back-link about-back" href="#" onclick="goHome();return false">&larr; Back to Home</a>
-        <div class="about-hero-grid">
-          <div class="about-hero-copy">
-            <p id="aboutHeroSubtext">We're a full-spectrum IT services company — turning ambition into job-ready skills and technology into measurable business outcomes through expert training, consulting, and staffing.</p>
-          </div>
-          <div class="about-hero-media">
-            <img id="aboutImage" src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80" alt="VTech Infotech" loading="lazy">
-          </div>
+        <div class="about-hero-copy">
+          <p id="aboutHeroSubtext">We're a full-spectrum IT services company — turning ambition into job-ready skills and technology into measurable business outcomes through expert training, consulting, and staffing.</p>
         </div>
+      </div>
+      <div class="about-hero-media">
+        <img id="aboutImage" src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=900&q=80" alt="VTech Infotech" loading="lazy">
       </div>
     </section>
     <section class="cd-sec">
@@ -2677,7 +2685,7 @@ function renderPromoMedia(imgUrl){
   const src = imgUrl || PROMO_IMAGE_URL;
   box.classList.add('pv-image');
   box.innerHTML = src
-    ? '<img src="' + esc(src) + '" alt="VTech Infotech" style="width:100%;height:100%;object-fit:cover">'
+    ? '<img src="' + esc(src) + '" alt="VTech Infotech" style="width:100%;height:100%;object-fit:contain">'
     : '<div class="pv-overlay"><div class="pv-label">Set the hero_image_url property to show the hero image</div></div>';
 }
 
