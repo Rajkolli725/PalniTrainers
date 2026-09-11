@@ -451,15 +451,33 @@
   .lp-band-tile p { margin: 0; font-size: .84rem; color: rgba(255,255,255,.78); }
   @media (max-width: 900px) { .lp-band-inner { grid-template-columns: 1fr; } .lp-band-grid { grid-template-columns: 1fr; } }
 
-  /* ServiceNow Solutions section (light, checklist + simplified dashboard mockup) */
-  .lp-sn { padding: 74px 0; }
-  .lp-sn-inner { max-width: 1120px; margin: 0 auto; padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center; }
+  /* ServiceNow Solutions section — styled like the hero: dark gradient background,
+     white text, and a photo that bleeds edge-to-edge instead of sitting in a card. */
+  .lp-sn { background: var(--brand-grad); color: #fff; padding: 74px 0; position: relative; overflow: hidden; }
+  .lp-sn-inner { max-width: 1120px; margin: 0 auto; padding: 0 20px; position: relative; z-index: 1; }
+  .lp-sn:has(#solutionsDriveMedia:not(:empty)) .lp-sn-inner { padding-right: 520px; }
   .lp-sn h2 { font-size: 2.1rem; margin: 0 0 14px; }
-  .lp-sn p { color: var(--muted); line-height: 1.6; margin: 0 0 20px; }
+  .lp-sn p { color: rgba(255,255,255,.85); line-height: 1.6; margin: 0 0 20px; }
   .lp-sn-check { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 20px; margin: 0 0 26px; list-style: none; padding: 0; }
-  .lp-sn-check li { display: flex; align-items: center; gap: 8px; font-size: .92rem; font-weight: 600; color: var(--ink); }
-  .lp-sn-check li::before { content: "✓"; color: #16a34a; font-weight: 800; }
-  @media (max-width: 900px) { .lp-sn-inner { grid-template-columns: 1fr; } }
+  .lp-sn-check li { display: flex; align-items: center; gap: 8px; font-size: .92rem; font-weight: 600; color: #fff; }
+  .lp-sn-check li::before { content: "✓"; color: #4ade80; font-weight: 800; }
+  @media (max-width: 900px) {
+    .lp-sn:has(#solutionsDriveMedia:not(:empty)) .lp-sn-inner { padding-right: 0; }
+  }
+
+  /* Media slot (dashboard mockup by default) sits on the right, positioned
+     independently of .lp-sn-inner's max-width so it — and a real photo once
+     loaded — can reach the section's true top/bottom/right edges, like the hero. */
+  #solutionsDriveMedia { position: absolute; top: 0; right: 0; bottom: 0; width: 650px; z-index: 0;
+    display: flex; align-items: center; justify-content: center; }
+  #solutionsDriveMedia.lp-media-photo { display: block; }
+  #solutionsDriveMedia.lp-media-photo img { border-radius: 0; box-shadow: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 22%); }
+  @media (max-width: 900px) {
+    #solutionsDriveMedia { position: static; width: 100%; margin-top: 30px; }
+    #solutionsDriveMedia.lp-media-photo { height: auto; aspect-ratio: 650 / 420; }
+  }
 
   .lp-mockup { position: relative; }
   .lp-mockup-window { background: var(--ink); color: #fff; border-radius: 14px; box-shadow: 0 24px 60px rgba(20,28,55,.28); overflow: hidden; }
@@ -1347,7 +1365,8 @@
           <li>Security Operations (SecOps)</li>
         </ul>
       </div>
-      <div class="lp-mockup reveal" id="solutionsDriveMedia">
+    </div>
+    <div class="lp-mockup reveal" id="solutionsDriveMedia">
         <div class="lp-mockup-window">
           <div class="lp-mockup-bar"><b></b><b></b><b></b>&nbsp;Service Operations Workspace</div>
           <div class="lp-mockup-body">
@@ -1373,7 +1392,6 @@
           </ul>
         </div>
       </div>
-    </div>
   </section>
 
   <!-- Data Engineering band -->
