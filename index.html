@@ -411,10 +411,10 @@
   /* A real uploaded photo (set via setMediaImage) gets the same framed-photo
      treatment used for the About page hero and the Support section's map image. */
   .lp-media-photo img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.28); }
-  /* Hero photo: fixed 650x420, no card border/shadow — the left edge fades to
-     transparent so the hero gradient shows through and the photo reads as if
-     it blends straight into the background instead of sitting in a box. */
-  #landingHeroMedia.lp-media-photo { width: 650px; height: 420px; margin: 0; }
+  /* Hero photo: fills the entire right grid column (650px wide by design, height
+     matches the row) — no card border/shadow, and the left edge fades to transparent
+     so the hero gradient shows through and the photo blends into the background. */
+  #landingHeroMedia.lp-media-photo { width: 100%; margin: 0; align-self: stretch; }
   #landingHeroMedia.lp-media-photo img { border-radius: 0; box-shadow: none;
     -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
     mask-image: linear-gradient(to right, transparent 0%, #000 22%); }
@@ -870,11 +870,11 @@
     .hero-wrap.hs2 .hero-right .lede { margin-bottom: 26px; }
     .hero-wrap.hs2 .promo-video { margin: 0; }
   }
-  /* Fixed 650x420, no card border/shadow — the left edge fades to transparent
-     so the hero gradient shows through and the photo blends into the background
-     instead of sitting in a box. */
+  /* Fills the entire right grid column (650px wide by design, height matches the
+     row) — no card border/shadow, and the left edge fades to transparent so the
+     hero gradient shows through and the photo blends into the background. */
   .promo-video {
-    position: relative; width: 650px; height: 420px; margin: 0 auto;
+    position: relative; width: 100%; margin: 0 auto; align-self: stretch;
     overflow: hidden;
     background: linear-gradient(135deg, #142440 0%, #1e3a5f 55%, #5a3318 100%);
   }
