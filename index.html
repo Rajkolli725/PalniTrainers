@@ -393,7 +393,7 @@
      =================================================================== */
   .hl-accent { color: var(--accent); }
   .lp-hero { background: var(--brand-grad); color: #fff; padding: var(--hero-pad-top) 20px 74px; position: relative; overflow: hidden; }
-  .lp-hero-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1.05fr .95fr; gap: 40px; align-items: center; position: relative; z-index: 1; }
+  .lp-hero-inner { max-width: 1120px; margin: 0 auto; display: grid; grid-template-columns: 1fr 650px; gap: 40px; align-items: center; position: relative; z-index: 1; }
   .lp-hero h1 { font-size: 2.6rem; line-height: 1.16; margin: 0 0 18px; font-weight: 800; }
   .lp-hero h1 .hl { color: var(--gold); }
   .lp-hero .lp-lede { font-size: 1.05rem; color: rgba(255,255,255,.9); max-width: 480px; margin: 0 0 26px; }
@@ -401,7 +401,7 @@
   .lp-hero-badges { display: flex; flex-wrap: wrap; gap: 20px; font-size: .84rem; color: rgba(255,255,255,.85); }
   .lp-hero-badges span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
   .lp-hero-badges span::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; flex: none; }
-  @media (max-width: 900px) { .lp-hero-inner { grid-template-columns: 1fr; } .lp-hero h1 { font-size: 2.1rem; } }
+  @media (max-width: 900px) { .lp-hero h1 { font-size: 2.1rem; } }
 
   /* Hero media slot — empty (no default illustration) until a real photo is
      set via setMediaImage; the hero text takes the full width until then. */
@@ -411,12 +411,18 @@
   /* A real uploaded photo (set via setMediaImage) gets the same framed-photo
      treatment used for the About page hero and the Support section's map image. */
   .lp-media-photo img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 16px; box-shadow: 0 18px 40px rgba(0,0,0,.28); }
-  /* Hero photo: borderless, blended straight into the hero gradient (no card/shadow),
-     sized to a 650x420 box so it matches the reference layout. */
-  #landingHeroMedia.lp-media-photo { max-width: 650px; aspect-ratio: 650 / 420; margin: 20px auto 0; }
-  #landingHeroMedia.lp-media-photo img { border-radius: 0; box-shadow: none; }
+  /* Hero photo: fixed 650x420, no card border/shadow — the left edge fades to
+     transparent so the hero gradient shows through and the photo reads as if
+     it blends straight into the background instead of sitting in a box. */
+  #landingHeroMedia.lp-media-photo { width: 650px; height: 420px; margin: 0; }
+  #landingHeroMedia.lp-media-photo img { border-radius: 0; box-shadow: none;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 22%); }
   #solutionsDriveMedia.lp-media-photo { min-height: 360px; }
-  @media (max-width: 900px) { #landingHeroMedia.lp-media-photo { max-width: 100%; } }
+  @media (max-width: 900px) {
+    .lp-hero-inner { grid-template-columns: 1fr; }
+    #landingHeroMedia.lp-media-photo { width: 100%; height: auto; aspect-ratio: 650 / 420; }
+  }
 
   /* Our IT Services — expandable cards */
   .itsvc-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; }
@@ -858,22 +864,30 @@
   }
   /* Hero (always style 2): text on the left, hero image on the right */
   @media (min-width: 861px) {
-    .hero-wrap.hs2 { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: center; }
+    .hero-wrap.hs2 { display: grid; grid-template-columns: 1fr 650px; gap: 46px; align-items: center; }
     .hero-wrap.hs2 .hero-top { grid-template-columns: 1fr; gap: 20px; margin-bottom: 0; align-items: start; }
     .hero-wrap.hs2 .hero-left, .hero-wrap.hs2 .hero-right { justify-content: flex-start; }
     .hero-wrap.hs2 .hero-right .lede { margin-bottom: 26px; }
-    .hero-wrap.hs2 .promo-video { margin: 0; max-width: none; }
+    .hero-wrap.hs2 .promo-video { margin: 0; }
   }
-  /* Borderless, blended straight into the hero gradient (no card/border/shadow),
-     sized to the same 650x420 box as the landing page hero photo. */
+  /* Fixed 650x420, no card border/shadow — the left edge fades to transparent
+     so the hero gradient shows through and the photo blends into the background
+     instead of sitting in a box. */
   .promo-video {
-    position: relative; max-width: 650px; margin: 0 auto; aspect-ratio: 650 / 420;
+    position: relative; width: 650px; height: 420px; margin: 0 auto;
     overflow: hidden;
     background: linear-gradient(135deg, #142440 0%, #1e3a5f 55%, #5a3318 100%);
+  }
+  .promo-video.pv-image img {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 22%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 22%);
   }
   .promo-video .pv-overlay { position: absolute; inset: 0; display: flex; flex-direction: column;
     align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 20px; }
   .pv-label { color: #fff; font-weight: 700; font-size: 1.05rem; }
+  @media (max-width: 860px) {
+    .promo-video { width: 100%; height: auto; aspect-ratio: 650 / 420; }
+  }
   @media (max-width: 640px) { .hero-wrap { padding: 40px 16px 52px; } }
 
   /* ===================================================================
