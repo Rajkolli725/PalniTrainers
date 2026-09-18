@@ -867,7 +867,7 @@
   /* Two-column hero: left = heading + rating + CTAs, right = justified paragraph (equal heights) */
   .hero-top { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: stretch; text-align: left; margin-bottom: 44px; }
   .hero-left { display: flex; flex-direction: column; justify-content: space-between; }
-  .hero-left h1 { margin: 0 0 18px; font-size: 2.6rem; line-height: 1.16; font-weight: 800; }
+  .hero-left h1 { margin: 0 0 18px; font-size: 2.1rem; line-height: 1.16; font-weight: 800; }
   .hero-left .hero-trust { display: flex; flex-direction: row; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; margin: 0; font-size: .95rem; color: #fff; }
   .hero-left .hero-trust .stars { font-size: 1.2rem; letter-spacing: 2px; color: #5aa2ff; white-space: nowrap; }
   /* Hand-drawn pen underline (e.g. under "5,000+") */
@@ -882,7 +882,6 @@
   .hero-right .hero-cta { justify-content: flex-start; margin: 0; }
   @media (max-width: 860px) {
     .hero-top { grid-template-columns: 1fr; gap: 22px; margin-bottom: 32px; }
-    .hero-left h1 { font-size: 2.1rem; }
     .hero-right .lede { text-align: left; }
     /* flow as normal wrapped text so stars + sentence align cleanly */
     .hero-left .hero-trust { display: block; white-space: normal; line-height: 1.7; }
