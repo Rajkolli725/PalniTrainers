@@ -397,13 +397,12 @@
   /* Reserve room on the right for the hero photo, which is positioned independently
      of this max-width container so it can reach the section's true right edge. */
   .lp-hero:has(#landingHeroMedia:not(:empty)) .lp-hero-inner { padding-right: 520px; }
-  .lp-hero h1 { font-size: 2.6rem; line-height: 1.16; margin: 0 0 18px; font-weight: 800; }
+  .lp-hero h1 { font-size: 2.1rem; line-height: 1.16; margin: 0 0 18px; font-weight: 800; }
   .lp-hero h1 .hl { color: var(--gold); }
   .lp-hero .lp-lede { font-size: 1.05rem; line-height: 1.6; color: rgba(255,255,255,.9); max-width: 480px; margin: 0 0 26px; }
   .lp-hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
   .lp-hero-badges { display: flex; flex-wrap: wrap; gap: 20px; font-size: .84rem; color: rgba(255,255,255,.85); }
   .lp-hero-badges span { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
-  @media (max-width: 900px) { .lp-hero h1 { font-size: 2.1rem; } }
 
   /* Hero media slot — empty (no default illustration) until a real photo is set
      via setMediaImage; the hero text takes the full width until then. Positioned
