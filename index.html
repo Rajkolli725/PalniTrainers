@@ -865,10 +865,12 @@
   .hero-wrap { padding: var(--hero-pad-top) 20px 74px; position: relative; z-index: 1; }
   /* Two-column hero: left = heading + rating + CTAs, right = justified paragraph (equal heights) */
   .hero-top { display: grid; grid-template-columns: 1fr 1fr; gap: 46px; align-items: stretch; text-align: left; margin-bottom: 44px; }
-  .hero-left { display: flex; flex-direction: column; justify-content: space-between; }
-  .hero-left h1 { margin: 0 0 18px; font-size: 2.1rem; line-height: 1.16; font-weight: 800; }
-  .hero-left .hero-trust { display: flex; flex-direction: row; align-items: center; gap: 8px; flex-wrap: nowrap; white-space: nowrap; margin: 0; font-size: .95rem; color: #fff; }
-  .hero-left .hero-trust .stars { font-size: 1.2rem; letter-spacing: 2px; color: #5aa2ff; white-space: nowrap; }
+  .hero-left { display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+  .hero-left h1 { margin: 0 0 18px; font-size: 2.1rem; line-height: 1.16; font-weight: 800; overflow-wrap: break-word; }
+  /* Wraps to a second line instead of overflowing the column when space is tight —
+     only the stars themselves (and the "1,500+" figure) stay unbroken. */
+  .hero-left .hero-trust { display: flex; flex-direction: row; align-items: center; gap: 8px; flex-wrap: wrap; margin: 0; font-size: .95rem; color: #fff; }
+  .hero-left .hero-trust .stars { font-size: 1.2rem; letter-spacing: 2px; color: #5aa2ff; white-space: nowrap; flex: none; }
   /* Hand-drawn pen underline (e.g. under "5,000+") */
   .pen-underline { position: relative; white-space: nowrap; }
   .pen-underline::after {
@@ -876,8 +878,8 @@
     background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 26'%3E%3Cpath d='M5 14 C 50 4, 120 5, 196 11' fill='none' stroke='%23e8541e' stroke-width='3.4' stroke-linecap='round'/%3E%3Cpath d='M10 20 C 70 13, 150 16, 190 18' fill='none' stroke='%23e8541e' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center;
     background-size: 100% 100%;
   }
-  .hero-right { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; }
-  .hero-right .lede { text-align: justify; margin: 0 0 26px; max-width: none; font-size: 1.05rem; }
+  .hero-right { display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; min-width: 0; }
+  .hero-right .lede { text-align: justify; margin: 0 0 26px; max-width: none; font-size: 1.05rem; overflow-wrap: break-word; }
   .hero-right .hero-cta { justify-content: flex-start; margin: 0; }
   @media (max-width: 860px) {
     .hero-top { grid-template-columns: 1fr; gap: 22px; margin-bottom: 32px; }
