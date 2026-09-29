@@ -893,8 +893,9 @@
      home page hero: the image is positioned independently of .hero-wrap's max-width
      so it can bleed to the section's true top/bottom/right edges. */
   @media (min-width: 861px) {
-    .hero-wrap.hs2 { padding-right: 520px; }
-    .hero-wrap.hs2 .hero-top { grid-template-columns: 1fr; gap: 20px; margin-bottom: 0; align-items: start; }
+    /* Hard-capped at just under half the section's width so the text can never
+       physically reach the right half, no matter the screen size. */
+    .hero-wrap.hs2 .hero-top { grid-template-columns: 1fr; gap: 20px; margin-bottom: 0; align-items: start; max-width: 48%; }
     .hero-wrap.hs2 .hero-left, .hero-wrap.hs2 .hero-right { justify-content: flex-start; }
     .hero-wrap.hs2 .hero-right .lede { margin-bottom: 26px; }
   }
